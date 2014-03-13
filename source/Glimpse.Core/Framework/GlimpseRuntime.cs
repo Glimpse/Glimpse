@@ -157,16 +157,16 @@ namespace Glimpse.Core.Framework
 
             var glimpseRequestContextHandle = ActiveGlimpseRequestContexts.Add(glimpseRequestContext);
 
-            // When we are dealing with a resource request, there is no need to further 
-            // continue setting up the request.
-            if (glimpseRequestContextHandle.RequestHandlingMode == RequestHandlingMode.ResourceRequest)
-            {
-                return glimpseRequestContextHandle;
-            }
-
             try
             {
                 glimpseRequestContext.StartTiming();
+
+                // When we are dealing with a resource request, there is no need to further 
+                // continue setting up the request.
+                if (glimpseRequestContextHandle.RequestHandlingMode == RequestHandlingMode.ResourceRequest)
+                {
+                    return glimpseRequestContextHandle;
+                }
 
                 TabProvider.Execute(glimpseRequestContext, RuntimeEvent.BeginRequest);
 

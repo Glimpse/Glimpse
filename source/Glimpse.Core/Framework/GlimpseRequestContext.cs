@@ -100,14 +100,7 @@ namespace Glimpse.Core.Framework
             {
                 if (activeExecutionTimer == null)
                 {
-                    if (RequestHandlingMode == RequestHandlingMode.ResourceRequest)
-                    {
-                        activeExecutionTimer = new ExecutionTimer(Stopwatch.StartNew());
-                    }
-                    else
-                    {
-                        throw new GlimpseException("Execution timer is not available, did you start timing?");
-                    }
+                    throw new GlimpseException("Execution timer is not available, did you start timing?");
                 }
 
                 return activeExecutionTimer;
