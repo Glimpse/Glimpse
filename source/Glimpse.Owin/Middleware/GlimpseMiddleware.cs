@@ -55,7 +55,7 @@ namespace Glimpse.Owin.Middleware
                             // V2Merge: Hack's a million!
 #warning Even with this hack, it seems wrong, as the scripts will always be injected independent of the RuntimePolicy (only DisplayGlimpseClient should render it, and we only know that at the end)
                             var htmlSnippet = GlimpseRuntime.Instance.GenerateScriptTags(glimpseRequestContextHandle);
-                            response.Body = new PreBodyTagInjectionStream(htmlSnippet, response.Body, Encoding.UTF8, request.Uri.AbsoluteUri, new NullLogger());
+                            response.Body = new PreBodyTagInjectionStream(htmlSnippet, response.Body, Encoding.UTF8, request.Uri.AbsoluteUri, GlimpseRuntime.Instance.Configuration.Logger);
 
                             await innerNext(environment);
                         }
