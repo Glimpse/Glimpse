@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Web;
 using System.Web.Compilation;
+using System.Web.Hosting;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
 
@@ -29,28 +30,23 @@ namespace Glimpse.AspNet
                 // serviceLocator.Logger.Error("Call to System.Web.Compilation.BuildManager.GetReferencedAssemblies() failed.", exception);
             }
 
-            // AppDomain.CurrentDomain.SetData(Constants.LoggerKey, logger);
-            // AppDomain.CurrentDomain.DomainUnload += (sender, e) => OnAppDomainUnload((AppDomain)sender);
+            AppDomain.CurrentDomain.DomainUnload += (sender, e) => OnAppDomainUnload((AppDomain)sender);
         }
 
         private static void OnAppDomainUnload(AppDomain appDomain)
         {
-            ILogger logger = appDomain.GetData(Constants.LoggerKey) as ILogger;
-
-            if (logger == null)
+            if (GlimpseRuntime.IsInitialized)
             {
-                return;
+                GlimpseRuntime.Instance.Configuration.Logger.Fatal(
+                    "AppDomain with Id: '{0}' and BaseDirectory: '{1}' has been unloaded. Any in memory data stores have been lost. {2}",
+                    appDomain.Id,
+                    appDomain.BaseDirectory,
+                    "Reason for shutdown => " + HostingEnvironment.ShutdownReason);
+
+                // NLog writes its logs asynchronously, which means that if we don't wait, chances are the log will not be written 
+                // before the appdomain is actually shut down, so we sleep for 100ms and hopefully that is enough for NLog to do its thing
+                Thread.Sleep(100);
             }
-
-            logger.Fatal(
-                "AppDomain with Id: '{0}' and BaseDirectory: '{1}' has been unloaded. Any in memory data stores have been lost. {2}",
-                appDomain.Id,
-                appDomain.BaseDirectory,
-                HttpRuntimeShutdownMessageResolver.ResolveShutdownMessage());
-
-            // NLog writes its logs asynchronously, which means that if we don't wait, chances are the log will not be written 
-            // before the appdomain is actually shut down, so we sleep for 100ms and hopefully that is enough for NLog to do its thing
-            Thread.Sleep(100);
         }
 
         public void Init(HttpApplication httpApplication)
@@ -78,7 +74,6 @@ namespace Glimpse.AspNet
 
             var currentDomain = AppDomain.CurrentDomain;
             currentDomain.SetData(Constants.LoggerKey, Configuration.Logger);
-            currentDomain.DomainUnload += (sender, e) => OnAppDomainUnload((AppDomain)sender);
 
             Func<object, HttpContextWrapper> createHttpContextWrapper = sender => new HttpContextWrapper(((HttpApplication)sender).Context);
 

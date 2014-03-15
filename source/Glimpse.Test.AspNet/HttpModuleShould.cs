@@ -37,7 +37,7 @@ namespace Glimpse.Test.AspNet
             HttpModule.Dispose();
         }
 
-        [Fact]
+        [Fact(Skip="Logger is not put in appDomain data any longer, but GlimpseRuntime.Instance.Configuration.Logger is used")]
         public void HaveLoggedAppDomainUnloadMessage()
         {
             // to make sure the HttpModule's type constructor has been run, otherwise the previous logger will have a value of null, which will be 
@@ -60,7 +60,7 @@ namespace Glimpse.Test.AspNet
             }
         }
 
-        [Fact(Skip = "This was borken in the V2Merge")] // V2Merge: this was broken in the merge. We may need to correct this test
+        [Fact(Skip = "Logger is not put in appDomain data any longer, but GlimpseRuntime.Instance.Configuration.Logger is used")]
         public void HaveStoredLoggerInAppDomainData()
         {
             Assert.NotNull(this.HttpModule); // triggering the call of the HttpModule's type constructor (if not already called)
