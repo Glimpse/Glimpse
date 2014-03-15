@@ -205,8 +205,8 @@ namespace Glimpse.Core.Framework
                 var timingDuration = glimpseRequestContext.StopTiming();
                 var requestResponseAdapter = glimpseRequestContext.RequestResponseAdapter;
                 var requestMetadata = requestResponseAdapter.RequestMetadata;
-                var runtimePolicy = glimpseRequestContext.CurrentRuntimePolicy;
 
+                var runtimePolicy = glimpseRequestContext.CurrentRuntimePolicy;
                 if (runtimePolicy.HasFlag(RuntimePolicy.PersistResults))
                 {
                     var persistenceStore = Configuration.PersistenceStore;
