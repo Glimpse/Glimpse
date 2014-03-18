@@ -20,7 +20,7 @@ namespace Glimpse.Core.Metadata
             var endpoint = configuration.ResourceEndpoint; 
             foreach (var resource in configuration.Resources)
             {
-                var resourceKey = GlimpseRuntime.CreateKey(resource);
+                var resourceKey = KeyCreator.Create(resource);
                 if (resourceMetadata.ContainsKey(resourceKey))
                 {
                     logger.Warn(Resources.GlimpseRuntimePersistMetadataMultipleResourceWarning, resource.Name);

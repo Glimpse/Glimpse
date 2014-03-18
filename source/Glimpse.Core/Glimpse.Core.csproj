@@ -121,6 +121,7 @@
     <Compile Include="Framework\GlimpseRuntimeInitializer.cs" />
     <Compile Include="Framework\InspectorProvider.cs" />
     <Compile Include="Framework\IReadonlyConfiguration.cs" />
+    <Compile Include="Framework\KeyCreator.cs" />
     <Compile Include="Framework\ReadonlyConfigurationAdapter.cs" />
     <Compile Include="Framework\ICurrentGlimpseRequestIdTracker.cs" />
     <Compile Include="Framework\IGlimpseRequestContext.cs" />

@@ -21,7 +21,7 @@ namespace Glimpse.Core.Framework
             var displaysThatRequireSetup = Configuration.Displays.Where(display => display is ITabSetup).Select(display => display);
             foreach (ITabSetup display in displaysThatRequireSetup)
             {
-                var key = GlimpseRuntime.CreateKey(display);
+                var key = KeyCreator.Create(display);
                 try
                 {
                     var setupContext = new TabSetupContext(logger, messageBroker, () => GetTabStore(key, CurrentRequestContext));
@@ -45,7 +45,7 @@ namespace Glimpse.Core.Framework
             foreach (var display in Configuration.Displays)
             {
                 TabResult result; // TODO: Rename now that it is no longer *just* tab results
-                var key = GlimpseRuntime.CreateKey(display);
+                var key = KeyCreator.Create(display);
                 try
                 {
                     var displayContext = new TabContext(runtimeContext, GetTabStore(key, glimpseRequestContext), logger, messageBroker); // TODO: Do we need a DisplayContext?

@@ -24,7 +24,7 @@ namespace Glimpse.Core.Framework
             var tabsThatRequireSetup = Configuration.Tabs.Where(tab => tab is ITabSetup).Select(tab => tab);
             foreach (ITabSetup tab in tabsThatRequireSetup)
             {
-                var key = GlimpseRuntime.CreateKey(tab);
+                var key = KeyCreator.Create(tab);
                 try
                 {
                     var setupContext = new TabSetupContext(logger, messageBroker, () => GetTabStore(key, CurrentRequestContext));
@@ -54,7 +54,7 @@ namespace Glimpse.Core.Framework
             foreach (var tab in supportedRuntimeTabs)
             {
                 TabResult result;
-                var key = GlimpseRuntime.CreateKey(tab);
+                var key = KeyCreator.Create(tab);
                 try
                 {
                     var tabContext = new TabContext(runtimeContext, GetTabStore(key, glimpseRequestContext), logger, messageBroker);

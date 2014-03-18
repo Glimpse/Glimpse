@@ -38,7 +38,7 @@ namespace Glimpse.Core.Metadata
 
                 if (metadataInstance.Count > 0)
                 {
-                    tabMetadata[GlimpseRuntime.CreateKey(tab)] = metadataInstance;
+                    tabMetadata[KeyCreator.Create(tab)] = metadataInstance;
                 }
             }
 

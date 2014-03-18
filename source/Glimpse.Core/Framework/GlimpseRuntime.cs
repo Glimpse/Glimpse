@@ -417,23 +417,6 @@ namespace Glimpse.Core.Framework
 
         }
 
-        internal static string CreateKey(object obj)
-        {
-            var result = (string)null;
-
-            var keyProvider = obj as IKey;
-            if (keyProvider != null)
-            {
-                result = keyProvider.Key;
-            }
-            else
-            {
-                result = obj.GetType().FullName;
-            }
-
-            return result.Replace('.', '_').Replace(' ', '_').ToLower();
-        }
-
         // TODO this should not be public! This was changed to hack in OWIN support
         // TODO do we need both GenerateScriptTags methods
 #warning this should not be public! but we need to have some way to get to generate script tags conditionally so that they are only generated once (like glimpse injects it before </body> and at the same time a user has added the GlimpseClient control)
