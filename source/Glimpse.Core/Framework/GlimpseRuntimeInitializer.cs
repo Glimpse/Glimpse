@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Glimpse.Core.Configuration;
 using Glimpse.Core.Extensibility;
 
@@ -65,7 +66,7 @@ namespace Glimpse.Core.Framework
                         }
 
                         // now that the Logger is available, we can log the registered initialization messages
-                        foreach (var initializationMessage in InitializationMessages)
+                        foreach (var initializationMessage in InitializationMessages.Where(initializationMessage => !initializationMessage.WrittenToLog))
                         {
                             switch (initializationMessage.Level)
                             {
@@ -88,6 +89,8 @@ namespace Glimpse.Core.Framework
                                     configuration.Logger.Fatal(initializationMessage.Message, initializationMessage.Exception);
                                     break;
                             }
+
+                            initializationMessage.WrittenToLog = true;
                         }
 
                         var readonlyConfiguration = new ReadonlyConfigurationAdapter(userUpdatedConfig);
@@ -124,6 +127,7 @@ namespace Glimpse.Core.Framework
                 public LoggingLevel Level { get; set; }
                 public string Message { get; set; }
                 public Exception Exception { get; set; }
+                public bool WrittenToLog { get; set; }
             }
         }
     }
