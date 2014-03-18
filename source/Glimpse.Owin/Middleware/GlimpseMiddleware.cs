@@ -60,14 +60,10 @@ namespace Glimpse.Owin.Middleware
 
         private static async Task ExecuteResourceRequest(GlimpseRequestContextHandle glimpseRequestContextHandle, IReadableStringCollection queryString)
         {
-            if (string.IsNullOrEmpty(queryString[UriTemplateResourceEndpointConfiguration.DefaultResourceNameKey]))
-            {
-                GlimpseRuntime.Instance.ExecuteDefaultResource(glimpseRequestContextHandle);
-            }
-            else
-            {
-                GlimpseRuntime.Instance.ExecuteResource(glimpseRequestContextHandle, queryString[UriTemplateResourceEndpointConfiguration.DefaultResourceNameKey], new ResourceParameters(queryString.ToDictionary(qs => qs.Key, qs => qs.Value.First())));
-            }
+            GlimpseRuntime.Instance.ExecuteResource(
+                glimpseRequestContextHandle, 
+                queryString[UriTemplateResourceEndpointConfiguration.DefaultResourceNameKey], 
+                new ResourceParameters(queryString.ToDictionary(qs => qs.Key, qs => qs.Value.First())));
         }
 
         private async Task ExecuteRegularRequest(GlimpseRequestContextHandle glimpseRequestContextHandle, IOwinRequest request, IOwinResponse response, IDictionary<string, object> environment)

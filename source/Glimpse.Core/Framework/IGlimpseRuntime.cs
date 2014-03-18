@@ -21,12 +21,6 @@ namespace Glimpse.Core.Framework
         void EndRequest(GlimpseRequestContextHandle glimpseRequestContextHandle);
 
         /// <summary>
-        /// Executes the default resource.
-        /// </summary>
-        /// <param name="glimpseRequestContextHandle">The Glimpse handle of the corresponding request</param>
-        void ExecuteDefaultResource(GlimpseRequestContextHandle glimpseRequestContextHandle);
-
-        /// <summary>
         /// Executes the given resource.
         /// </summary>
         /// <param name="glimpseRequestContextHandle">The Glimpse handle of the corresponding request</param>

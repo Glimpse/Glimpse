@@ -41,7 +41,7 @@ namespace Glimpse.Test.AspNet
 
             Handler.ProcessRequest(Handler.ContextMock.Object);
 
-            Handler.RuntimeMock.Verify(r => r.ExecuteDefaultResource(It.IsAny<GlimpseRequestContextHandle>()), Times.Once());
+            Handler.RuntimeMock.Verify(r => r.ExecuteResource(It.IsAny<GlimpseRequestContextHandle>(), null, It.IsAny<ResourceParameters>()), Times.Once());
         }
     }
 }

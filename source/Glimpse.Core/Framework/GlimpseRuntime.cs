@@ -264,15 +264,6 @@ namespace Glimpse.Core.Framework
             }
         }
 
-#warning CGI: There is no need to keep both execute methods, just have one default to default resource when resourcename is null
-        /// <summary>
-        /// Executes the default resource.
-        /// </summary>
-        public void ExecuteDefaultResource(GlimpseRequestContextHandle glimpseRequestContextHandle)
-        {
-            ExecuteResource(glimpseRequestContextHandle, Configuration.DefaultResource.Name, ResourceParameters.None());
-        }
-
         /// <summary>
         /// Executes the given resource.
         /// </summary>
@@ -289,7 +280,7 @@ namespace Glimpse.Core.Framework
 
             if (string.IsNullOrEmpty(resourceName))
             {
-                throw new ArgumentNullException("resourceName");
+                resourceName = Configuration.DefaultResource.Name;
             }
 
             if (parameters == null)
@@ -337,13 +328,13 @@ namespace Glimpse.Core.Framework
             }
             else
             {
-                var resources = Configuration.Resources.Where(r => r.Name.Equals(resourceName, StringComparison.InvariantCultureIgnoreCase));
-                switch (resources.Count())
+                var resources = Configuration.Resources.Where(r => r.Name.Equals(resourceName, StringComparison.InvariantCultureIgnoreCase)).ToArray();
+                switch (resources.Length)
                 {
                     case 1: // 200 - OK
                         try
                         {
-                            var resource = resources.First();
+                            var resource = resources[0];
                             var resourceContext = new ResourceContext(parameters.GetParametersFor(resource), Configuration.PersistenceStore, logger);
 
                             var privilegedResource = resource as IPrivilegedResource;

@@ -33,16 +33,11 @@ namespace Glimpse.AspNet
                     glimpseRequestContextHandleFound = true;
 
                     var queryString = context.Request.QueryString;
-                    var resourceName = queryString[UriTemplateResourceEndpointConfiguration.DefaultResourceNameKey];
 
-                    if (string.IsNullOrEmpty(resourceName))
-                    {
-                        GlimpseRuntime.Instance.ExecuteDefaultResource(glimpseRequestContextHandle);
-                    }
-                    else
-                    {
-                        GlimpseRuntime.Instance.ExecuteResource(glimpseRequestContextHandle, resourceName, new ResourceParameters(queryString.AllKeys.Where(key => key != null).ToDictionary(key => key, key => queryString[key])));
-                    }
+                    GlimpseRuntime.Instance.ExecuteResource(
+                        glimpseRequestContextHandle,
+                        queryString[UriTemplateResourceEndpointConfiguration.DefaultResourceNameKey],
+                        new ResourceParameters(queryString.AllKeys.Where(key => key != null).ToDictionary(key => key, key => queryString[key])));
                 }
             }
 
