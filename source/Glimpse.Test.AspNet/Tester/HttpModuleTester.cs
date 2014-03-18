@@ -23,7 +23,6 @@ namespace Glimpse.Test.AspNet.Tester
             RuntimeMock.Setup(r => r.Configuration).Returns(ConfigurationMock.Object);
 
             AppStateMock = new Mock<HttpApplicationStateBase>();
-            AppStateMock.Setup(s => s[Constants.RuntimeKey]).Returns(RuntimeMock.Object);
 
             AppMock = new Mock<HttpApplicationBase>();
             AppMock.Setup(a => a.Application).Returns(AppStateMock.Object);
