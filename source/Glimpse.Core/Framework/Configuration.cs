@@ -338,7 +338,7 @@ namespace Glimpse.Core.Framework
                 }
 
                 messageBroker = new MessageBroker(
-                    () => GlimpseRuntime.IsInitialized && GlimpseRuntime.Instance.CurrentRequestContext.CurrentRuntimePolicy != RuntimePolicy.Off,
+                    () => GlimpseRuntime.IsAvailable && GlimpseRuntime.Instance.CurrentRequestContext.CurrentRuntimePolicy != RuntimePolicy.Off,
                     Logger);
 
                 return messageBroker;
@@ -437,8 +437,8 @@ namespace Glimpse.Core.Framework
                 proxyFactory = new CastleDynamicProxyFactory(
                     Logger,
                     MessageBroker,
-                    () => GlimpseRuntime.IsInitialized ? GlimpseRuntime.Instance.CurrentRequestContext.CurrentExecutionTimer : UnavailableGlimpseRequestContext.Instance.CurrentExecutionTimer,
-                    () => GlimpseRuntime.IsInitialized ? GlimpseRuntime.Instance.CurrentRequestContext.CurrentRuntimePolicy : UnavailableGlimpseRequestContext.Instance.CurrentRuntimePolicy);
+                    () => GlimpseRuntime.IsAvailable ? GlimpseRuntime.Instance.CurrentRequestContext.CurrentExecutionTimer : UnavailableGlimpseRequestContext.Instance.CurrentExecutionTimer,
+                    () => GlimpseRuntime.IsAvailable ? GlimpseRuntime.Instance.CurrentRequestContext.CurrentRuntimePolicy : UnavailableGlimpseRequestContext.Instance.CurrentRuntimePolicy);
 
                 return proxyFactory;
             }

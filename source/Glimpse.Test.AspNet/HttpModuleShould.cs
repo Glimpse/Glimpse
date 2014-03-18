@@ -37,7 +37,7 @@ namespace Glimpse.Test.AspNet
             HttpModule.Dispose();
         }
 
-        [Fact(Skip="Logger is not put in appDomain data any longer, but GlimpseRuntime.Instance.Configuration.Logger is used")]
+        [Fact]
         public void HaveLoggedAppDomainUnloadMessage()
         {
             // to make sure the HttpModule's type constructor has been run, otherwise the previous logger will have a value of null, which will be 
@@ -45,26 +45,18 @@ namespace Glimpse.Test.AspNet
             // OnAppDomainUnload method, which will set the correct logger, but that will be undone by setting the null value back.
             Assert.NotNull(this.HttpModule);
 
-            var currentDomain = AppDomain.CurrentDomain;
-
-            object previousLoggerKeyValue = currentDomain.GetData(Constants.LoggerKey);
             try
             {
-                currentDomain.SetData(Constants.LoggerKey, HttpModule.LoggerMock.Object);
-                typeof(HttpModule).GetMethod("OnAppDomainUnload", BindingFlags.NonPublic | BindingFlags.Static).Invoke(HttpModule, new object[] { currentDomain });
+                var glimpseRuntimeMock = new Mock<IGlimpseRuntime>();
+                glimpseRuntimeMock.Setup(glimpseRuntime => glimpseRuntime.Configuration).Returns(HttpModule.ConfigurationMock.Object);
+                GlimpseRuntime.Instance = glimpseRuntimeMock.Object;
+                typeof(HttpModule).GetMethod("OnAppDomainUnload", BindingFlags.NonPublic | BindingFlags.Static).Invoke(HttpModule, new object[] { AppDomain.CurrentDomain });
                 HttpModule.LoggerMock.Verify(l => l.Fatal(It.IsAny<string>(), It.IsAny<object[]>()));
             }
             finally
             {
-                currentDomain.SetData(Constants.LoggerKey, previousLoggerKeyValue);
+                GlimpseRuntime.Instance = null;
             }
-        }
-
-        [Fact(Skip = "Logger is not put in appDomain data any longer, but GlimpseRuntime.Instance.Configuration.Logger is used")]
-        public void HaveStoredLoggerInAppDomainData()
-        {
-            Assert.NotNull(this.HttpModule); // triggering the call of the HttpModule's type constructor (if not already called)
-            Assert.NotNull(AppDomain.CurrentDomain.GetData(Constants.LoggerKey));
         }
     }
 }

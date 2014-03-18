@@ -21,4 +21,5 @@ using Glimpse.Core.Extensibility;
 
 [assembly: CLSCompliant(true)]
 [assembly: InternalsVisibleTo("Glimpse.Test.Core")]
+[assembly: InternalsVisibleTo("Glimpse.Test.AspNet")]
 [assembly: NuGetPackage("Glimpse")]

@@ -65,7 +65,7 @@ namespace Glimpse.Core.Policy
             }
             catch (Exception exception)
             {
-                if (GlimpseRuntime.IsInitialized)
+                if (GlimpseRuntime.IsAvailable)
                 {
                     GlimpseRuntime.Instance.Configuration.Logger.Error("Failed to process custom configuration by '" + this.GetType().FullName + "'", exception);
                 }

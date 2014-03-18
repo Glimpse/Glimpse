@@ -119,7 +119,7 @@ namespace Glimpse.Core.Framework
                 Guid glimpseRequestId;
                 if (!CurrentGlimpseRequestIdTracker.TryGet(out glimpseRequestId))
                 {
-                    if (GlimpseRuntime.IsInitialized)
+                    if (GlimpseRuntime.IsAvailable)
                     {
                         GlimpseRuntime.Instance.Configuration.Logger.Warn("Returning UnavailableGlimpseRequestContext.Instance which is unexpected. If you set the log level to Trace, then you'll see the stack trace as well.");
                         GlimpseRuntime.Instance.Configuration.Logger.Trace("Call for UnavailableGlimpseRequestContext.Instance made from" + Environment.NewLine + "\t" + new StackTrace());
@@ -151,7 +151,7 @@ namespace Glimpse.Core.Framework
             }
             catch (Exception exception)
             {
-                if (GlimpseRuntime.IsInitialized)
+                if (GlimpseRuntime.IsAvailable)
                 {
                     GlimpseRuntime.Instance.Configuration.Logger.Error("Exception occurred when '" + eventName + "' event got raised", exception);
                 }

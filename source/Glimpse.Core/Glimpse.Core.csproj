@@ -117,10 +117,11 @@
     <Compile Include="Framework\CallContextCurrentGlimpseRequestIdTracker.cs" />
     <Compile Include="Framework\Crc32.cs" />
     <Compile Include="Framework\DisplayProvider.cs" />
+    <Compile Include="Framework\GlimpseRuntimeNotAvailableException.cs" />
+    <Compile Include="Framework\GlimpseRuntimeInitializer.cs" />
     <Compile Include="Framework\InspectorProvider.cs" />
     <Compile Include="Framework\IReadonlyConfiguration.cs" />
     <Compile Include="Framework\ReadonlyConfigurationAdapter.cs" />
-    <Compile Include="Framework\GlimpseNotInitializedException.cs" />
     <Compile Include="Framework\ICurrentGlimpseRequestIdTracker.cs" />
     <Compile Include="Framework\IGlimpseRequestContext.cs" />
     <Compile Include="Framework\GlimpseRequestContext.cs" />
@@ -135,6 +136,7 @@
     <Compile Include="Framework\Support\ExecutionBlockBase.cs" />
     <Compile Include="Framework\Support\IExecutionTask.cs" />
     <Compile Include="Framework\UriTemplateResourceEndpointConfiguration.cs" />
+    <Compile Include="Guard.cs" />
     <Compile Include="Message\RuntimeMessage.cs" />
     <Compile Include="Metadata\CorrelationInstanceMetadata.cs" />
     <Compile Include="Metadata\DocumentationTabMetadata.cs" />

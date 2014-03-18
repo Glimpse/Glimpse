@@ -108,7 +108,7 @@ namespace Glimpse.Core.Framework
 
         private static T LogAccess<T>(string propertyOrMethodName, Func<T> propertyValueProvider)
         {
-            if (GlimpseRuntime.IsInitialized)
+            if (GlimpseRuntime.IsAvailable)
             {
                 GlimpseRuntime.Instance.Configuration.Logger.Warn("Accessing 'UnavailableGlimpseRequestContext.Instance." + propertyOrMethodName + "' which is unexpected. Make sure to check the current runtime policy before accessing any further details. StackTrace = " + new StackTrace());
             }

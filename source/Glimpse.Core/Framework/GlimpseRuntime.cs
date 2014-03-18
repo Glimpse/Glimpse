@@ -1,10 +1,9 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
-using Glimpse.Core.Message; 
+using Glimpse.Core.Message;
 using Glimpse.Core.ResourceResult;
 #if NET35
 using Glimpse.Core.Backport;
@@ -15,12 +14,11 @@ namespace Glimpse.Core.Framework
     /// <summary>
     /// The heart and soul of Glimpse. The runtime coordinate all input from a <see cref="IRequestResponseAdapter" />, persists collected runtime information and writes responses out to the <see cref="IRequestResponseAdapter" />.
     /// </summary>
-    public class GlimpseRuntime : IGlimpseRuntime
+    public partial class GlimpseRuntime : IGlimpseRuntime
     {
         private static readonly MethodInfo MethodInfoBeginRequest = typeof(GlimpseRuntime).GetMethod("BeginRequest", BindingFlags.Public | BindingFlags.Instance);
         private static readonly MethodInfo MethodInfoEndRequest = typeof(GlimpseRuntime).GetMethod("EndRequest", BindingFlags.Public | BindingFlags.Instance);
-        private static readonly object LockObj = new object();
-        private static GlimpseRuntime instance;
+        private static IGlimpseRuntime instance;
 
         /// <summary>
         /// Initializes static members of the <see cref="GlimpseRuntime" /> class.
@@ -28,8 +26,7 @@ namespace Glimpse.Core.Framework
         /// <exception cref="System.NullReferenceException">BeginRequest method not found</exception>
         static GlimpseRuntime()
         {
-            // Version is in major.minor.build format to support http://semver.org/ 
-            IsInitialized = false;
+            Initializer = new GlimpseRuntimeInitializer();
 
             if (MethodInfoBeginRequest == null)
             {
@@ -42,73 +39,70 @@ namespace Glimpse.Core.Framework
             }
         }
 
-        internal static void Reset()
-        {
-            instance = null; // HACK?
-        }
+        /// <summary>
+        /// Gets the <see cref="GlimpseRuntimeInitializer"/> which will initialize the <see cref="GlimpseRuntime"/> and set the <see cref="GlimpseRuntime.Instance"/>
+        /// </summary>
+        public static GlimpseRuntimeInitializer Initializer { get; private set; }
 
         /// <summary>
-        /// Gets the singleton instance of the <see cref="GlimpseRuntime"/> type once it has been initialized
+        /// Gets a value indicating whether the Glimpse runtime is available.
         /// </summary>
-        public static GlimpseRuntime Instance
+        /// <value>
+        /// <c>true</c> if the Glimpse runtime is available; otherwise, <c>false</c>.
+        /// </value>
+        public static bool IsAvailable { get { return instance != null; } }
+
+        /// <summary>
+        /// Gets the <see cref="IGlimpseRuntime"/> instance set during the initialization of the Glimpse runtime
+        /// </summary>
+        public static IGlimpseRuntime Instance
         {
             get
             {
-                if (instance == null)
+                if (!IsAvailable)
                 {
-                    throw new GlimpseNotInitializedException();
+                    throw new GlimpseRuntimeNotAvailableException();
                 }
 
                 return instance;
             }
 
-            private set { instance = value; }
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether this instance has been initialized.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if this instance is initialized; otherwise, <c>false</c>.
-        /// </value>
-        public static bool IsInitialized { get; private set; }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="GlimpseRuntime" /> class.
-        /// </summary>
-        /// <param name="configuration">The configuration.</param>
-        /// <exception cref="System.ArgumentNullException">Throws an exception if <paramref name="configuration"/> is <c>null</c>.</exception>
-        public static void Initialize(IConfiguration configuration)
-        {
-            if (configuration == null)
+            internal set
             {
-                throw new ArgumentNullException("configuration");
-            }
-
-            if (configuration.DefaultRuntimePolicy == RuntimePolicy.Off)
-            {
-                return;
-            }
-
-            if (!IsInitialized) // Double checked lock to ensure thread safety. http://en.wikipedia.org/wiki/Double_checked_locking_pattern
-            {
-                lock (LockObj)
-                {
-                    if (!IsInitialized)
-                    {
-                        Instance = new GlimpseRuntime(configuration);
-                    }
-                }
+                instance = value;
             }
         }
 
-        // TODO: V2Merge This should be private but is internal to not break unit tests
-        internal GlimpseRuntime(IConfiguration configuration) 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GlimpseRuntime" />
+        /// </summary>
+        /// <param name="configuration">The configuration</param>
+        /// <param name="activeGlimpseRequestContexts">The store for active <see cref="IGlimpseRequestContext"/> instances</param>
+        /// <param name="runtimePolicyDeterminator">The runtime policy determinator</param>
+        /// <param name="metadataProvider">The metadata provider</param>
+        /// <param name="tabProvider">The tab provider</param>
+        /// <param name="displayProvider">The display provider</param>
+        internal GlimpseRuntime(
+            IReadonlyConfiguration configuration,
+            ActiveGlimpseRequestContexts activeGlimpseRequestContexts,
+            RuntimePolicyDeterminator runtimePolicyDeterminator,
+            MetadataProvider metadataProvider,
+            TabProvider tabProvider,
+            DisplayProvider displayProvider)
         {
-            InitializeConfig(configuration);
-            Initialize();
+            Guard.ArgumentNotNull("configuration", configuration);
+            Guard.ArgumentNotNull("activeGlimpseRequestContexts", activeGlimpseRequestContexts);
+            Guard.ArgumentNotNull("runtimePolicyDeterminator", runtimePolicyDeterminator);
+            Guard.ArgumentNotNull("metadataProvider", metadataProvider);
+            Guard.ArgumentNotNull("tabProvider", tabProvider);
+            Guard.ArgumentNotNull("displayProvider", displayProvider);
 
-            IsInitialized = true;
+            Configuration = configuration;
+            ActiveGlimpseRequestContexts = activeGlimpseRequestContexts;
+            RuntimePolicyDeterminator = runtimePolicyDeterminator;
+            MetadataProvider = metadataProvider;
+            TabProvider = tabProvider;
+            DisplayProvider = displayProvider;
         }
 
         /// <summary>
@@ -117,7 +111,7 @@ namespace Glimpse.Core.Framework
         /// <value>
         /// The configuration.
         /// </value>
-        public IReadonlyConfiguration Configuration { get; set; }
+        public IReadonlyConfiguration Configuration { get; private set; }
 
         /// <summary>
         /// Returns the <see cref="IGlimpseRequestContext"/> corresponding to the current request.
@@ -128,16 +122,10 @@ namespace Glimpse.Core.Framework
         }
 
         private ActiveGlimpseRequestContexts ActiveGlimpseRequestContexts { get; set; }
-
         private RuntimePolicyDeterminator RuntimePolicyDeterminator { get; set; }
-
         private MetadataProvider MetadataProvider { get; set; }
-         
-        private DisplayProvider DisplayProvider { get; set; }
-
         private TabProvider TabProvider { get; set; }
-
-        private InspectorProvider InspectorProvider { get; set; } 
+        private DisplayProvider DisplayProvider { get; set; }
 
         /// <summary>
         /// Begins Glimpse's processing of a Http request.
@@ -187,7 +175,7 @@ namespace Glimpse.Core.Framework
         /// </summary>
         /// <param name="glimpseRequestContextHandle">The Glimpse handle of the corresponding request</param>
         /// <exception cref="Glimpse.Core.Framework.GlimpseException">Throws an exception if <c>BeginRequest</c> has not yet been called for the given request.</exception>
-        public void EndRequest(GlimpseRequestContextHandle glimpseRequestContextHandle) 
+        public void EndRequest(GlimpseRequestContextHandle glimpseRequestContextHandle)
         {
             if (glimpseRequestContextHandle == null)
             {
@@ -337,8 +325,8 @@ namespace Glimpse.Core.Framework
                 policy = RuntimePolicyDeterminator.DetermineRuntimePolicy(RuntimeEvent.ExecuteResource, Configuration.DefaultRuntimePolicy, requestResponseAdapter);
             }
 
-            var result = (IResourceResult)null;
-            var message = (string)null;
+            IResourceResult result;
+            string message;
             var logger = Configuration.Logger;
 
             if (policy == RuntimePolicy.Off)
@@ -438,33 +426,6 @@ namespace Glimpse.Core.Framework
 
         }
 
-        private void InitializeConfig(IConfiguration configuration)
-        {
-            // Run user customizations to configuration before storing and then override 
-            // (some) changes made by the user to make sure .config file driven settings win
-            var userUpdatedConfig = GlimpseConfiguration.Override(configuration);
-            userUpdatedConfig.ApplyOverrides();
-
-            Configuration = new ReadonlyConfigurationAdapter(userUpdatedConfig);
-        }
-
-        private void Initialize()
-        { 
-            ActiveGlimpseRequestContexts = new ActiveGlimpseRequestContexts(Configuration.CurrentGlimpseRequestIdTracker);
-
-            RuntimePolicyDeterminator = new RuntimePolicyDeterminator(Configuration); 
-            MetadataProvider = new MetadataProvider(Configuration);
-            DisplayProvider = new DisplayProvider(Configuration, ActiveGlimpseRequestContexts);
-            TabProvider = new TabProvider(Configuration, ActiveGlimpseRequestContexts);
-            InspectorProvider = new InspectorProvider(Configuration, ActiveGlimpseRequestContexts);
-
-            DisplayProvider.Setup();
-            TabProvider.Setup();
-            InspectorProvider.Setup();
-             
-            MetadataProvider.SaveMetadata();
-        }
-          
         internal static string CreateKey(object obj)
         {
             var result = (string)null;

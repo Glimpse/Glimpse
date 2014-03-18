@@ -39,7 +39,7 @@ namespace Glimpse.Core
                 throw new ArgumentNullException("eventName");
             }
 
-            if (!GlimpseRuntime.IsInitialized)
+            if (!GlimpseRuntime.IsAvailable)
             {
                 return OngoingCapture.Empty();
             }
@@ -84,7 +84,7 @@ namespace Glimpse.Core
                 throw new ArgumentNullException("eventName");
             }
 
-            if (!GlimpseRuntime.IsInitialized)
+            if (!GlimpseRuntime.IsAvailable)
             {
                 return;
             }

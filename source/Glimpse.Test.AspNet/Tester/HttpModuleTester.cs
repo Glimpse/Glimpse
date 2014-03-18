@@ -32,6 +32,8 @@ namespace Glimpse.Test.AspNet.Tester
             ContextMock.Setup(c => c.Application).Returns(AppStateMock.Object);
 
             LoggerMock = new Mock<ILogger>();
+
+            ConfigurationMock.Setup(configuration => configuration.Logger).Returns(LoggerMock.Object);
         }
 
         public static HttpModuleTester Create()

@@ -25,12 +25,12 @@ namespace Glimpse.Owin.Middleware
 
         public async Task Invoke(IDictionary<string, object> environment)
         {
-            if (!GlimpseRuntime.IsInitialized)
+            if (!GlimpseRuntime.IsAvailable)
             {
-                GlimpseRuntime.Initialize(config);
+                GlimpseRuntime.Initializer.Initialize(config);
             }
 
-            if (GlimpseRuntime.IsInitialized)
+            if (GlimpseRuntime.IsAvailable)
             {
                 var request = new OwinRequest(environment);
                 var response = new OwinResponse(environment);

@@ -1,3 +1,5 @@
+using System;
+
 namespace Glimpse.Core.Framework
 {
     /// <summary>
@@ -60,5 +62,22 @@ namespace Glimpse.Core.Framework
         /// The configuration.
         /// </value>
         IReadonlyConfiguration Configuration { get; }
+
+        /// <summary>
+        /// Returns the corresponding <see cref="IGlimpseRequestContext"/> for the given <paramref name="glimpseRequestId"/>
+        /// </summary>
+        /// <param name="glimpseRequestId">The Glimpse request Id</param>
+        /// <param name="glimpseRequestContext">The corresponding <see cref="IGlimpseRequestContext"/></param>
+        /// <returns>Boolean indicating whether the corresponding <see cref="IGlimpseRequestContext"/> was found.</returns>
+        bool TryGetRequestContext(Guid glimpseRequestId, out IGlimpseRequestContext glimpseRequestContext);
+
+        /// <summary>
+        /// Returns the <see cref="IGlimpseRequestContext"/> corresponding to the current request.
+        /// </summary>
+        IGlimpseRequestContext CurrentRequestContext { get; }
+
+        string GenerateScriptTags(IGlimpseRequestContext glimpseRequestContext);
+
+        string GenerateScriptTags(GlimpseRequestContextHandle glimpseRequestContextHandle);
     }
 }

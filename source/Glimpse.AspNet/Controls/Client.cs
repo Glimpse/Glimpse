@@ -8,7 +8,7 @@ namespace Glimpse.AspNet.Controls
     {
         protected override void Render(HtmlTextWriter writer)
         {
-            if (GlimpseRuntime.IsInitialized)
+            if (GlimpseRuntime.IsAvailable)
             {
                 writer.Write(GlimpseRuntime.Instance.GenerateScriptTags(GlimpseRuntime.Instance.CurrentRequestContext));
             }

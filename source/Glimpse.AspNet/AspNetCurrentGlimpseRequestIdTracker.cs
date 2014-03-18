@@ -53,7 +53,7 @@ namespace Glimpse.AspNet
                     Guid callcontextStoredGlimpseRequestId;
                     if (base.TryGet(out callcontextStoredGlimpseRequestId) && callcontextStoredGlimpseRequestId != glimpseRequestId)
                     {
-                        if (GlimpseRuntime.IsInitialized)
+                        if (GlimpseRuntime.IsAvailable)
                         {
                             GlimpseRuntime.Instance.Configuration.Logger.Error("Glimpse request id '" + callcontextStoredGlimpseRequestId + "' was found in the CallContext but it differs from the one found in the HttpContext.Current.Items collection being '" + glimpseRequestId + "'.");
                         }

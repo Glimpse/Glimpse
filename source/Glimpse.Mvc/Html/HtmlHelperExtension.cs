@@ -9,7 +9,7 @@ namespace Glimpse.Mvc.Html
 #if MVC2
         public static string GlimpseClient(this HtmlHelper helper)
         {
-            return GlimpseRuntime.IsInitialized
+            return GlimpseRuntime.IsAvailable
                 ? GlimpseRuntime.Instance.GenerateScriptTags(GlimpseRuntime.Instance.CurrentRequestContext)
                 : string.Empty;
         }
@@ -17,7 +17,7 @@ namespace Glimpse.Mvc.Html
         public static IHtmlString GlimpseClient(this HtmlHelper helper)
         {
             return helper.Raw( 
-                GlimpseRuntime.IsInitialized 
+                GlimpseRuntime.IsAvailable 
                     ? GlimpseRuntime.Instance.GenerateScriptTags(GlimpseRuntime.Instance.CurrentRequestContext) 
                     : string.Empty);
         }

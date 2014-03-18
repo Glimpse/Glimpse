@@ -18,7 +18,7 @@ namespace Glimpse.AspNet
 
         public void ProcessRequest(HttpContextBase context)
         {
-            if (!GlimpseRuntime.IsInitialized)
+            if (!GlimpseRuntime.IsAvailable)
             {
                 throw new HttpException(404, Resources.ProcessRequestMissingRuntime);
             }

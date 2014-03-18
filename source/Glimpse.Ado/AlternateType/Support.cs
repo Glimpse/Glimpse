@@ -157,12 +157,12 @@ namespace Glimpse.Ado.AlternateType
 
         internal static IMessageBroker DetermineMessageBroker()
         {
-            return GlimpseRuntime.IsInitialized ? GlimpseRuntime.Instance.Configuration.MessageBroker : null;
+            return GlimpseRuntime.IsAvailable ? GlimpseRuntime.Instance.Configuration.MessageBroker : null;
         }
 
         internal static IExecutionTimer DetermineExecutionTimer()
         {
-            if (GlimpseRuntime.IsInitialized)
+            if (GlimpseRuntime.IsAvailable)
             {
                 var currentRequestContext = GlimpseRuntime.Instance.CurrentRequestContext;
                 if (currentRequestContext.CurrentRuntimePolicy != RuntimePolicy.Off)

@@ -52,7 +52,7 @@ namespace Glimpse.Core
         {
             get
             {
-                return messageBroker ?? (messageBroker = GlimpseRuntime.IsInitialized ? GlimpseRuntime.Instance.Configuration.MessageBroker : null);
+                return messageBroker ?? (messageBroker = GlimpseRuntime.IsAvailable ? GlimpseRuntime.Instance.Configuration.MessageBroker : null);
             }
 
             set
@@ -72,7 +72,7 @@ namespace Glimpse.Core
             {
                 if (timerStrategy == null)
                 {
-                    if (GlimpseRuntime.IsInitialized)
+                    if (GlimpseRuntime.IsAvailable)
                     {
                         timerStrategy = () =>
                         {

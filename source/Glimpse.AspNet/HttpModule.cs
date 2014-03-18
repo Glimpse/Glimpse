@@ -3,6 +3,7 @@ using System.Threading;
 using System.Web;
 using System.Web.Compilation;
 using System.Web.Hosting;
+using Glimpse.Core.Configuration;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
 
@@ -14,20 +15,14 @@ namespace Glimpse.AspNet
 
         static HttpModule()
         {
-            // V2Merge: need to find another way to access logger here
-            // ILogger logger = Factory.InstantiateLogger();
-            // serviceLocator.Logger = Factory.InstantiateLogger();
-
             try
             {
                 BuildManager.GetReferencedAssemblies();
-                // TODO: Add these back in
-                // serviceLocator.Logger.Debug("Preloaded all referenced assemblies with System.Web.Compilation.BuildManager.GetReferencedAssemblies()");
+                GlimpseRuntime.Initializer.AddInitializationMessage(LoggingLevel.Debug, "Preloaded all referenced assemblies with System.Web.Compilation.BuildManager.GetReferencedAssemblies()");
             }
             catch (Exception exception)
             {
-                // TODO: Add these back in
-                // serviceLocator.Logger.Error("Call to System.Web.Compilation.BuildManager.GetReferencedAssemblies() failed.", exception);
+                GlimpseRuntime.Initializer.AddInitializationMessage(LoggingLevel.Error, "Call to System.Web.Compilation.BuildManager.GetReferencedAssemblies() failed.", exception);
             }
 
             AppDomain.CurrentDomain.DomainUnload += (sender, e) => OnAppDomainUnload((AppDomain)sender);
@@ -35,18 +30,20 @@ namespace Glimpse.AspNet
 
         private static void OnAppDomainUnload(AppDomain appDomain)
         {
-            if (GlimpseRuntime.IsInitialized)
+            if (!GlimpseRuntime.IsAvailable)
             {
-                GlimpseRuntime.Instance.Configuration.Logger.Fatal(
-                    "AppDomain with Id: '{0}' and BaseDirectory: '{1}' has been unloaded. Any in memory data stores have been lost. {2}",
-                    appDomain.Id,
-                    appDomain.BaseDirectory,
-                    "Reason for shutdown => " + HostingEnvironment.ShutdownReason);
-
-                // NLog writes its logs asynchronously, which means that if we don't wait, chances are the log will not be written 
-                // before the appdomain is actually shut down, so we sleep for 100ms and hopefully that is enough for NLog to do its thing
-                Thread.Sleep(100);
+                return;
             }
+
+            GlimpseRuntime.Instance.Configuration.Logger.Fatal(
+               "AppDomain with Id: '{0}' and BaseDirectory: '{1}' has been unloaded. Any in memory data stores have been lost. {2}",
+               appDomain.Id,
+               appDomain.BaseDirectory,
+               "Reason for shutdown => " + HostingEnvironment.ShutdownReason);
+
+            // NLog writes its logs asynchronously, which means that if we don't wait, chances are the log will not be written 
+            // before the appdomain is actually shut down, so we sleep for 100ms and hopefully that is enough for NLog to do its thing
+            Thread.Sleep(100);
         }
 
         public void Init(HttpApplication httpApplication)
@@ -61,7 +58,7 @@ namespace Glimpse.AspNet
 
         internal void Init(HttpApplicationBase httpApplication)
         {
-            if (!GlimpseRuntime.IsInitialized)
+            if (!GlimpseRuntime.IsAvailable)
             {
                 Configuration = Configuration ??
                     new Configuration(
@@ -69,11 +66,8 @@ namespace Glimpse.AspNet
                         new InMemoryPersistenceStore(new HttpApplicationStateBaseDataStoreAdapter(httpApplication.Application)),
                         new AspNetCurrentGlimpseRequestIdTracker());
 
-                GlimpseRuntime.Initialize(Configuration);
+                GlimpseRuntime.Initializer.Initialize(Configuration);
             }
-
-            var currentDomain = AppDomain.CurrentDomain;
-            currentDomain.SetData(Constants.LoggerKey, Configuration.Logger);
 
             Func<object, HttpContextWrapper> createHttpContextWrapper = sender => new HttpContextWrapper(((HttpApplication)sender).Context);
 
@@ -86,9 +80,14 @@ namespace Glimpse.AspNet
 
         internal void BeginRequest(HttpContextBase httpContext)
         {
-            // TODO: Add Logging to either methods here or in Runtime
+            if (!GlimpseRuntime.IsAvailable)
+            {
+                return;
+            }
 
-            var glimpseRequestContextHandle = GlimpseRuntime.Instance.BeginRequest(new AspNetRequestResponseAdapter(httpContext, Configuration.Logger));
+            var glimpseRequestContextHandle = GlimpseRuntime.Instance.BeginRequest(
+                new AspNetRequestResponseAdapter(httpContext, GlimpseRuntime.Instance.Configuration.Logger));
+
             if (glimpseRequestContextHandle.RequestHandlingMode != RequestHandlingMode.Unhandled)
             {
                 // We'll store the glimpseRequestContextHandle in the Items collection so it can be retrieved and disposed later on in the EndRequest event handler.
@@ -136,28 +135,30 @@ namespace Glimpse.AspNet
 
         private static void ProcessAspNetRuntimeEvent(HttpContextBase httpContext, Action<GlimpseRequestContextHandle> action, bool disposeHandle = false, bool availabilityOfGlimpseRequestContextHandleIsRequired = true)
         {
-            if (GlimpseRuntime.IsInitialized)
+            if (!GlimpseRuntime.IsAvailable)
             {
-                GlimpseRequestContextHandle glimpseRequestContextHandle;
-                if (TryGetGlimpseRequestContextHandle(httpContext, out glimpseRequestContextHandle))
+                return;
+            }
+
+            GlimpseRequestContextHandle glimpseRequestContextHandle;
+            if (TryGetGlimpseRequestContextHandle(httpContext, out glimpseRequestContextHandle))
+            {
+                try
                 {
-                    try
+                    action(glimpseRequestContextHandle);
+                }
+                finally
+                {
+                    if (disposeHandle)
                     {
-                        action(glimpseRequestContextHandle);
-                    }
-                    finally
-                    {
-                        if (disposeHandle)
-                        {
-                            glimpseRequestContextHandle.Dispose();
-                            httpContext.Items.Remove(Constants.GlimpseRequestContextHandle);
-                        }
+                        glimpseRequestContextHandle.Dispose();
+                        httpContext.Items.Remove(Constants.GlimpseRequestContextHandle);
                     }
                 }
-                else if (availabilityOfGlimpseRequestContextHandleIsRequired)
-                {
-                    Configuration.Logger.Info("There is no Glimpse request context handle stored inside the httpContext.Items collection.");
-                }
+            }
+            else if (availabilityOfGlimpseRequestContextHandleIsRequired)
+            {
+                GlimpseRuntime.Instance.Configuration.Logger.Info("There is no Glimpse request context handle stored inside the httpContext.Items collection.");
             }
         }
 
