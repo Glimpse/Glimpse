@@ -5,7 +5,7 @@ namespace Glimpse.Core.Framework
     /// <summary>
     /// Defines methods to implement the Glimpse runtime
     /// </summary>
-    public interface IGlimpseRuntime
+    public interface IGlimpseRuntime : IDisposable
     {
         /// <summary>
         /// Calling this method will allow Glimpse to decide to hook into the given request or not

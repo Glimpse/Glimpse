@@ -468,5 +468,44 @@ namespace Glimpse.Core.Framework
             requestStore.Set(Constants.ScriptsHaveRenderedKey, true);
             return glimpseScriptTags;
         }
+
+        public void Dispose()
+        {
+            var disposables = Configuration.ClientScripts.OfType<IDisposable>()
+                .Concat(new[] { Configuration.CurrentGlimpseRequestIdTracker }.OfType<IDisposable>())
+                .Concat(new[] { Configuration.DefaultResource }.OfType<IDisposable>())
+                .Concat(Configuration.Displays.OfType<IDisposable>())
+                .Concat(new[] { Configuration.HtmlEncoder }.OfType<IDisposable>())
+                .Concat(Configuration.Inspectors.OfType<IDisposable>())
+                .Concat(Configuration.InstanceMetadata.OfType<IDisposable>())
+                .Concat(new[] { Configuration.MessageBroker }.OfType<IDisposable>())
+                .Concat(Configuration.Metadata.OfType<IDisposable>())
+                .Concat(new[] { Configuration.PersistenceStore }.OfType<IDisposable>())
+                .Concat(new[] { Configuration.ProxyFactory }.OfType<IDisposable>())
+                .Concat(new[] { Configuration.ResourceEndpoint }.OfType<IDisposable>())
+                .Concat(Configuration.Resources.OfType<IDisposable>())
+                .Concat(Configuration.RuntimePolicies.OfType<IDisposable>())
+                .Concat(new[] { Configuration.Serializer }.OfType<IDisposable>())
+                .Concat(Configuration.TabMetadata.OfType<IDisposable>())
+                .Concat(Configuration.Tabs.OfType<IDisposable>())
+                .Concat(new[] { Configuration.Logger }.OfType<IDisposable>()); // the logger right at the end
+
+            foreach (var disposable in disposables)
+            {
+                try
+                {
+                    disposable.Dispose();
+                }
+                catch (Exception exception)
+                {
+                    if (!object.ReferenceEquals(disposable, Configuration.Logger))
+                    {
+                        Configuration.Logger.Error("Failed disposing '" + disposable.GetType().Name + "'", exception);
+                    }
+                }
+            }
+
+            GlimpseRuntime.Instance = null;
+        }
     }
 }

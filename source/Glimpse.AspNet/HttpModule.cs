@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading;
 using System.Web;
 using System.Web.Compilation;
 using System.Web.Hosting;
@@ -41,9 +40,7 @@ namespace Glimpse.AspNet
                appDomain.BaseDirectory,
                "Reason for shutdown => " + HostingEnvironment.ShutdownReason);
 
-            // NLog writes its logs asynchronously, which means that if we don't wait, chances are the log will not be written 
-            // before the appdomain is actually shut down, so we sleep for 100ms and hopefully that is enough for NLog to do its thing
-            Thread.Sleep(100);
+            GlimpseRuntime.Instance.Dispose();
         }
 
         public void Init(HttpApplication httpApplication)
