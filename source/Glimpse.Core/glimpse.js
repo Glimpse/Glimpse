@@ -2735,7 +2735,7 @@ glimpse.tab = (function($, pubsub, data) {
                     rowCount = masterBody.find('tr').length;
 
                 if (masterRow.length == 0)
-                    masterRow = $('<tr class="glimpse-row"><td>' + util.htmlEncode(recordName) + '</td><td class="glimpse-history-count">1</td><td><a href="javascript:void(0)" class="glimpse-Client-link" data-clientName="' + recordName + '">Inspect</a></td></tr>').prependTo(masterBody);
+                    masterRow = $('<tr class="glimpse-row"><td>' + util.htmlEncode(recordName) + '</td><td class="glimpse-history-count">1</td><td><a href="javascript:void(0)" class="glimpse-Client-link" data-clientName="' + util.htmlEncode(recordName) + '">Inspect</a></td></tr>').prependTo(masterBody);
                 
                 masterRow.find('.glimpse-history-count').text(result[recordName].length);
                 

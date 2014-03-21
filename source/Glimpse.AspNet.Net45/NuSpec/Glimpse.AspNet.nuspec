@@ -14,11 +14,8 @@
         <description>Glimpse is a web debugging and diagnostics tool used to gain a better understanding of whats happening inside of your ASP.NET 4.0 application. For ASP.NET MVC3 support, please NuGet Glimpse.MVC3.</description>
         <summary>ASP.NET 4.5 web debugging and diagnostics tool.</summary>
         <releaseNotes>
-Featherweight release for Asp.Net:
- - Update Route Inspector to ignore non AspNet based routes (this fixes problems with Glimpse and WebAPI)
- - Added updated Server Tab which shows common server variables
- - Clean up web.config transform to remove volume of commented out config in the glimpse section
- - Update Request Tab serialization to handle request validation failures 
+Bantamweight release for Asp.Net:
+ - Update to RouteInspector to ignore non AspNet routes doesn't work for WebHosted WebAPIs
         </releaseNotes>
         <tags>ASP.NET Web WebForms Glimpse</tags>
         <dependencies>

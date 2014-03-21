@@ -73,13 +73,8 @@ namespace Glimpse.Ado.AlternateType
 
             if (parameter.Value is byte[])
             {
-                var builder = new StringBuilder("0x");
-                foreach (var num in (byte[])parameter.Value)
-                {
-                    builder.Append(num.ToString("X2"));
-                }
-
-                return builder.ToString();
+                var blob = parameter.Value as byte[];
+                return "BLOB" + (blob != null ? String.Format(" {0} bytes", blob.Length) : "");
             }
 
             return parameter.Value;
