@@ -1,0 +1,159 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <PropertyGroup>
+    <ProjectGuid>{8C62666A-0BF2-49AA-BBA1-547B73C614AC}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Glimpse.WebApi</RootNamespace>
+    <AssemblyName>Glimpse.WebApi</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <NoWin32Manifest>False</NoWin32Manifest>
+    <SignAssembly>False</SignAssembly>
+    <DelaySign>False</DelaySign>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <NoStdLib>False</NoStdLib>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <WarningLevel>4</WarningLevel>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <BaseAddress>4194304</BaseAddress>
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <DebugSymbols>True</DebugSymbols>
+    <DebugType>Full</DebugType>
+    <Optimize>False</Optimize>
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
+    <StartAction>Project</StartAction>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <DebugSymbols>False</DebugSymbols>
+    <DebugType>None</DebugType>
+    <Optimize>True</Optimize>
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Castle.Core">
+      <HintPath>..\..\packages\Castle.Core.3.1.0\lib\net40-client\Castle.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\packages\Newtonsoft.Json.5.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Net.Http">
+      <HintPath>..\..\..\..\..\..\..\Program Files\Microsoft ASP.NET\ASP.NET MVC 4\Assemblies\System.Net.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting, Version=5.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Microsoft.AspNet.WebApi.Client.5.1.1\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Http, Version=5.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Microsoft.AspNet.WebApi.Core.5.1.1\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Microsoft.AspNet.WebApi.WebHost.5.1.1\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Microsoft.AspNet.Mvc.5.0.0\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.XML" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Glimpse.Core\Glimpse.Core.csproj">
+      <Project>{c1289ce8-3259-41d9-893e-7a4e6f772d30}</Project>
+      <Name>Glimpse.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AlternateType\ActionFilterAttribute.cs" />
+    <Compile Include="AlternateType\AuthorizationFilterAttribute.cs" />
+    <Compile Include="AlternateType\IActionValueBinder.cs" />
+    <Compile Include="AlternateType\IActionResultConverter.cs" />
+    <Compile Include="AlternateType\IHttpActionInvoker.cs" />
+    <Compile Include="AlternateType\IActionHttpMethodProvider.cs" />
+    <Compile Include="AlternateType\IHttpActionSelector.cs" />
+    <Compile Include="AlternateType\IHttpControllerTypeResolver.cs" />
+    <Compile Include="AlternateType\IHttpControllerSelector.cs" />
+    <Compile Include="AlternateType\IHttpControllerActivator.cs" />
+    <Compile Include="AlternateType\IHttpRoute.cs" />
+    <Compile Include="AlternateType\IRouteNameMixin.cs" />
+    <Compile Include="AlternateType\IHttpRouteConstraint.cs" />
+    <Compile Include="AlternateType\IHttpRouteConstraintRegex.cs" />
+    <Compile Include="AlternateType\RouteNameMixin.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="DelegatingHandler.cs" />
+    <Compile Include="Extensibility\WebApiTab.cs" />
+    <Compile Include="Inspector\DummyActionFilter.cs" />
+    <Compile Include="Inspector\DummyAuthorizationFilter.cs" />
+    <Compile Include="Inspector\ExecutionInspector.cs" />
+    <Compile Include="Inspector\RoutesInspector.cs" />
+    <Compile Include="Message\FilterBounds.cs" />
+    <Compile Include="Message\FilterCategory.cs" />
+    <Compile Include="Message\IActionMessage.cs" />
+    <Compile Include="Message\IBoundedFilterMessage.cs" />
+    <Compile Include="Message\ICanceledFilterMessage.cs" />
+    <Compile Include="Message\IExceptionFilterMessage.cs" />
+    <Compile Include="Message\IExecutionMessage.cs" />
+    <Compile Include="Message\IFilterMessage.cs" />
+    <Compile Include="Message\IInvokeActionResultMessage.cs" />
+    <Compile Include="Message\WebApiTimelineCategory.cs" />
+    <Compile Include="Message\MvcTimelineExtension.cs" />
+    <Compile Include="Message\ProcessConstraintMessage.cs" />
+    <Compile Include="Model\FilterModel.cs" />
+    <Compile Include="Model\ExecutionModel.cs" />
+    <Compile Include="Model\RouteActionDataTokenModel.cs" />
+    <Compile Include="Model\ConfigurationModel.cs" />
+    <Compile Include="Model\FormatterModel.cs" />
+    <Compile Include="Model\RouteConstraintModel.cs" />
+    <Compile Include="Model\RouteDataItemModel.cs" />
+    <Compile Include="Model\RouteModel.cs" />
+    <Compile Include="Model\ServiceModel.cs" />
+    <Compile Include="Resources.Designer.cs">
+      <DependentUpon>Resources.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="SerializationConverter\ListOfExecutionModelConverter.cs" />
+    <Compile Include="SerializationConverter\ListOfRouteModelConverter.cs" />
+    <Compile Include="Tab\Configuration.cs" />
+    <Compile Include="Tab\Demo.cs" />
+    <Compile Include="Tab\Execution.cs" />
+    <Compile Include="Tab\Routes.cs" />
+    <Compile Include="WebApiFrameworkProvider.cs" />
+    <Compile Include="WebApiServiceLocator.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+</Project>
