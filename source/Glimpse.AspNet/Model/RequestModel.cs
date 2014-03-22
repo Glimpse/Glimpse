@@ -26,7 +26,7 @@ namespace Glimpse.AspNet.Model
             UserAgent = request.UserAgent;
             UserHostAddress = request.UserHostAddress;
             UserHostName = request.UserHostName;
-            
+
             ApplicationPath = request.ApplicationPath;
             AppRelativeCurrentExecutionFilePath = request.AppRelativeCurrentExecutionFilePath;
             CurrentExecutionFilePath = request.CurrentExecutionFilePath;
@@ -40,26 +40,45 @@ namespace Glimpse.AspNet.Model
         //// TODO: Add InputStream
 
         public IEnumerable<Cookie> Cookies { get; private set; }
+
         public CultureInfo CurrentUiCulture { get; private set; }
+
         public IEnumerable<PostedFile> Files { get; private set; }
+
         public IEnumerable<FormVariable> FormVariables { get; private set; }
+
         public IEnumerable<HeaderField> HeaderFields { get; private set; }
+
         public IEnumerable<QueryStringParameter> QueryString { get; private set; }
+
         public string RawUrl { get; private set; }
+
         public string RequestType { get; private set; }
+
         public Uri Url { get; private set; }
+
         public Uri UrlReferrer { get; private set; }
+
         public string UserAgent { get; private set; }
+
         public string UserHostAddress { get; private set; }
+
         public string UserHostName { get; private set; }
 
         public string ApplicationPath { get; private set; }
+
         public string AppRelativeCurrentExecutionFilePath { get; private set; }
+
         public string CurrentExecutionFilePath { get; private set; }
+
         public string FilePath { get; private set; }
+
         public string Path { get; private set; }
+
         public string PathInfo { get; private set; }
+
         public string PhysicalApplicationPath { get; private set; }
+
         public string PhysicalPath { get; private set; }
 
         private IEnumerable<Cookie> GetCookies(HttpRequestBase httpRequest, HttpServerUtilityBase server)
@@ -102,11 +121,11 @@ namespace Glimpse.AspNet.Model
                         if (httpPostedFileBase != null)
                         {
                             yield return new PostedFile
-                                {
-                                    FileName = httpPostedFileBase.FileName,
-                                    ContentType = httpPostedFileBase.ContentType,
-                                    ContentLength = httpPostedFileBase.ContentLength
-                                };
+                            {
+                                FileName = httpPostedFileBase.FileName,
+                                ContentType = httpPostedFileBase.ContentType,
+                                ContentLength = httpPostedFileBase.ContentLength
+                            };
                         }
                     }
                 }
@@ -123,7 +142,7 @@ namespace Glimpse.AspNet.Model
                 {
                     foreach (var key in formVariables.AllKeys)
                     {
-                        yield return new FormVariable {Key = key, Value = SafeGetKeyValue(formVariables, key)};
+                        yield return new FormVariable { Key = key, Value = SafeGetKeyValue(formVariables, key) };
                     }
                 }
             }
@@ -176,31 +195,37 @@ namespace Glimpse.AspNet.Model
         public class Cookie
         {
             public string Name { get; set; }
+            
             public string Value { get; set; }
         }
 
         public class FormVariable
         {
             public string Key { get; set; }
+            
             public string Value { get; set; }
         }
 
         public class HeaderField
         {
             public string Key { get; set; }
+            
             public string Value { get; set; }
         }
 
         public class PostedFile
         {
             public string FileName { get; set; }
+            
             public string ContentType { get; set; }
+            
             public int ContentLength { get; set; }
         }
 
         public class QueryStringParameter
         {
             public string Key { get; set; }
+            
             public string Value { get; set; }
         }
     }

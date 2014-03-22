@@ -39,13 +39,14 @@ namespace Glimpse.WindowsAzure.Storage.Infrastructure.Inspections
                 {
                     ODataUriParser.ParseFilter(filterString, EdmModel, TableServiceEntity);
                 }
-                catch (ODataException ex)
+                catch (ODataException)
                 {
                     // this means we're using other properties...
                     return new[] { "This query may not perform as intended. Consider optimizing the entity structure so that a PartitionKey/RowKey query can be executed instead." };
                 } 
             }
-            return new string[] {} ;
+
+            return new string[0];
         }
     }
 }

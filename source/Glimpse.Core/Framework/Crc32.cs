@@ -74,7 +74,7 @@ namespace Glimpse.Core.Framework
             uint[] createTable = new uint[256];
             for (int i = 0; i < 256; i++)
             {
-                uint entry = (UInt32)i;
+                uint entry = (uint)i;
                 for (int j = 0; j < 8; j++)
                 {
                     if ((entry & 1) == 1)

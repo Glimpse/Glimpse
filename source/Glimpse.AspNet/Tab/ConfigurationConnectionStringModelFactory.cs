@@ -20,9 +20,9 @@ namespace Glimpse.AspNet.Tab
             ObfuscatedConnectionStringValues =
                 new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase)
                 {
-                    {"password", ObfuscatedValue},
-                    {"pwd", ObfuscatedValue},
-                    {"accountkey", ObfuscatedValue}
+                    { "password", ObfuscatedValue },
+                    { "pwd", ObfuscatedValue },
+                    { "accountkey", ObfuscatedValue }
                 };
 
             var additionalKeysToObfuscate = ConfigurationManager.AppSettings["Glimpse:ConfigurationTab:ConnectionStrings;KeysToObfuscate"];

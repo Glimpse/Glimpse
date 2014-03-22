@@ -1,11 +1,4 @@
-﻿using Glimpse.AspNet.Extensibility;
-using Glimpse.Core.Extensibility;
-using Glimpse.Core.Extensions;
-using Glimpse.Core.Tab.Assist;
-using Glimpse.WebForms.Inspector;
-using Glimpse.WebForms.Model;
-using Glimpse.WebForms.Support;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
@@ -13,6 +6,13 @@ using System.Reflection;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using Glimpse.AspNet.Extensibility;
+using Glimpse.Core.Extensibility;
+using Glimpse.Core.Extensions;
+using Glimpse.Core.Tab.Assist;
+using Glimpse.WebForms.Inspector;
+using Glimpse.WebForms.Model;
+using Glimpse.WebForms.Support;
 
 namespace Glimpse.WebForms.Tab
 {
@@ -77,10 +77,9 @@ namespace Glimpse.WebForms.Tab
 
                 context.TabStore.Set("hasRun", "true");
 
-                //Remember the previous state, turn tracing on at the begining of the request,
-                //set things up so that when request is finished, lets put things back to the 
-                //way they where. Lastly, make sure sate of trace is setup
-
+                // Remember the previous state, turn tracing on at the begining of the request,
+                // set things up so that when request is finished, lets put things back to the 
+                // way they where. Lastly, make sure sate of trace is setup
                 context.Logger.Debug("Setting logger infrastructure - previouslyEnabled = {0}", trace.IsEnabled);
 
                 var previouslyEnabled = trace.IsEnabled;
@@ -124,8 +123,7 @@ namespace Glimpse.WebForms.Tab
 
         private void RegisterAdapters(ITabContext context)
         {
-            //Add adapter to the pipeline as a ViewStatePageAdapter 
-
+            // Add adapter to the pipeline as a ViewStatePageAdapter 
             context.Logger.Debug("Setting up view state page adapter");
 
             var adapters = HttpContext.Current.Request.Browser.Adapters;
@@ -152,6 +150,7 @@ namespace Glimpse.WebForms.Tab
             {
                 HttpContext.Current.Items["_GlimpseWebFormDataBinding"] = new Dictionary<string, List<DataBindParameterModel>>();
             }
+
             foreach (DictionaryEntry adapter in adapters)
             {
                 var controlType = Type.GetType((string)adapter.Key);
@@ -165,11 +164,11 @@ namespace Glimpse.WebForms.Tab
                     }
                 }
             }
+
             if (!adapters.Contains(dataBoundControlType.AssemblyQualifiedName))
             {
                 adapters.Add(dataBoundControlType.AssemblyQualifiedName, dataBoundControlAdapterType.AssemblyQualifiedName);
             }
-
         }
 
         private object ProcessData(DataTable dataTable, ILogger logger, IEnumerable<PageLifeCycleMessage> pageLifeCycleMessages)
@@ -201,9 +200,11 @@ namespace Glimpse.WebForms.Tab
                     };
                     nodeList[item.ParentControlId].Children.Add(nodeList[item.ControlId]);
 
-                    //This logic shouldn't be here
+                    // This logic shouldn't be here
                     for (var index = 0; index < num; ++index)
+                    {
                         item.ControlId = "\t" + item.ControlId;
+                    }
 
                     item.Level = num;
                     item.Type = current["Trace_Type"].CastOrDefault<string>();

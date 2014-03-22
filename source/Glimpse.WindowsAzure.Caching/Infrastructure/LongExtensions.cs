@@ -13,7 +13,9 @@ namespace Glimpse.WindowsAzure.Caching.Infrastructure
             foreach (string order in orders)
             {
                 if (bytes >= max)
+                {
                     return string.Format("{0:##.##} {1}", decimal.Divide(bytes, max), order);
+                }
 
                 max /= scale;
             }

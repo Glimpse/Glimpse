@@ -14,6 +14,7 @@ namespace Glimpse.WindowsAzure.Storage.Models
         public StorageStatisticsModel Statistics { get; set; }
 
         public List<StorageWarningModel> Warnings { get; set; }
+
         public List<StorageRequestModel> Requests { get; set; }
     }
 }

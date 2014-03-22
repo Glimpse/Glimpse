@@ -12,15 +12,22 @@ namespace Glimpse.AspNet.Model
 
         public DateTime? CreatedOn { get; set; }
 
-        public DateTime? ExpiresOn { get
-        {
-            if (expiresOn == DateTime.MaxValue)
+        public DateTime? ExpiresOn 
+        { 
+            get
             {
-                return null;
+                if (expiresOn == DateTime.MaxValue)
+                {
+                    return null;
+                }
+
+                return expiresOn;
             }
-            return expiresOn;
-        }
-            set { expiresOn = value; } 
+
+            set
+            {
+                expiresOn = value;
+            } 
         }
 
         public TimeSpan? SlidingExpiration { get; set; }

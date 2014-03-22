@@ -99,11 +99,7 @@ namespace Glimpse.Core.Framework
         public static bool IsBlackListed(Assembly assembly)
         {
             var assemblyName = assembly.GetName().Name;
-            if (blackList.Contains(assemblyName))
-            {
-                return true;
-            }
-            return false;
+            return blackList.Contains(assemblyName);
         }
     }
 }

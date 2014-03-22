@@ -17,6 +17,7 @@ namespace Glimpse.WindowsAzure.Storage.Infrastructure
         }
 
         public IMessageBroker MessageBroker { get; set; }
+
         public Func<IExecutionTimer> TimerStrategy { get; set; }
 
         public OperationContext Create()
@@ -38,14 +39,17 @@ namespace Glimpse.WindowsAzure.Storage.Infrastructure
             {
                 return "Blob";
             }
+
             if (requestUri.Host.Contains("queue") || requestUri.Port == 10001)
             {
                 return "Queue";
             }
+
             if (requestUri.Host.Contains("table") || requestUri.Port == 10002)
             {
                 return "Table";
             }
+
             return "(other)";
         }
     }

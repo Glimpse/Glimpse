@@ -129,7 +129,7 @@ namespace Glimpse.Core.Resource
             glimpseConfigurationTemplate.Add("configurationStyleUri", glimpseMetadata.Resources[ConfigurationStyleResource.InternalName].Replace("{&" + ResourceParameter.Hash.Name + "}", string.Empty));
             glimpseConfigurationTemplate.Add("configurationScriptUri", glimpseMetadata.Resources[ConfigurationScriptResource.InternalName].Replace("{&" + ResourceParameter.Hash.Name + "}", string.Empty));
 
-            //Duplicate resources
+            // Duplicate resources
             var duplicateResources = DetectDuplicateResources(configuration.Resources).ToList();
             glimpseConfigurationTemplate.Add("hasDuplicateResources", duplicateResources.Count != 0);
             glimpseConfigurationTemplate.Add("duplicateResources", duplicateResources.Select((duplicateResource, index) => new { Name = duplicateResource, IsNotFirstDuplicate = index != 0 }));
@@ -137,77 +137,71 @@ namespace Glimpse.Core.Resource
             var packages = FindPackages();
 
             // Tabs
+            Func<ITab, object> createTabItemDisplay = registeredTab => new
+            {
+                registeredTab.Name,
+                Type = registeredTab.GetType().FullName,
+                registeredTab.ExecuteOn,
+                AssemblyName = registeredTab.GetType().Assembly.GetName().Name
+            };
+
             glimpseConfigurationTemplate.Add(
                 "tabsByPackage",
-                GroupItemsByPackage(
-                    configuration.Tabs.OrderBy(x => x.Name),
-                    packages,
-                    registeredTab => new
-                    {
-                        registeredTab.Name,
-                        Type = registeredTab.GetType().FullName,
-                        registeredTab.ExecuteOn,
-                        AssemblyName = registeredTab.GetType().Assembly.GetName().Name
-                    }).ToArray());
+                GroupItemsByPackage(configuration.Tabs.OrderBy(x => x.Name), packages, createTabItemDisplay).ToArray());
 
             // Runtime Policies
+            Func<IRuntimePolicy, object> createRuntimePolicyItemDisplay = registeredRuntimePolicy =>
+            {
+                string warningMessage = registeredRuntimePolicy.GetType().FullName == "Glimpse.AspNet.Policy.LocalPolicy" ? "*This policy means that Glimpse won't run remotely.*" : string.Empty;
+                return new
+                {
+                    Type = registeredRuntimePolicy.GetType().FullName,
+                    registeredRuntimePolicy.ExecuteOn,
+                    AssemblyName = registeredRuntimePolicy.GetType().Assembly.GetName().Name,
+                    WarningMessage = warningMessage,
+                    HasWarningMessage = !string.IsNullOrEmpty(warningMessage)
+                };
+            };
             glimpseConfigurationTemplate.Add(
                 "runtimePoliciesByPackage",
-                GroupItemsByPackage(
-                    configuration.RuntimePolicies.OrderBy(x => x.GetType().FullName),
-                    packages,
-                    registeredRuntimePolicy =>
-                    {
-                        string warningMessage = registeredRuntimePolicy.GetType().FullName == "Glimpse.AspNet.Policy.LocalPolicy" ? "*This policy means that Glimpse won't run remotely.*" : string.Empty;
-                        return new
-                        {
-                            Type = registeredRuntimePolicy.GetType().FullName,
-                            registeredRuntimePolicy.ExecuteOn,
-                            AssemblyName = registeredRuntimePolicy.GetType().Assembly.GetName().Name,
-                            WarningMessage = warningMessage,
-                            HasWarningMessage = !string.IsNullOrEmpty(warningMessage)
-                        };
-                    }).ToArray());
+                GroupItemsByPackage(configuration.RuntimePolicies.OrderBy(x => x.GetType().FullName), packages, createRuntimePolicyItemDisplay).ToArray());
 
-            // Details : Inspectors
+            // Inspectors
+            Func<IInspector, object> createInspectorItemDisplay = inspector => new
+            {
+                Type = inspector.GetType().FullName,
+                AssemblyName = inspector.GetType().Assembly.GetName().Name
+            };
+
             glimpseConfigurationTemplate.Add(
                 "inspectorsByPackage",
-                GroupItemsByPackage(
-                    configuration.Inspectors.OrderBy(x => x.GetType().FullName),
-                    packages,
-                    inspector => new
-                    {
-                        Type = inspector.GetType().FullName,
-                        AssemblyName = inspector.GetType().Assembly.GetName().Name
-                    }).ToArray());
+                GroupItemsByPackage(configuration.Inspectors.OrderBy(x => x.GetType().FullName), packages, createInspectorItemDisplay).ToArray());
 
-            // Details : Resources
+            // Resources
+            Func<IResource, object> createResourceItemDisplay = resource => new
+            {
+                resource.Name,
+                Type = resource.GetType().FullName,
+                Parameters = resource.Parameters != null ? string.Join(", ", resource.Parameters.Select(parameter => string.Format("{0} ({1})", parameter.Name, parameter.IsRequired)).ToArray()) : string.Empty,
+                HasDuplicate = duplicateResources.Contains(resource.Name)
+            };
+
             glimpseConfigurationTemplate.Add(
                 "resourcesByPackage",
-                GroupItemsByPackage(
-                    configuration.Resources.OrderBy(x => x.Name),
-                    packages,
-                    resource => new
-                    {
-                        resource.Name,
-                        Type = resource.GetType().FullName,
-                        Parameters = resource.Parameters != null ? string.Join(", ", resource.Parameters.Select(parameter => string.Format("{0} ({1})", parameter.Name, parameter.IsRequired)).ToArray()) : string.Empty,
-                        HasDuplicate = duplicateResources.Contains(resource.Name)
-                    }).ToArray());
+                GroupItemsByPackage(configuration.Resources.OrderBy(x => x.Name), packages, createResourceItemDisplay).ToArray());
 
-            // Details : Client Scripts
+            // Client Scripts
+            Func<IClientScript, object> createClientScriptItemDisplay = clientScript => new
+            {
+                Type = clientScript.GetType().FullName,
+                clientScript.Order
+            };
+
             glimpseConfigurationTemplate.Add(
                 "clientScriptsByPackage",
-                GroupItemsByPackage(
-                    configuration.ClientScripts.OrderBy(x => x.GetType().FullName),
-                    packages,
-                    clientScript => new
-                    {
-                        Type = clientScript.GetType().FullName,
-                        clientScript.Order
-                    }).ToArray());
+                GroupItemsByPackage(configuration.ClientScripts.OrderBy(x => x.GetType().FullName), packages, createClientScriptItemDisplay).ToArray());
 
-            // Details : More
+            // Remainder
             glimpseConfigurationTemplate.Add("frameworkProviderType", configuration.FrameworkProvider.GetType().FullName);
             glimpseConfigurationTemplate.Add("htmlEncoderType", configuration.HtmlEncoder.GetType().FullName);
             glimpseConfigurationTemplate.Add("loggerType", configuration.Logger.GetType().FullName);

@@ -1,11 +1,10 @@
-﻿using Glimpse.WebForms.Inspector;
-using Glimpse.WebForms.Model;
-using Glimpse.WebForms.Tab;
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Glimpse.WebForms.Inspector;
+using Glimpse.WebForms.Model;
+using Glimpse.WebForms.Tab;
 
 namespace Glimpse.WebForms.Support
 {
@@ -30,6 +29,7 @@ namespace Glimpse.WebForms.Support
                     {
                         dataBindParameters.Add(parameter);
                     }
+
                     var lifeCycleEvent = pageLifeCycleMessages.First(p => p.Offset <= parameterModel.Offset);
                     if (dataBindModel.Event == lifeCycleEvent.EventName)
                     {
@@ -41,6 +41,7 @@ namespace Glimpse.WebForms.Support
                             dataBindModel.Parameters = multipleEventParameters;
                             multipleEventParameters.Add(new EventParameterModel(0, existingEventParameters));
                         }
+
                         multipleEventParameters.Add(new EventParameterModel(multipleEventParameters.Count, dataBindParameters));
                     }
                     else
@@ -50,6 +51,7 @@ namespace Glimpse.WebForms.Support
                     }
                 }
             }
+
             foreach (var child in item.Children)
             {
                 ProcessRecord(child, dataBindInfo, pageLifeCycleMessages);

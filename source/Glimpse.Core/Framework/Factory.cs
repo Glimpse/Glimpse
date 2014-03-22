@@ -430,6 +430,7 @@ namespace Glimpse.Core.Framework
                 if (!frameworkProvider.HttpRequestStore.Contains(Constants.RuntimePolicyKey))
                 {
                     logger.Debug("Apparently GlimpseRuntime has not yet initialized this request. This might happen in case you're doing something specific like mentioned in this issue: https://github.com/Glimpse/Glimpse/issues/703 . Either way, Glimpse will be disabled to prevent any further non-deterministic behavior during this request.");
+                    
                     // we'll store a RuntimePolicy.Off in the HttpRequestStore for subsequent calls for this request.
                     frameworkProvider.HttpRequestStore.Set(Constants.RuntimePolicyKey, RuntimePolicy.Off);
                 }

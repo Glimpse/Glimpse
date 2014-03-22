@@ -11,7 +11,6 @@
         {
             Type = type;
             Default = defaultValue;
-
         }
     }
 }

@@ -21,18 +21,18 @@ namespace Glimpse.WebForms.Support
 
         public void Process(ControlTreeItemTrackModel root)
         {
-            Logger.Debug("Start merginging in the viewState data to the ControlTree");
+            Logger.Debug("Start merging in the viewState data to the ControlTree");
 
             var viewState = HttpContext.Current.Items["_GlimpseWebFormViewState"] as Pair;
             var controlTypes = HttpContext.Current.Items["_GlimpseWebFormControlTreeType"] as Dictionary<string, Type>;
 
             if (viewState != null && root.Children.Count > 0)
             { 
-                Logger.Debug("Process Rroot node for viewState data to the ControlTree mapping");
+                Logger.Debug("Process Root node for viewState data to the ControlTree mapping");
                 ProcessRecord(root.Children[0], viewState, controlTypes); 
             }
 
-            Logger.Debug("Finish merginging in the viewState data to the ControlTree");
+            Logger.Debug("Finish merging in the viewState data to the ControlTree");
         }
 
         private void ProcessRecord(ControlTreeItemTrackModel item, object viewstate, Dictionary<string, Type> controlTypes)
@@ -50,7 +50,8 @@ namespace Glimpse.WebForms.Support
                 {
                     var triplet = (Triplet)viewstate;
                     item.Record.Viewstate = ProcessData(controlTypes[item.ControlId], item.Record.Type, triplet.First);
-                        //NEED TO DO SOMETHING WITH SECOND ITEM?
+                        
+                    // NEED TO DO SOMETHING WITH SECOND ITEM?
                     ProcessRecord(item, triplet.Third, controlTypes);
                 }
                 else if (viewStateType == typeof(ArrayList))
@@ -70,14 +71,14 @@ namespace Glimpse.WebForms.Support
             var result = (object)null;
             if (data != null)
             {
-                //My life is sad
+                // My life is sad
                 if (type == "System.Web.UI.DataBoundLiteralControl")
                 {
                     result = data;
                 }
                 else if (type == "System.Web.UI.WebControls.ListView")
                 {
-                    var list = (Object[])data;
+                    var list = (object[])data;
                     result = ProcessData(rootType, "System.Web.UI.WebControls.DataBoundControl", list[0]);
                     if (list[1] != null)
                     {
@@ -148,7 +149,6 @@ namespace Glimpse.WebForms.Support
                         temp.Add("Label Attributes State", triplet.Third);
                         result = temp;
                     }
-                    
                 }
                 else if (type == "System.Web.UI.WebControls.Repeater")
                 {
@@ -179,7 +179,6 @@ namespace Glimpse.WebForms.Support
                         temp.Add("Items State", ProcessData(rootType, "System.Web.UI.WebControls.ListItemCollection", triplet.Second));
                         temp.Add("Selected Indices", triplet.Third);
                         result = temp;
-
                     }
                 }
                 else if (type == "System.Web.UI.WebControls.ListItemCollection")
@@ -288,11 +287,11 @@ namespace Glimpse.WebForms.Support
                         temp.Add("Edit Row Style", WrapProcessedData(list[7]));
                         temp.Add("Insert Row Style", WrapProcessedData(list[8]));
                         temp.Add("Field Header Style", WrapProcessedData(list[9]));
-                        temp.Add("Field Collection", list[10]);  //Could do more here 
+                        temp.Add("Field Collection", list[10]);  // Could do more here 
                         temp.Add("Bound Field Style", ProcessData(rootType, "System.Web.UI.OrderedDictionaryStateHelper", list[11])); 
                         temp.Add("Pager Settings", WrapProcessedData(list[12]));
                         temp.Add("Control Style", WrapProcessedData(list[13]));
-                        temp.Add("Rows Generator", list[14]); //Could do more here 
+                        temp.Add("Rows Generator", list[14]); // Could do more here 
 
                         result = temp;
                     } 
@@ -304,7 +303,7 @@ namespace Glimpse.WebForms.Support
                     {
                         var temp = new Dictionary<string, object>();
                         temp.Add("Base State", ProcessData(rootType, "System.Web.UI.WebControls.CompositeDataBoundControl", list[0]));
-                        temp.Add("Field Collection", list[1]); //Could do more here 
+                        temp.Add("Field Collection", list[1]); // Could do more here 
                         temp.Add("Pager Style", WrapProcessedData(list[2]));
                         temp.Add("Header Style", WrapProcessedData(list[3]));
                         temp.Add("Footer Style", WrapProcessedData(list[4]));
@@ -315,7 +314,7 @@ namespace Glimpse.WebForms.Support
                         temp.Add("Bound Field Values", ProcessData(rootType, "System.Web.UI.OrderedDictionaryStateHelper", list[9]));
                         temp.Add("Pager Settings", WrapProcessedData(list[10]));
                         temp.Add("Control Style Created", WrapProcessedData(list[11]));
-                        temp.Add("Columns Generator", list[12]); //Could do more here 
+                        temp.Add("Columns Generator", list[12]); // Could do more here 
                         temp.Add("Sorted Ascending Cell Style", WrapProcessedData(list[13]));
                         temp.Add("Sorted Descending Cell Style", WrapProcessedData(list[14]));
                         temp.Add("Sorted Ascending Header Style", WrapProcessedData(list[15]));
@@ -346,7 +345,7 @@ namespace Glimpse.WebForms.Support
                         temp.Add("Level Menu Item Styles", WrapProcessedData(list[9]));
                         temp.Add("Level Selected Styles", WrapProcessedData(list[10]));
                         temp.Add("Level Styles", WrapProcessedData(list[11]));
-                        temp.Add("Items", list[12]); //Could do more here 
+                        temp.Add("Items", list[12]); // Could do more here 
 
                         result = temp;
                     }
@@ -365,7 +364,7 @@ namespace Glimpse.WebForms.Support
                         temp.Add("Selected Node Style", WrapProcessedData(list[5]));
                         temp.Add("Hover Node Style", WrapProcessedData(list[6]));
                         temp.Add("Level Style", WrapProcessedData(list[7]));
-                        temp.Add("Nodes", list[8]); //Could do more here 
+                        temp.Add("Nodes", list[8]); // Could do more here 
 
                         result = temp;
                     }
@@ -386,7 +385,7 @@ namespace Glimpse.WebForms.Support
                         temp.Add("Selected Item Style", WrapProcessedData(list[7]));
                         temp.Add("Edit Item Style", WrapProcessedData(list[8]));
                         temp.Add("Control Style", WrapProcessedData(list[9]));
-                        temp.Add("Auto Generated Columns", list[10]); //Could do more here 
+                        temp.Add("Auto Generated Columns", list[10]); // Could do more here 
 
                         result = temp;
                     }
@@ -479,7 +478,7 @@ namespace Glimpse.WebForms.Support
                 }
                 else if (type == "System.Web.UI.StateManagedCollection")
                 {
-                    //TODO: Process this structure, note that both the Pair and Triple case need to be dealt with.
+                    // TODO: Process this structure, note that both the Pair and Triple case need to be dealt with.
                     //      See both the SaveAllItemsToViewState() and this.SaveChangedItemsToViewState() cases.
                 }
 
@@ -516,7 +515,6 @@ namespace Glimpse.WebForms.Support
         {
             return data == null ? data : new IndexedStringListConverterTarget(data);
         }
-
 
         private class TempListItem
         {

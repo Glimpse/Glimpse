@@ -16,11 +16,17 @@ namespace Glimpse.AspNet
         private const string TroubleshootingDocsUri = "http://getglimpse.com/Help/Troubleshooting";
 
         private ILogger Logger { get; set; }
+        
         private string HtmlSnippet { get; set; }
+        
         private Stream OutputStream { get; set; }
+        
         private Encoding ContentEncoding { get; set; }
+        
         private Regex BodyEndRegex { get; set; }
+        
         private string CurrentRequestRawUrl { get; set; }
+        
         private string UnwrittenCharactersFromPreviousCall { get; set; }
 
         public PreBodyTagFilter(string htmlSnippet, Stream outputStream, Encoding contentEncoding, string currentRequestRawUrl, ILogger logger)
@@ -107,7 +113,6 @@ namespace Glimpse.AspNet
             // - in case there was a </body> tag found, the replacement will be done
             // - in case there was no </body> tag found, then the warning will be written to the log, indicating something went wrong
             // either way, the remaining unwritten characters will be sent down the output stream.
-
             string contentInBuffer = ContentEncoding.GetString(buffer, offset, count);
 
             // Prepend remaining characters from the previous call, if any

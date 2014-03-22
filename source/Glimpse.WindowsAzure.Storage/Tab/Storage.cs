@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web.UI.WebControls.WebParts;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
 using Glimpse.Core.Message;
-using Glimpse.Core.Tab.Assist;
 using Glimpse.WindowsAzure.Storage.Infrastructure;
 using Glimpse.WindowsAzure.Storage.Infrastructure.Inspections;
 using Glimpse.WindowsAzure.Storage.Models;
@@ -27,6 +25,7 @@ namespace Glimpse.WindowsAzure.Storage.Tab
         {
             get { return true; }
         }
+        
         public object GetLayout()
         {
             return Layout;
@@ -52,7 +51,7 @@ namespace Glimpse.WindowsAzure.Storage.Tab
                 model.Statistics.TotalQueueTx = timelineMessages.Count(m => m.EventName.StartsWith("WAZStorage:Queue"));
                 model.Statistics.TotalTrafficToStorage = timelineMessages.Sum(m => m.RequestSize).ToBytesHuman();
                 model.Statistics.TotalTrafficFromStorage = timelineMessages.Sum(m => m.ResponseSize).ToBytesHuman();
-                model.Statistics.PricePerTenThousandPageViews = string.Format("${0}", (model.Statistics.TotalStorageTx * 1000 * 0.0000001 + timelineMessages.Sum(m => m.ResponseSize) * 10000 * (0.12 / 1024 / 1024 / 1024)));
+                model.Statistics.PricePerTenThousandPageViews = string.Format("${0}", model.Statistics.TotalStorageTx * 1000 * 0.0000001 + timelineMessages.Sum(m => m.ResponseSize) * 10000 * (0.12 / 1024 / 1024 / 1024));
 
                 model.Requests = FlattenRequests(timelineMessages);
                 model.Warnings = AnalyzeMessagesForWarnings(timelineMessages);
@@ -82,13 +81,14 @@ namespace Glimpse.WindowsAzure.Storage.Tab
         {
             List<StorageWarningModel> returnValue = new List<StorageWarningModel>();
 
-            //todo: inject inspections so they can be made extensible
+            // todo: inject inspections so they can be made extensible
             var inspectors = new IWindowsAzureStorageInspector[]
                 {
                     new GeneralBestPracticesInspector(),
                     new TableStorageQueryIndexInspector(),
                     new TableStorageEchoContentInspector()
                 };
+
             foreach (var inspector in inspectors)
             {
                 var warnings = inspector.Inspect();

@@ -47,6 +47,7 @@ namespace Glimpse.Core.Framework
         /// <param name="resources">The resources collection.</param>
         /// <param name="serializer">The serializer.</param>
         /// <param name="tabs">The tabs collection.</param>
+        /// <param name="displays">The displays collection.</param>
         /// <param name="runtimePolicies">The runtime policies collection.</param>
         /// <param name="defaultResource">The default resource.</param>
         /// <param name="proxyFactory">The proxy factory.</param>
