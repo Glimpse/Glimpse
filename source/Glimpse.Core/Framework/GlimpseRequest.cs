@@ -23,6 +23,7 @@ namespace Glimpse.Core.Framework
         /// <param name="requestId">The request id.</param>
         /// <param name="requestMetadata">The request metadata.</param>
         /// <param name="tabData">The plugin data.</param>
+        /// <param name="displayData">The display data</param>
         /// <param name="duration">The duration.</param>
         public GlimpseRequest(Guid requestId, IRequestMetadata requestMetadata, IDictionary<string, TabResult> tabData, IDictionary<string, TabResult> displayData, TimeSpan duration, IDictionary<string, object> instanceMetadata)
             : this()

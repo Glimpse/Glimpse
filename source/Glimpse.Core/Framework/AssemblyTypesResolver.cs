@@ -26,7 +26,6 @@ namespace Glimpse.Core.Framework
         public static Type[] ResolveTypes(Assembly assembly, ILogger logger)
         {
             // GetTypes potentially throws an exception. Defensive coding as per http://haacked.com/archive/2012/07/23/get-all-types-in-an-assembly.aspx
-            
             Type[] allTypes;
             lock (typesByAssembly)
             {

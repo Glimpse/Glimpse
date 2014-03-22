@@ -13,6 +13,6 @@ namespace Glimpse
         /// code if Glimpse doesn't initialize soon enough in the application
         /// life cycle for your purposes.
         /// </summary>
-        public readonly static Initializer Initialize = new Initializer();
+        public static readonly Initializer Initialize = new Initializer();
     }
 }

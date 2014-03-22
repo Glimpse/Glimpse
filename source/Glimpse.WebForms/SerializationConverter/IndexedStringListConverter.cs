@@ -52,7 +52,7 @@ namespace Glimpse.WebForms.SerializationConverter
                 var list = data as IList;
                 if (list != null && list.Count > 0)
                 {
-                    if (list.Count%2 == 0 && list[0] is IndexedString)
+                    if (list.Count % 2 == 0 && list[0] is IndexedString)
                     {
                         var result = new Dictionary<object, object>();
                         for (int i = 0; i < list.Count; i = i + 2)
@@ -73,7 +73,7 @@ namespace Glimpse.WebForms.SerializationConverter
                         var temp = ProcessValue(list[0]);
                         if (temp != list[0])
                         {
-                            var result = new Dictionary<int, object> { {0, temp} }; 
+                            var result = new Dictionary<int, object> { { 0, temp } }; 
                             for (int i = 1; i < list.Count; i++)
                             {
                                 result.Add(i, ProcessValue(list[i]));

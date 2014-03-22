@@ -79,7 +79,7 @@ namespace Glimpse.Mvc.Tab
                             model.RawValue,
                             model.Culture,
                             model.ModelBinderType,
-                            model.ValueProviderActivity.Select(vp => new{ vp.ValueProvider, vp.IsMatch}).ToArray()
+                            model.ValueProviderActivity.Select(vp => new { vp.ValueProvider, vp.IsMatch }).ToArray()
                         });
 
                 if (model.Properties.Count > 0)
@@ -147,7 +147,6 @@ namespace Glimpse.Mvc.Tab
                     // to their model being the dictionary/array. So we need to move through the stack as long as the name of the model
                     // preceding it start with "{ParameterName}." or "{ParameterName}[digits}" in case we are dealing with an array 
                     // and adding all those intermediate models as "properties" until we reach the model we are looking for
-
                     string regexPattern = string.Format(@"^{0}\..+|^{0}\[\d+\]", parameter);
                     Regex regex = new Regex(regexPattern, RegexOptions.Compiled);
                     if (regex.IsMatch(model.ParameterName))
@@ -161,9 +160,9 @@ namespace Glimpse.Mvc.Tab
                         }
 
                         // The model we have now should be the one we were looking for in the first place
-                        if(model.ParameterName.Equals(parameter))
+                        if (model.ParameterName.Equals(parameter))
                         {
-                            foreach(var modelProperty in possiblePropertiesOfRequestedModel)
+                            foreach (var modelProperty in possiblePropertiesOfRequestedModel)
                             {
                                 model.Properties.Add(modelProperty);
                             }
@@ -172,8 +171,9 @@ namespace Glimpse.Mvc.Tab
 
                             return model;
                         }
-                        else // This should not happen, but in case it does, we undo our popping above
+                        else
                         {
+                            // This should not happen, but in case it does, we undo our popping above
                             foreach (var possiblePropertyOfRequestedModel in possiblePropertiesOfRequestedModel)
                             {
                                 stack.Push(possiblePropertyOfRequestedModel);

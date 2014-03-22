@@ -26,6 +26,7 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Debug\Glimpse.WindowsAzure.Caching.xml</DocumentationFile>
     <Prefer32Bit>false</Prefer32Bit>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -36,6 +37,7 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Release\Glimpse.WindowsAzure.Caching.xml</DocumentationFile>
     <Prefer32Bit>false</Prefer32Bit>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
@@ -105,7 +107,6 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
@@ -114,6 +115,7 @@
   </Target>
   -->
   <PropertyGroup>
+    <StyleCopOverrideSettingsFile>$(SolutionDir)Source\Settings.StyleCop</StyleCopOverrideSettingsFile>
     <StyleCopMSBuildTargetsFile>..\..\packages\StyleCop.MSBuild.4.7.46.1\tools\StyleCop.targets</StyleCopMSBuildTargetsFile>
   </PropertyGroup>
   <Import Condition="Exists('$(StyleCopMSBuildTargetsFile)')" Project="$(StyleCopMSBuildTargetsFile)" />

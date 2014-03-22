@@ -59,7 +59,7 @@ namespace Glimpse.WebForms.Tab
             { 
                 context.TabStore.Set("hasRun", "true");
                  
-                //Make sure the traces are dumpted out to the normal trace stream  
+                // Make sure the traces are dumpted out to the normal trace stream  
                 writeToDiagnosticsTraceField.SetValue(null, true);    
 
                 return null;

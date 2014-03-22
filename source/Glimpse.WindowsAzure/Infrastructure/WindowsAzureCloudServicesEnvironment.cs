@@ -8,6 +8,7 @@ namespace Glimpse.WindowsAzure.Infrastructure
         : IWindowsAzureEnvironment
     {
         private static Assembly ServiceRuntimeAssembly { get; set; }
+
         private static Type RoleEnvironmentType { get; set; }
 
         static WindowsAzureCloudServicesEnvironment()
@@ -80,7 +81,7 @@ namespace Glimpse.WindowsAzure.Infrastructure
             }
         }
 
-        static bool WrappedIsAvailable()
+        private static bool WrappedIsAvailable()
         {
             try
             {
@@ -96,10 +97,12 @@ namespace Glimpse.WindowsAzure.Infrastructure
                         innerException1 = innerException1.InnerException;
                     }
                 }
+
                 if (innerException1 != null && innerException1.Message.Contains("C++ module failed to load"))
                 {
                     return false;
                 }
+
                 throw;
             }
             catch (TypeInitializationException ex)
@@ -109,6 +112,7 @@ namespace Glimpse.WindowsAzure.Infrastructure
                 {
                     return false;
                 }
+
                 throw;
             }
         }
@@ -125,6 +129,5 @@ namespace Glimpse.WindowsAzure.Infrastructure
                 return null;
             }
         }
-
     }
 }

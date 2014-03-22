@@ -1,6 +1,4 @@
-﻿using Glimpse.Core.Framework;
-using Glimpse.WebForms.Model;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
@@ -10,6 +8,8 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.Adapters;
 using System.Web.UI.WebControls;
+using Glimpse.Core.Framework;
+using Glimpse.WebForms.Model;
 
 namespace Glimpse.WebForms.Inspector
 {
@@ -49,12 +49,14 @@ namespace Glimpse.WebForms.Inspector
                 {
                     parameters.Add(new KeyValuePair<string, ParameterCollection>("Select", objectDataSource.SelectParameters));
                 }
+
                 var sqlDataSource = DataBoundControl.DataSourceObject as SqlDataSource;
                 if (sqlDataSource != null)
                 {
                     parameters.Add(new KeyValuePair<string, ParameterCollection>("Select", sqlDataSource.SelectParameters));
                     parameters.Add(new KeyValuePair<string, ParameterCollection>("Filter", sqlDataSource.FilterParameters));
                 }
+
                 var linqDataSource = DataBoundControl.DataSourceObject as LinqDataSource;
                 if (linqDataSource != null)
                 {
@@ -64,6 +66,7 @@ namespace Glimpse.WebForms.Inspector
                     parameters.Add(new KeyValuePair<string, ParameterCollection>("GroupBy", linqDataSource.GroupByParameters));
                     parameters.Add(new KeyValuePair<string, ParameterCollection>("OrderGroupsBy", linqDataSource.OrderGroupsByParameters));
                 }
+
                 return parameters;
             }
         }
@@ -108,6 +111,7 @@ namespace Glimpse.WebForms.Inspector
             {
                 DataBindInfo[DataBoundControl.UniqueID] = new List<DataBindParameterModel>();
             }
+
             DataBindInfo[DataBoundControl.UniqueID].Add(parameterModel);
         }
 
@@ -119,6 +123,7 @@ namespace Glimpse.WebForms.Inspector
             {
                 field = parameter.GetType().GetProperty(defaultPropertyAttribute.Name).GetValue(parameter, null) as string;
             }
+
             return field ?? parameter.Name;
         }
 
@@ -132,6 +137,7 @@ namespace Glimpse.WebForms.Inspector
                     defaultValue = Convert.ChangeType(parameter.DefaultValue, parameter.Type, CultureInfo.CurrentCulture);
                 }
             }
+
             return defaultValue;
         }
     }
@@ -152,6 +158,7 @@ namespace Glimpse.WebForms.Inspector
         private bool AdapterStateCopied { get; set; }
 
         private static readonly MethodInfo BeginRenderInfo = typeof(System.Web.UI.Adapters.PageAdapter).GetMethod("BeginRender", BindingFlags.Instance | BindingFlags.NonPublic);
+        
         protected override void BeginRender(HtmlTextWriter writer)
         {
             CopyAccessState();
@@ -159,6 +166,7 @@ namespace Glimpse.WebForms.Inspector
         }
 
         private static readonly MethodInfo CreateChildControlsInfo = typeof(System.Web.UI.Adapters.PageAdapter).GetMethod("CreateChildControls", BindingFlags.Instance | BindingFlags.NonPublic);
+        
         protected override void CreateChildControls()
         {
             CopyAccessState();
@@ -166,6 +174,7 @@ namespace Glimpse.WebForms.Inspector
         }
 
         private static readonly MethodInfo EndRenderInfo = typeof(System.Web.UI.Adapters.PageAdapter).GetMethod("EndRender", BindingFlags.Instance | BindingFlags.NonPublic);
+        
         protected override void EndRender(HtmlTextWriter writer)
         {
             CopyAccessState();
@@ -173,6 +182,7 @@ namespace Glimpse.WebForms.Inspector
         }
 
         private static readonly MethodInfo LoadAdapterControlStateInfo = typeof(System.Web.UI.Adapters.PageAdapter).GetMethod("LoadAdapterControlState", BindingFlags.Instance | BindingFlags.NonPublic);
+        
         protected override void LoadAdapterControlState(object state)
         {
             CopyAccessState();
@@ -180,12 +190,14 @@ namespace Glimpse.WebForms.Inspector
         }
 
         private static readonly MethodInfo LoadAdapterViewStateInfo = typeof(System.Web.UI.Adapters.PageAdapter).GetMethod("LoadAdapterViewState", BindingFlags.Instance | BindingFlags.NonPublic);
+        
         protected override void LoadAdapterViewState(object state)
         {
             LoadAdapterViewStateInfo.Invoke(InnerAdapter, new object[] { state });
         }
 
         private static readonly MethodInfo OnInitInfo = typeof(System.Web.UI.Adapters.PageAdapter).GetMethod("OnInit", BindingFlags.Instance | BindingFlags.NonPublic);
+        
         protected override void OnInit(EventArgs e)
         {
             CopyAccessState();
@@ -197,6 +209,7 @@ namespace Glimpse.WebForms.Inspector
         }
 
         private static readonly MethodInfo OnLoadInfo = typeof(System.Web.UI.Adapters.PageAdapter).GetMethod("OnLoad", BindingFlags.Instance | BindingFlags.NonPublic);
+        
         protected override void OnLoad(EventArgs e)
         {
             CopyAccessState();
@@ -204,6 +217,7 @@ namespace Glimpse.WebForms.Inspector
         }
 
         private static readonly MethodInfo OnPreRenderInfo = typeof(System.Web.UI.Adapters.PageAdapter).GetMethod("OnPreRender", BindingFlags.Instance | BindingFlags.NonPublic);
+        
         protected override void OnPreRender(EventArgs e)
         {
             CopyAccessState();
@@ -211,6 +225,7 @@ namespace Glimpse.WebForms.Inspector
         }
 
         private static readonly MethodInfo OnUnloadInfo = typeof(System.Web.UI.Adapters.PageAdapter).GetMethod("OnUnload", BindingFlags.Instance | BindingFlags.NonPublic);
+        
         protected override void OnUnload(EventArgs e)
         {
             CopyAccessState();
@@ -218,6 +233,7 @@ namespace Glimpse.WebForms.Inspector
         }
 
         private static readonly MethodInfo RenderInfo = typeof(System.Web.UI.Adapters.PageAdapter).GetMethod("Render", BindingFlags.Instance | BindingFlags.NonPublic);
+        
         protected override void Render(HtmlTextWriter writer)
         {
             CopyAccessState();
@@ -225,6 +241,7 @@ namespace Glimpse.WebForms.Inspector
         }
 
         private static readonly MethodInfo RenderChildrenInfo = typeof(System.Web.UI.Adapters.PageAdapter).GetMethod("RenderChildren", BindingFlags.Instance | BindingFlags.NonPublic);
+        
         protected override void RenderChildren(HtmlTextWriter writer)
         {
             CopyAccessState();
@@ -232,6 +249,7 @@ namespace Glimpse.WebForms.Inspector
         }
 
         private static readonly MethodInfo SaveAdapterControlStateInfo = typeof(System.Web.UI.Adapters.PageAdapter).GetMethod("SaveAdapterControlState", BindingFlags.Instance | BindingFlags.NonPublic);
+        
         protected override object SaveAdapterControlState()
         {
             CopyAccessState();
@@ -239,6 +257,7 @@ namespace Glimpse.WebForms.Inspector
         }
 
         private static readonly MethodInfo SaveAdapterViewStateInfo = typeof(System.Web.UI.Adapters.PageAdapter).GetMethod("SaveAdapterViewState", BindingFlags.Instance | BindingFlags.NonPublic);
+        
         protected override object SaveAdapterViewState()
         {
             CopyAccessState();

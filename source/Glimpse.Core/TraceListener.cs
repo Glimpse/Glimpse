@@ -20,6 +20,7 @@ namespace Glimpse.Core
         private Func<IExecutionTimer> timerStrategy;
 
         // ReSharper disable UnusedMember.Global 
+
         /// <summary>
         /// These constructors used by .NET when TraceListener is set via web.config
         /// </summary>
@@ -34,6 +35,7 @@ namespace Glimpse.Core
         public TraceListener(string initializeData)
         {
         }
+
         //// ReSharper restore UnusedMember.Global
 
         /// <summary>
