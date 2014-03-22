@@ -14,7 +14,7 @@ namespace Glimpse.Core.Policy
     {
         private static readonly object configuredItemsLock = new object();
         private readonly List<TConfiguredItem> configuredItems = new List<TConfiguredItem>();
-        private readonly IComparer<TConfiguredItem> Comparer;
+        private readonly IComparer<TConfiguredItem> comparer;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AddRemoveClearItemsConfigurator{TItem}" />
@@ -24,7 +24,7 @@ namespace Glimpse.Core.Policy
         protected AddRemoveClearItemsConfigurator(string customConfigurationKey, IComparer<TConfiguredItem> comparer)
         {
             CustomConfigurationKey = customConfigurationKey;
-            Comparer = comparer;
+            this.comparer = comparer;
         }
 
         /// <summary>
@@ -95,7 +95,7 @@ namespace Glimpse.Core.Policy
         {
             lock (configuredItemsLock)
             {
-                if (ConfiguredItems.All(existingItem => Comparer.Compare(existingItem, item) != 0))
+                if (ConfiguredItems.All(existingItem => comparer.Compare(existingItem, item) != 0))
                 {
                     configuredItems.Add(item);
                 }
@@ -110,7 +110,7 @@ namespace Glimpse.Core.Policy
         {
             lock (configuredItemsLock)
             {
-                var itemToRemove = ConfiguredItems.SingleOrDefault(existingItem => Comparer.Compare(existingItem, item) == 0);
+                var itemToRemove = ConfiguredItems.SingleOrDefault(existingItem => comparer.Compare(existingItem, item) == 0);
                 if (!object.Equals(itemToRemove, default(TConfiguredItem)))
                 {
                     configuredItems.Remove(itemToRemove);

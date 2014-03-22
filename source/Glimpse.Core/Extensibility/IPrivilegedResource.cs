@@ -15,18 +15,15 @@ namespace Glimpse.Core.Extensibility
         /// <summary>
         /// Executes the specified context.
         /// </summary>
-        /// <param name="context">
-        /// The context.
-        /// </param>
-        /// <param name="configuration">
-        /// The configuration.
-        /// </param>
+        /// <param name="context">The context</param>
+        /// <param name="configuration">The configuration</param>
+        /// <param name="requestResponseAdapter">The request response adapter</param>
         /// <remarks>
         /// Use of <see cref="IPrivilegedResource"/> is reserved.
         /// </remarks>
         /// <returns>
         /// A <see cref="IResourceResult"/>.
         /// </returns>
-        IResourceResult Execute(IResourceContext context, IReadonlyConfiguration configuration, IRequestResponseAdapter requestResponseAdapter); 
+        IResourceResult Execute(IResourceContext context, IReadonlyConfiguration configuration, IRequestResponseAdapter requestResponseAdapter);
     }
 }

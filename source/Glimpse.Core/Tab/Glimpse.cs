@@ -42,8 +42,8 @@ namespace Glimpse.Core.Tab
             lock (activeGlimpseRequestContextEvents)
             {
                 var totalNumberOfActiveGlimpseRequestContexts = activeGlimpseRequestContextEvents.Count;
-                var oldestActiveGlimpseRequestContext = (ActiveGlimpseRequestContextEventArgs) (totalNumberOfActiveGlimpseRequestContexts != 0 ? activeGlimpseRequestContextEvents[0] : null);
-                var newestActiveGlimpseRequestContext = (ActiveGlimpseRequestContextEventArgs) (totalNumberOfActiveGlimpseRequestContexts != 0 ? activeGlimpseRequestContextEvents[totalNumberOfActiveGlimpseRequestContexts-1] : null);
+                var oldestActiveGlimpseRequestContext = (ActiveGlimpseRequestContextEventArgs)(totalNumberOfActiveGlimpseRequestContexts != 0 ? activeGlimpseRequestContextEvents[0] : null);
+                var newestActiveGlimpseRequestContext = (ActiveGlimpseRequestContextEventArgs)(totalNumberOfActiveGlimpseRequestContexts != 0 ? activeGlimpseRequestContextEvents[totalNumberOfActiveGlimpseRequestContexts - 1] : null);
 
                 return new
                 {

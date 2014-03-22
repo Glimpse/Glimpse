@@ -9,12 +9,16 @@ namespace Glimpse.Core
 
         public static Func<IConfiguration, IConfiguration> Override
         {
-            get { return @override; }
+            get
+            {
+                return @override;
+            }
+
             set
             {
                 if (value == null)
                 {
-                    throw new ArgumentNullException("Override");
+                    throw new ArgumentNullException("value");
                 }
 
                 @override = value;

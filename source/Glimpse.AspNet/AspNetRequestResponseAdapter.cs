@@ -24,12 +24,12 @@ namespace Glimpse.AspNet
             get { return new RequestMetadata(Context); }
         }
 
-        internal HttpContextBase Context{ get; set;}
-        
+        internal HttpContextBase Context { get; set; }
+
         private ILogger Logger { get; set; }
 
-        private bool SettingHttpResponseHeadersPrevented{ get; set; }
-        
+        private bool SettingHttpResponseHeadersPrevented { get; set; }
+
         public void PreventSettingHttpResponseHeaders()
         {
             SettingHttpResponseHeadersPrevented = true;

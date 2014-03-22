@@ -50,7 +50,6 @@ namespace Glimpse.Core
             return new OngoingCapture(executionTimer, messageBroker, eventName, eventSubText, category, message);
         }
 
-
         public static void CaptureMoment(string eventName)
         {
             CaptureMoment(eventName, null, TimelineCategory.User, new TimelineMessage());
@@ -78,7 +77,6 @@ namespace Glimpse.Core
 
         internal static void CaptureMoment(string eventName, string eventSubText, TimelineCategoryItem category, ITimelineMessage message) 
         {
-
             if (string.IsNullOrEmpty(eventName))
             {
                 throw new ArgumentNullException("eventName");

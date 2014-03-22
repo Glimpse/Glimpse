@@ -17,7 +17,6 @@ namespace Glimpse.Core.Framework
         /// </summary>
         /// <param name="glimpseRequestId">The Glimpse request Id for the request for which script tags must be generated</param>
         /// <param name="configuration">A <see cref="IConfiguration"/></param>
-        /// <param name="glimpseRuntimeVersion">The version of the glimpse runtime</param>
         /// <returns>The generated script tags</returns>
         public static string Generate(Guid glimpseRequestId, IReadonlyConfiguration configuration)
         {

@@ -25,6 +25,7 @@ namespace Glimpse.Core.Framework
         /// <param name="tabData">The plugin data.</param>
         /// <param name="displayData">The display data</param>
         /// <param name="duration">The duration.</param>
+        /// <param name="instanceMetadata">The metadata</param>
         public GlimpseRequest(Guid requestId, IRequestMetadata requestMetadata, IDictionary<string, TabResult> tabData, IDictionary<string, TabResult> displayData, TimeSpan duration, IDictionary<string, object> instanceMetadata)
             : this()
         {
@@ -143,7 +144,7 @@ namespace Glimpse.Core.Framework
         /// Gets or sets the metadata that targeted at this specific request.
         /// </summary>
         /// <value>
-        /// The metdata data.
+        /// The metadata data.
         /// </value>
         public IDictionary<string, object> Metadata { get; set; }
 

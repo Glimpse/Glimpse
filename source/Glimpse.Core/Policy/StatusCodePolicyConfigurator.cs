@@ -68,7 +68,7 @@ namespace Glimpse.Core.Policy
         }
 
         /// <summary>
-        /// Creates a int representing a status code
+        /// Creates a integer representing a status code
         /// </summary>
         /// <param name="itemNode">The <see cref="XmlNode"/> from which a status code is created</param>
         /// <returns>A status code</returns>

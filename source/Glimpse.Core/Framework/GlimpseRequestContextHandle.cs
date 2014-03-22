@@ -11,6 +11,7 @@ namespace Glimpse.Core.Framework
     public class GlimpseRequestContextHandle : IDisposable
     {
         private bool Disposed { get; set; }
+        
         private Action OnDisposeCallback { get; set; }
 
         /// <summary>

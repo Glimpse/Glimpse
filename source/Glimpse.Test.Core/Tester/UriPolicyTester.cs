@@ -1,8 +1,4 @@
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using System;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
 using Glimpse.Core.Policy;
@@ -13,7 +9,9 @@ namespace Glimpse.Test.Core.Tester
     public class UriPolicyTester : UriPolicy
     {
         public Mock<IRequestMetadata> RequestMetadataMock { get; set; }
+        
         public Mock<IRuntimePolicyContext> ContextMock { get; set; }
+        
         public Mock<ILogger> LoggerMock { get; set; }
 
         private UriPolicyTester()

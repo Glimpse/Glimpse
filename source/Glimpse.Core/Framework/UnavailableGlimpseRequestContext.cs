@@ -61,7 +61,10 @@ namespace Glimpse.Core.Framework
         /// </summary>
         public RuntimePolicy CurrentRuntimePolicy
         {
-            get { return RuntimePolicy.Off; }
+            get
+            {
+                return RuntimePolicy.Off;
+            }
 
             set
             {

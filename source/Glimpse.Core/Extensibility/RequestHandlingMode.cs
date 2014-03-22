@@ -19,7 +19,6 @@ namespace Glimpse.Core.Extensibility
         /// </summary>
         RegularRequest,
 
-
         /// <summary>
         /// Glimpse handles this request completely, as the request is made for a specific Glimpse <see cref="IResource"/>
         /// </summary>

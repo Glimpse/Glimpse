@@ -51,8 +51,9 @@ namespace Glimpse.Core.Framework
             {
                 Guard.ArgumentNotNull("configuration", configuration);
 
-                lock (initializationLock) // we always take a lock as concurrent initialization calls should not happen, but if they do, they'll have to wait on each other
+                lock (initializationLock)
                 {
+                    // we always take a lock as concurrent initialization calls should not happen, but if they do, they'll have to wait on each other
                     if (!IsAvailable)
                     {
                         // Run user customizations to configuration before storing and then override 
@@ -125,8 +126,11 @@ namespace Glimpse.Core.Framework
             private class InitializationMessage
             {
                 public LoggingLevel Level { get; set; }
+                
                 public string Message { get; set; }
+                
                 public Exception Exception { get; set; }
+                
                 public bool WrittenToLog { get; set; }
             }
         }

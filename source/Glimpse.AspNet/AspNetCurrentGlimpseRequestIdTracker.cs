@@ -49,7 +49,6 @@ namespace Glimpse.AspNet
                     // What is not normal and even wrong, is that the CallContext returns another Glimpse request id then the one stored inside
                     // the HttpContext.Current.Items collection, so we're going to check this to make sure and log an error in case we find ourselves
                     // in such a situation
-
                     Guid callcontextStoredGlimpseRequestId;
                     if (base.TryGet(out callcontextStoredGlimpseRequestId) && callcontextStoredGlimpseRequestId != glimpseRequestId)
                     {

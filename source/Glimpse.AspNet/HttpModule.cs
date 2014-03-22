@@ -10,7 +10,7 @@ namespace Glimpse.AspNet
 {
     public class HttpModule : IHttpModule
     {
-        private static Configuration Configuration;
+        private static Configuration Configuration { get; set; }
 
         static HttpModule()
         {
@@ -111,14 +111,17 @@ namespace Glimpse.AspNet
 
         private static void SendHeaders(HttpContextBase httpContext)
         {
-            ProcessAspNetRuntimeEvent(httpContext, glimpseRequestContextHandle =>
-            {
-                IGlimpseRequestContext glimpseRequestContext;
-                if (GlimpseRuntime.Instance.TryGetRequestContext(glimpseRequestContextHandle.GlimpseRequestId, out glimpseRequestContext))
+            ProcessAspNetRuntimeEvent(
+                httpContext,
+                glimpseRequestContextHandle =>
                 {
-                    ((IAspNetRequestResponseAdapter)glimpseRequestContext.RequestResponseAdapter).PreventSettingHttpResponseHeaders();
-                }
-            }, availabilityOfGlimpseRequestContextHandleIsRequired: false);
+                    IGlimpseRequestContext glimpseRequestContext;
+                    if (GlimpseRuntime.Instance.TryGetRequestContext(glimpseRequestContextHandle.GlimpseRequestId, out glimpseRequestContext))
+                    {
+                        ((IAspNetRequestResponseAdapter)glimpseRequestContext.RequestResponseAdapter).PreventSettingHttpResponseHeaders();
+                    }
+                },
+                availabilityOfGlimpseRequestContextHandleIsRequired: false);
 
             // Under normal circumstances the SendHeaders event will be raised AFTER the EndRequest
             // event, which means that in most cases the Glimpse request context handle will already

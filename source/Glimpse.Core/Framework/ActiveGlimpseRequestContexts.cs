@@ -11,7 +11,9 @@ namespace Glimpse.Core.Framework
     internal class ActiveGlimpseRequestContexts
     {
         private static readonly object glimpseRequestContextsAccessLock = new object();
+
         private IDictionary<Guid, IGlimpseRequestContext> GlimpseRequestContexts { get; set; }
+        
         private ICurrentGlimpseRequestIdTracker CurrentGlimpseRequestIdTracker { get; set; }
 
         /// <summary>
@@ -53,7 +55,6 @@ namespace Glimpse.Core.Framework
             // we'll create the handle. This handle will make sure the glimpseRequestContext is removed from the collection of active glimpse request contexts
             // in case something goes wrong further on. That's is also why we create the handle first and then add the the glimpseRequestContext to the list
             // because if the creation of the handle would fail afterwards, then there is no way to remove the glimpseRequestContext from the list.
-
             var glimpseRequestId = glimpseRequestContext.GlimpseRequestId;
             var handle = new GlimpseRequestContextHandle(glimpseRequestId, glimpseRequestContext.RequestHandlingMode, () => Remove(glimpseRequestId));
             lock (glimpseRequestContextsAccessLock)

@@ -354,8 +354,9 @@ namespace Glimpse.Core
 
             var timer = TimerStrategy();
 
-            if (timer == null) // it can still be null in case the timer strategy decides to not return a timer (RuntimePolicy == Off for instance)
+            if (timer == null)
             {
+                // it can still be null in case the timer strategy decides to not return a timer (RuntimePolicy == Off for instance)
                 return;
             }
 

@@ -14,9 +14,9 @@ namespace Glimpse.Core.Extensibility
         string Key { get; }
 
         /// <summary>
-        /// Gets the metadata for a given tab
+        /// Gets the metadata for a given configuration
         /// </summary>
-        /// <param name="tab">Tab that might have metadata generated for it.</param>
+        /// <param name="configuration">The configuration.</param>
         /// <returns>The metadata to be used for the given key</returns>
         object GetMetadata(IReadonlyConfiguration configuration);
     }

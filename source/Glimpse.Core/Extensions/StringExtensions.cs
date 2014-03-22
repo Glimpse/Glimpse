@@ -7,7 +7,7 @@ namespace Glimpse.Core.Extensions
     {
         public static string TakeFirstChar(this string input)
         {
-            if (!String.IsNullOrEmpty(input))
+            if (!string.IsNullOrEmpty(input))
             {
                 input = input[0].ToString(CultureInfo.InvariantCulture);
             }

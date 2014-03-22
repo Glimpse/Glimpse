@@ -41,7 +41,6 @@ namespace Glimpse.Core.Framework
         private ICollection<IDisplay> displays;
         private string hash;
         private string version;
-        private IServiceLocator userServiceLocator;
         private Section xmlConfiguration;
         private RuntimePolicy? defaultRuntimePolicy;
         private ICollection<ISerializationConverter> serializationConverters;
@@ -89,17 +88,15 @@ namespace Glimpse.Core.Framework
         /// </value>
         public ICurrentGlimpseRequestIdTracker CurrentGlimpseRequestIdTracker { get; private set; }
 
-        public IServiceLocator UserServiceLocator 
-        {
-            get { return userServiceLocator; }
-            set { userServiceLocator = value; }
-        }
+        public IServiceLocator UserServiceLocator { get; set; }
 
-        public Section XmlConfiguration {
+        public Section XmlConfiguration 
+        {
             get
             {
                 return xmlConfiguration;
             }
+
             set
             {
                 if (value == null)
@@ -587,7 +584,8 @@ namespace Glimpse.Core.Framework
         /// Gets or sets a collection of <see cref="ISerializationConverter"/>s.
         /// </summary>
         /// <returns>A collection of <see cref="ISerializationConverter"/> instances resolved by the <see cref="IServiceLocator"/>s, otherwise all <see cref="ISerializationConverter"/>s discovered in the configured discovery location.</returns>
-        public ICollection<ISerializationConverter> SerializationConverters {
+        public ICollection<ISerializationConverter> SerializationConverters 
+        {
             get
             {
                 if (serializationConverters != null)
@@ -641,8 +639,6 @@ namespace Glimpse.Core.Framework
                 tabs = value;
             }
         }
-
-        //
 
         /// <summary>
         /// Gets or sets the collection of <see cref="IMetadata"/>.
@@ -833,7 +829,8 @@ namespace Glimpse.Core.Framework
                 }
                  
                 return version;
-            } 
+            }
+
             set
             {
                 version = value;

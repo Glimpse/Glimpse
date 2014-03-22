@@ -106,7 +106,10 @@ namespace Glimpse.Core.Framework
                 return activeExecutionTimer;
             }
 
-            private set { activeExecutionTimer = value; }
+            private set
+            {
+                activeExecutionTimer = value;
+            }
         }
 
         /// <summary>

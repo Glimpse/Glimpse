@@ -50,7 +50,10 @@ namespace Glimpse.Core.Framework
         /// <value>
         /// <c>true</c> if the Glimpse runtime is available; otherwise, <c>false</c>.
         /// </value>
-        public static bool IsAvailable { get { return instance != null; } }
+        public static bool IsAvailable
+        {
+            get { return instance != null; }
+        }
 
         /// <summary>
         /// Gets the <see cref="IGlimpseRuntime"/> instance set during the initialization of the Glimpse runtime
@@ -122,9 +125,13 @@ namespace Glimpse.Core.Framework
         }
 
         private ActiveGlimpseRequestContexts ActiveGlimpseRequestContexts { get; set; }
+        
         private RuntimePolicyDeterminator RuntimePolicyDeterminator { get; set; }
+        
         private MetadataProvider MetadataProvider { get; set; }
+        
         private TabProvider TabProvider { get; set; }
+        
         private DisplayProvider DisplayProvider { get; set; }
 
         /// <summary>
@@ -414,7 +421,6 @@ namespace Glimpse.Core.Framework
             glimpseRequestContext.CurrentRuntimePolicy = RuntimePolicyDeterminator.DetermineRuntimePolicy(runtimeEvent, glimpseRequestContext.CurrentRuntimePolicy, glimpseRequestContext.RequestResponseAdapter);
 
             return glimpseRequestContext.CurrentRuntimePolicy != RuntimePolicy.Off;
-
         }
 
         // TODO this should not be public! This was changed to hack in OWIN support

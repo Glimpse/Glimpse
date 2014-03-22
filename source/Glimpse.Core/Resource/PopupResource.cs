@@ -67,6 +67,7 @@ namespace Glimpse.Core.Resource
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="configuration">The configuration.</param>
+        /// <param name="requestResponseAdapter">The request response.</param>
         /// <returns>
         /// A <see cref="IResourceResult" />.
         /// </returns>

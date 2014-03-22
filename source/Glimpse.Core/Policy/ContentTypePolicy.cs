@@ -26,7 +26,10 @@ namespace Glimpse.Core.Policy
         /// <summary>
         /// Gets the configurator
         /// </summary>
-        IConfigurator IConfigurable.Configurator { get { return Configurator; } }
+        IConfigurator IConfigurable.Configurator
+        {
+            get { return Configurator; }
+        }
 
         /// <summary>
         /// Gets the point in an Http request lifecycle that a policy should execute.

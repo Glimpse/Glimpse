@@ -2,10 +2,13 @@
   <GlobalSettings>
     <CollectionProperty Name="RecognizedWords">
       <Value>bootstrapper</Value>
+      <Value>determinator</Value>
       <Value>Dll</Value>
       <Value>enum</Value>
+      <Value>finalizer</Value>
       <Value>Json</Value>
       <Value>logoname</Value>
+      <Value>metadata</Value>
       <Value>mixin</Value>
       <Value>mixins</Value>
       <Value>non-nullable</Value>
