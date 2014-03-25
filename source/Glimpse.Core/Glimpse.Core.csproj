@@ -117,6 +117,7 @@
     <Compile Include="Framework\BaseDataProvider.cs" />
     <Compile Include="Framework\BaseProvider.cs" />
     <Compile Include="Framework\CallContextCurrentGlimpseRequestIdTracker.cs" />
+    <Compile Include="Framework\ConfigurationFactory.cs" />
     <Compile Include="Framework\Crc32.cs" />
     <Compile Include="Framework\DisplayProvider.cs" />
     <Compile Include="Framework\GlimpseRuntimeNotAvailableException.cs" />

@@ -19,7 +19,7 @@ namespace Glimpse.Core.Framework
     /// <summary>
     /// Contains all configuration required by <see cref="IGlimpseRuntime"/> instances to execute.
     /// </summary>
-    public class Configuration : IConfiguration
+    internal class Configuration : IConfiguration
     {
         private IMessageBroker messageBroker;
         private ILogger logger;
