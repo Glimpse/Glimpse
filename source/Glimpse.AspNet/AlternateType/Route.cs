@@ -22,6 +22,18 @@ namespace Glimpse.AspNet.AlternateType
             routeConstraintAlternate = new RouteConstraint(proxyFactory);
         }
 
+        public IEnumerable<IAlternateMethod> AllMethodsRouteBase
+        {
+            get
+            {
+                return allMethodsRouteBase ?? (allMethodsRouteBase = new List<IAlternateMethod>
+                {
+                    new GetRouteData(typeof(System.Web.Routing.RouteBase)),
+                    new GetVirtualPath(typeof(System.Web.Routing.RouteBase))
+                });
+            }
+        }
+
         public IEnumerable<IAlternateMethod> AllMethodsRoute
         {
             get
@@ -69,9 +81,9 @@ namespace Glimpse.AspNet.AlternateType
 
             if (newObj == null)
             {
-                if (ProxyFactory.IsWrapClassEligible(typeof(System.Web.Routing.Route)))
+                if (ProxyFactory.IsWrapClassEligible(typeof(System.Web.Routing.RouteBase)))
                 {
-                    newObj = ProxyFactory.WrapClass(originalObj, AllMethodsRoute, mixins);
+                    newObj = ProxyFactory.WrapClass(originalObj, AllMethodsRouteBase, mixins);
                 }
             }
 
