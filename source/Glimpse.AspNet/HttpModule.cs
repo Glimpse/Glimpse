@@ -10,7 +10,7 @@ namespace Glimpse.AspNet
 {
     public class HttpModule : IHttpModule
     {
-        private static Configuration Configuration { get; set; }
+        private static IConfiguration Configuration { get; set; }
 
         static HttpModule()
         {
@@ -58,7 +58,7 @@ namespace Glimpse.AspNet
             if (!GlimpseRuntime.IsAvailable)
             {
                 Configuration = Configuration ??
-                    new Configuration(
+                    ConfigurationFactory.Create(
                         new HttpHandlerEndpointConfiguration(),
                         new InMemoryPersistenceStore(new HttpApplicationStateBaseDataStoreAdapter(httpApplication.Application)),
                         new AspNetCurrentGlimpseRequestIdTracker());

@@ -18,7 +18,7 @@ namespace Glimpse.Owin.Middleware
         public GlimpseMiddleware(Func<IDictionary<string, object>, Task> next, IDictionary<string, object> serverStore)
         {
             innerNext = next;
-            config = new Configuration(
+            config = ConfigurationFactory.Create(
                     new UriTemplateResourceEndpointConfiguration(),
                     new InMemoryPersistenceStore(new DictionaryDataStoreAdapter((Dictionary<string, object>)serverStore)));
         }
