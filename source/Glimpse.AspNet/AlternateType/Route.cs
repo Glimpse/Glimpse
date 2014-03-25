@@ -2,37 +2,37 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Web; 
-using Glimpse.AspNet.Message; 
+using System.Web;
+using Glimpse.AspNet.Message;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Message;
 
 namespace Glimpse.AspNet.AlternateType
 {
-    public class RouteBase : IAlternateType<System.Web.Routing.RouteBase>
+    public class Route : IAlternateType<System.Web.Routing.Route>
     {
         private readonly RouteConstraint routeConstraintAlternate;
         private IEnumerable<IAlternateMethod> allMethodsRouteBase;
         private IEnumerable<IAlternateMethod> allMethodsRoute;
 
-        public RouteBase(IProxyFactory proxyFactory, ILogger logger)
+        public Route(IProxyFactory proxyFactory, ILogger logger)
         {
             ProxyFactory = proxyFactory;
             Logger = logger;
             routeConstraintAlternate = new RouteConstraint(proxyFactory);
         }
 
-        public IEnumerable<IAlternateMethod> AllMethodsRouteBase
-        {
-            get
-            {
-                return allMethodsRouteBase ?? (allMethodsRouteBase = new List<IAlternateMethod>
-                {
-                    new GetRouteData(typeof(System.Web.Routing.RouteBase)),
-                    new GetVirtualPath(typeof(System.Web.Routing.RouteBase))
-                });
-            }
-        }
+        //public IEnumerable<IAlternateMethod> AllMethodsRouteBase
+        //{
+        //    get
+        //    {
+        //        return allMethodsRouteBase ?? (allMethodsRouteBase = new List<IAlternateMethod>
+        //        {
+        //            new GetRouteData(typeof(System.Web.Routing.RouteBase)),
+        //            new GetVirtualPath(typeof(System.Web.Routing.RouteBase))
+        //        });
+        //    }
+        //}
 
         public IEnumerable<IAlternateMethod> AllMethodsRoute
         {
@@ -51,17 +51,17 @@ namespace Glimpse.AspNet.AlternateType
 
         private ILogger Logger { get; set; }
 
-        public bool TryCreate(System.Web.Routing.RouteBase originalObj, out System.Web.Routing.RouteBase newObj)
+        public bool TryCreate(System.Web.Routing.Route originalObj, out System.Web.Routing.Route newObj)
         {
             return TryCreate(originalObj, out newObj, null, null);
         }
 
-        public bool TryCreate(System.Web.Routing.RouteBase originalObj, out System.Web.Routing.RouteBase newObj, IEnumerable<object> mixins)
+        public bool TryCreate(System.Web.Routing.Route originalObj, out System.Web.Routing.Route newObj, IEnumerable<object> mixins)
         {
             return TryCreate(originalObj, out newObj, mixins, null);
         }
 
-        public bool TryCreate(System.Web.Routing.RouteBase originalObj, out System.Web.Routing.RouteBase newObj, IEnumerable<object> mixins, object[] constructorArguments)
+        public bool TryCreate(System.Web.Routing.Route originalObj, out System.Web.Routing.Route newObj, IEnumerable<object> mixins, object[] constructorArguments)
         {
             newObj = null;
 
@@ -81,15 +81,15 @@ namespace Glimpse.AspNet.AlternateType
 
             if (newObj == null)
             {
-                if (ProxyFactory.IsWrapClassEligible(typeof(System.Web.Routing.RouteBase)))
+                if (ProxyFactory.IsWrapClassEligible(typeof(System.Web.Routing.Route)))
                 {
-                    newObj = ProxyFactory.WrapClass(originalObj, AllMethodsRouteBase, mixins);
+                    newObj = ProxyFactory.WrapClass(originalObj, AllMethodsRoute, mixins);
                 }
             }
 
             return newObj != null;
         }
-         
+
         private void SetupConstraints(ILogger logger, IProxyFactory proxyFactory, System.Web.Routing.RouteValueDictionary constraints)
         {
             if (constraints != null)
@@ -123,17 +123,17 @@ namespace Glimpse.AspNet.AlternateType
                     else
                     {
                         logger.Info(Resources.RouteSetupNotReplacedRoute, constraint.GetType());
-                    } 
+                    }
                 }
             }
         }
-         
+
         public class GetRouteData : AlternateMethod
         {
             public GetRouteData(Type type)
                 : base(type, "GetRouteData", BindingFlags.Public | BindingFlags.Instance)
             {
-            } 
+            }
 
             public override void PostImplementation(IAlternateMethodContext context, TimerResult timerResult)
             {
@@ -152,14 +152,14 @@ namespace Glimpse.AspNet.AlternateType
                 {
                 }
             }
-        } 
+        }
 
         public class GetVirtualPath : AlternateMethod
         {
             public GetVirtualPath(Type type)
                 : base(type, "GetVirtualPath", BindingFlags.Public | BindingFlags.Instance)
             {
-            } 
+            }
 
             public override void PostImplementation(IAlternateMethodContext context, TimerResult timerResult)
             {
@@ -184,26 +184,26 @@ namespace Glimpse.AspNet.AlternateType
 
             public class Message : ITimedMessage, ISourceMessage
             {
-                public Message(Arguments args, object invocationTarget, System.Web.Routing.VirtualPathData virtualPathData) 
+                public Message(Arguments args, object invocationTarget, System.Web.Routing.VirtualPathData virtualPathData)
                 {
                     IsMatch = virtualPathData != null;
                     RouteHashCode = invocationTarget.GetHashCode();
                 }
 
-                public int RouteHashCode { get; protected set; } 
+                public int RouteHashCode { get; protected set; }
 
                 public bool IsMatch { get; protected set; }
-                
+
                 public Guid Id { get; private set; }
-                
+
                 public TimeSpan Offset { get; set; }
-                
+
                 public TimeSpan Duration { get; set; }
-                
+
                 public DateTime StartTime { get; set; }
-                
+
                 public Type ExecutedType { get; set; }
-                
+
                 public MethodInfo ExecutedMethod { get; set; }
             }
         }
@@ -248,9 +248,9 @@ namespace Glimpse.AspNet.AlternateType
             public class Message : ProcessConstraintMessage
             {
                 public Message(Arguments args, int routeHashCode, bool isMatch)
-                    : base(routeHashCode, args.Constraint.GetHashCode(), isMatch, args.ParameterName, args.Constraint, args.Values, args.RouteDirection) 
-                { 
-                } 
+                    : base(routeHashCode, args.Constraint.GetHashCode(), isMatch, args.ParameterName, args.Constraint, args.Values, args.RouteDirection)
+                {
+                }
             }
         }
     }

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AlternateType\IRouteNameMixin.cs" />
+    <Compile Include="AlternateType\Route.cs" />
     <Compile Include="AlternateType\RouteBase.cs" />
     <Compile Include="AlternateType\RouteConstraint.cs" />
     <Compile Include="AlternateType\RouteConstraintRegex.cs" />
@@ -68,6 +69,7 @@
     <Compile Include="HttpModule.cs" />
     <Compile Include="HttpRuntimeShutdownMessageResolver.cs" />
     <Compile Include="Message\ProcessConstraintMessage.cs" />
+    <Compile Include="Message\RouteDataMessage.cs" />
     <Compile Include="Model\CacheConfigurationModel.cs" />
     <Compile Include="Model\CacheItemModel.cs" />
     <Compile Include="Model\CacheModel.cs" />
@@ -140,7 +142,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
