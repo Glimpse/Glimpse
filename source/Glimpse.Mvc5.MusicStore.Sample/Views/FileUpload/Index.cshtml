@@ -1,0 +1,13 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Upload a test file</h2>
+
+@if (!string.IsNullOrEmpty(ViewBag.FileName))
+{
+    <span>File Uploaded: @ViewBag.FileName</span>
+    <br/>
+}
+
+@Html.ActionLink("Upload File", "Create")
