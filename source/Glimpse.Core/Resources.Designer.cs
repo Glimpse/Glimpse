@@ -90,36 +90,27 @@ namespace Glimpse.Core {
         /// <summary>
         ///   Looks up a localized string similar to Added {0} of type &apos;{1}&apos; to collection..
         /// </summary>
-        internal static string DiscoverableCollectionAdd {
+        internal static string DiscoverableCollectionAddItem {
             get {
-                return ResourceManager.GetString("DiscoverableCollectionAdd", resourceCulture);
+                return ResourceManager.GetString("DiscoverableCollectionAddItem", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Cleared {0} collection..
         /// </summary>
-        internal static string DiscoverableCollectionClear {
+        internal static string DiscoverableCollectionClearItems {
             get {
-                return ResourceManager.GetString("DiscoverableCollectionClear", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Discovered {0} of type &apos;{1}&apos; and added it to collection..
-        /// </summary>
-        internal static string DiscoverableCollectionDiscover {
-            get {
-                return ResourceManager.GetString("DiscoverableCollectionDiscover", resourceCulture);
+                return ResourceManager.GetString("DiscoverableCollectionClearItems", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Removed {0} of type &apos;{1}&apos; from collection..
         /// </summary>
-        internal static string DiscoverableCollectionRemove {
+        internal static string DiscoverableCollectionRemoveItem {
             get {
-                return ResourceManager.GetString("DiscoverableCollectionRemove", resourceCulture);
+                return ResourceManager.GetString("DiscoverableCollectionRemoveItem", resourceCulture);
             }
         }
         

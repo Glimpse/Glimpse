@@ -4,8 +4,8 @@ using Glimpse.Core.Extensibility;
 namespace Glimpse.Core.Framework
 {
     internal class InspectorProvider : BaseProvider
-    { 
-        public InspectorProvider(IReadonlyConfiguration configuration, ActiveGlimpseRequestContexts activeGlimpseRequestContexts)
+    {
+        public InspectorProvider(IConfiguration configuration, ActiveGlimpseRequestContexts activeGlimpseRequestContexts)
             : base(configuration, activeGlimpseRequestContexts)
         { 
         }

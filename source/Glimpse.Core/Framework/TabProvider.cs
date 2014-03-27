@@ -11,7 +11,7 @@ namespace Glimpse.Core.Framework
 {
     internal class TabProvider : BaseDataProvider
     {
-        public TabProvider(IReadonlyConfiguration configuration, ActiveGlimpseRequestContexts activeGlimpseRequestContexts)
+        public TabProvider(IConfiguration configuration, ActiveGlimpseRequestContexts activeGlimpseRequestContexts)
             : base(configuration, activeGlimpseRequestContexts)
         {
         }

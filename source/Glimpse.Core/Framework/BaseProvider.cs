@@ -2,7 +2,7 @@
 {
     internal class BaseProvider
     {
-        protected IReadonlyConfiguration Configuration { get; set; }
+        protected IConfiguration Configuration { get; set; }
 
         protected ActiveGlimpseRequestContexts ActiveGlimpseRequestContexts { get; set; }
 
@@ -11,7 +11,7 @@
             get { return ActiveGlimpseRequestContexts.Current; }
         }
 
-        public BaseProvider(IReadonlyConfiguration configuration, ActiveGlimpseRequestContexts activeGlimpseRequestContexts)
+        public BaseProvider(IConfiguration configuration, ActiveGlimpseRequestContexts activeGlimpseRequestContexts)
         {
             Configuration = configuration;
             ActiveGlimpseRequestContexts = activeGlimpseRequestContexts;

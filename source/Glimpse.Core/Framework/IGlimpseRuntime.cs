@@ -55,7 +55,7 @@ namespace Glimpse.Core.Framework
         /// <value>
         /// The configuration.
         /// </value>
-        IReadonlyConfiguration Configuration { get; }
+        IConfiguration Configuration { get; }
 
         /// <summary>
         /// Returns the corresponding <see cref="IGlimpseRequestContext"/> for the given <paramref name="glimpseRequestId"/>

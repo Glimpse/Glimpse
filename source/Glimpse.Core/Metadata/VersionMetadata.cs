@@ -1,5 +1,4 @@
-﻿using System;
-using Glimpse.Core.Extensibility;
+﻿using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
 
 namespace Glimpse.Core.Metadata
@@ -11,7 +10,7 @@ namespace Glimpse.Core.Metadata
             get { return "version"; }
         }
 
-        public object GetMetadata(IReadonlyConfiguration configuration)
+        public object GetMetadata(IConfiguration configuration)
         {
             return configuration.Version;
         }

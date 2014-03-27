@@ -12,13 +12,13 @@ namespace Glimpse.Core.Framework
     /// </summary>
     public class ScriptTagsGenerator : IScriptTagsGenerator
     {
-        private IReadonlyConfiguration Configuration { get; set; }
+        private IConfiguration Configuration { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ScriptTagsGenerator" />
         /// </summary>
-        /// <param name="configuration">A <see cref="IReadonlyConfiguration"/></param>
-        public ScriptTagsGenerator(IReadonlyConfiguration configuration)
+        /// <param name="configuration">A <see cref="IConfiguration"/></param>
+        public ScriptTagsGenerator(IConfiguration configuration)
         {
             Guard.ArgumentNotNull("configuration", configuration);
             Configuration = configuration;
@@ -29,7 +29,7 @@ namespace Glimpse.Core.Framework
         /// </summary>
         /// <param name="glimpseRequestId">The Glimpse request Id of the request for which script tags must be generated</param>
         /// <returns>The generated script tags</returns>
-        public string Generate(Guid glimpseRequestId)
+        public static string Generate(Guid glimpseRequestId, IConfiguration configuration)
         {
             var encoder = Configuration.HtmlEncoder;
             var resourceEndpoint = Configuration.ResourceEndpoint;

@@ -1,239 +1,241 @@
-﻿using System.Configuration;
-using Glimpse.Core.Configuration;
-using Glimpse.Core.Extensibility;
-using Glimpse.Test.Core.TestDoubles;
-using Xunit;
+﻿#warning Assess unittests
 
-namespace Glimpse.Test.Core.Configuration
-{
-    public class SectionShould
-    {
-        [Fact]
-        public void LoadFromConfigFile()
-        {
-            var section = ConfigurationManager.GetSection("glimpse") as Section;
-            Assert.NotNull(section);
-        }
+//using System.Configuration;
+//using Glimpse.Core.Configuration;
+//using Glimpse.Core.Extensibility;
+//using Glimpse.Test.Core.TestDoubles;
+//using Xunit;
 
-        [Fact]
-        public void ReadLoggingInfoFromFile()
-        {
-            var section = (Section)ConfigurationManager.GetSection("glimpse");
-            Assert.NotNull(section.Logging);
-            Assert.Equal(LoggingLevel.Warn, section.Logging.Level);
-        }
+//namespace Glimpse.Test.Core.Configuration
+//{
+//    public class SectionShould
+//    {
+//        [Fact]
+//        public void LoadFromConfigFile()
+//        {
+//            var section = ConfigurationManager.GetSection("glimpse") as Section;
+//            Assert.NotNull(section);
+//        }
 
-        [Fact]
-        public void HaveDefaultLoggingLevel()
-        {
-            var section = new Section();
-            Assert.Equal(LoggingLevel.Off, section.Logging.Level);
-        }
+//        [Fact]
+//        public void ReadLoggingInfoFromFile()
+//        {
+//            var section = (Section)ConfigurationManager.GetSection("glimpse");
+//            Assert.NotNull(section.Logging);
+//            Assert.Equal(LoggingLevel.Warn, section.Logging.Level);
+//        }
 
-        [Fact]
-        public void HaveDefaultClientScripts()
-        {
-            var section = new Section();
-            Assert.NotNull(section.ClientScripts);
-            Assert.True(section.ClientScripts.AutoDiscover);
-            Assert.Empty(section.ClientScripts.DiscoveryLocation);
-            Assert.Empty(section.ClientScripts.IgnoredTypes);
-        }
+//        [Fact]
+//        public void HaveDefaultLoggingLevel()
+//        {
+//            var section = new Section();
+//            Assert.Equal(LoggingLevel.Off, section.Logging.Level);
+//        }
 
-        [Fact]
-        public void ReadClientScriptsFromFile()
-        {
-            var section = (Section)ConfigurationManager.GetSection("glimpse");
+//        [Fact]
+//        public void HaveDefaultClientScripts()
+//        {
+//            var section = new Section();
+//            Assert.NotNull(section.ClientScripts);
+//            Assert.True(section.ClientScripts.AutoDiscover);
+//            Assert.Empty(section.ClientScripts.DiscoveryLocation);
+//            Assert.Empty(section.ClientScripts.IgnoredTypes);
+//        }
 
-            Assert.True(section.ClientScripts.AutoDiscover);
-            Assert.Equal("", section.ClientScripts.DiscoveryLocation);
-            Assert.True(section.ClientScripts.IgnoredTypes.Length == 1);
-        }
+//        [Fact]
+//        public void ReadClientScriptsFromFile()
+//        {
+//            var section = (Section)ConfigurationManager.GetSection("glimpse");
 
-        [Fact]
-        public void SetLoggingElement()
-        {
-            var loggingElement = new LoggingElement();
+//            Assert.True(section.ClientScripts.AutoDiscover);
+//            Assert.Equal("", section.ClientScripts.DiscoveryLocation);
+//            Assert.True(section.ClientScripts.IgnoredTypes.Length == 1);
+//        }
 
-            var section = new Section { Logging = loggingElement };
+//        [Fact]
+//        public void SetLoggingElement()
+//        {
+//            var loggingElement = new LoggingElement();
 
-            Assert.Equal(loggingElement, section.Logging);
-        }
+//            var section = new Section { Logging = loggingElement };
 
-        [Fact]
-        public void SetClientScriptsElement()
-        {
-            var scripts = new DiscoverableCollectionElement { AutoDiscover = false };
+//            Assert.Equal(loggingElement, section.Logging);
+//        }
 
-            var section = new Section { ClientScripts = scripts };
+//        [Fact]
+//        public void SetClientScriptsElement()
+//        {
+//            var scripts = new DiscoverableCollectionElement { AutoDiscover = false };
 
-            Assert.Equal(scripts, section.ClientScripts);
-        }
+//            var section = new Section { ClientScripts = scripts };
 
-        [Fact]
-        public void ReturnDefaultBasePolicy()
-        {
-            var section = new Section();
+//            Assert.Equal(scripts, section.ClientScripts);
+//        }
 
-            Assert.Equal(RuntimePolicy.Off, section.DefaultRuntimePolicy);
-        }
+//        [Fact]
+//        public void ReturnDefaultBasePolicy()
+//        {
+//            var section = new Section();
 
-        [Fact]
-        public void ReadDefaultRuntimePolicyFromFile()
-        {
-            var section = (Section)ConfigurationManager.GetSection("glimpse");
-            Assert.Equal(RuntimePolicy.On, section.DefaultRuntimePolicy);
-        }
+//            Assert.Equal(RuntimePolicy.Off, section.DefaultRuntimePolicy);
+//        }
 
-        [Fact]
-        public void GetSetBasePolicy()
-        {
-            const RuntimePolicy basePolicy = RuntimePolicy.ModifyResponseBody;
+//        [Fact]
+//        public void ReadDefaultRuntimePolicyFromFile()
+//        {
+//            var section = (Section)ConfigurationManager.GetSection("glimpse");
+//            Assert.Equal(RuntimePolicy.On, section.DefaultRuntimePolicy);
+//        }
 
-            var section = new Section { DefaultRuntimePolicy = basePolicy };
+//        [Fact]
+//        public void GetSetBasePolicy()
+//        {
+//            const RuntimePolicy basePolicy = RuntimePolicy.ModifyResponseBody;
 
-            Assert.Equal(basePolicy, section.DefaultRuntimePolicy);
-        }
+//            var section = new Section { DefaultRuntimePolicy = basePolicy };
 
-        [Fact]
-        public void ReturnDefaultInspectors()
-        {
-            var section = new Section();
+//            Assert.Equal(basePolicy, section.DefaultRuntimePolicy);
+//        }
 
-            var element = section.Inspectors;
+//        [Fact]
+//        public void ReturnDefaultInspectors()
+//        {
+//            var section = new Section();
 
-            Assert.NotNull(element);
-            Assert.True(element.AutoDiscover);
-            Assert.Empty(element.IgnoredTypes);
-            Assert.Empty(element.DiscoveryLocation);
-        }
+//            var element = section.Inspectors;
 
-        [Fact]
-        public void GetSetInspectors()
-        {
-            var section = new Section();
+//            Assert.NotNull(element);
+//            Assert.True(element.AutoDiscover);
+//            Assert.Empty(element.IgnoredTypes);
+//            Assert.Empty(element.DiscoveryLocation);
+//        }
 
-            var element = new DiscoverableCollectionElement { AutoDiscover = false };
+//        [Fact]
+//        public void GetSetInspectors()
+//        {
+//            var section = new Section();
 
-            section.Inspectors = element;
+//            var element = new DiscoverableCollectionElement { AutoDiscover = false };
 
-            Assert.Equal(element, section.Inspectors);
-        }
+//            section.Inspectors = element;
 
-        [Fact]
-        public void ReturnDefaultResources()
-        {
-            var section = new Section();
+//            Assert.Equal(element, section.Inspectors);
+//        }
 
-            var element = section.Resources;
+//        [Fact]
+//        public void ReturnDefaultResources()
+//        {
+//            var section = new Section();
 
-            Assert.NotNull(element);
-            Assert.True(element.AutoDiscover);
-            Assert.Empty(element.IgnoredTypes);
-            Assert.Empty(element.DiscoveryLocation);
-        }
+//            var element = section.Resources;
 
-        [Fact]
-        public void GetSetResources()
-        {
-            var section = new Section();
+//            Assert.NotNull(element);
+//            Assert.True(element.AutoDiscover);
+//            Assert.Empty(element.IgnoredTypes);
+//            Assert.Empty(element.DiscoveryLocation);
+//        }
 
-            var element = new DiscoverableCollectionElement { AutoDiscover = false };
+//        [Fact]
+//        public void GetSetResources()
+//        {
+//            var section = new Section();
 
-            section.Resources = element;
+//            var element = new DiscoverableCollectionElement { AutoDiscover = false };
 
-            Assert.Equal(element, section.Resources);
-        }
+//            section.Resources = element;
 
-        [Fact]
-        public void ReturnDefaultTabs()
-        {
-            var section = new Section();
+//            Assert.Equal(element, section.Resources);
+//        }
 
-            var element = section.Tabs;
+//        [Fact]
+//        public void ReturnDefaultTabs()
+//        {
+//            var section = new Section();
 
-            Assert.NotNull(element);
-            Assert.True(element.AutoDiscover);
-            Assert.Empty(element.IgnoredTypes);
-            Assert.Empty(element.DiscoveryLocation);
-        }
+//            var element = section.Tabs;
 
-        [Fact]
-        public void GetSetTabs()
-        {
-            var section = new Section();
+//            Assert.NotNull(element);
+//            Assert.True(element.AutoDiscover);
+//            Assert.Empty(element.IgnoredTypes);
+//            Assert.Empty(element.DiscoveryLocation);
+//        }
 
-            var element = new DiscoverableCollectionElement { AutoDiscover = false };
+//        [Fact]
+//        public void GetSetTabs()
+//        {
+//            var section = new Section();
 
-            section.Tabs = element;
+//            var element = new DiscoverableCollectionElement { AutoDiscover = false };
 
-            Assert.Equal(element, section.Tabs);
-        }
+//            section.Tabs = element;
 
-        [Fact]
-        public void ReturnDefaultRuntimePolicies()
-        {
-            var section = new Section();
+//            Assert.Equal(element, section.Tabs);
+//        }
 
-            var element = section.RuntimePolicies;
+//        [Fact]
+//        public void ReturnDefaultRuntimePolicies()
+//        {
+//            var section = new Section();
 
-            Assert.NotNull(element);
-            Assert.True(element.AutoDiscover);
-            Assert.Empty(element.IgnoredTypes);
-            Assert.Empty(element.DiscoveryLocation);
-        }
+//            var element = section.RuntimePolicies;
 
-        [Fact]
-        public void ReturnDefaultSerializationConverters()
-        {
-            var section = new Section();
+//            Assert.NotNull(element);
+//            Assert.True(element.AutoDiscover);
+//            Assert.Empty(element.IgnoredTypes);
+//            Assert.Empty(element.DiscoveryLocation);
+//        }
 
-            var element = section.SerializationConverters;
+//        [Fact]
+//        public void ReturnDefaultSerializationConverters()
+//        {
+//            var section = new Section();
 
-            Assert.NotNull(element);
-            Assert.True(element.AutoDiscover);
-            Assert.Empty(element.IgnoredTypes);
-            Assert.Empty(element.DiscoveryLocation);
-        }
+//            var element = section.SerializationConverters;
 
-        [Fact]
-        public void GetSetSerializationConverters()
-        {
-            var section = new Section();
+//            Assert.NotNull(element);
+//            Assert.True(element.AutoDiscover);
+//            Assert.Empty(element.IgnoredTypes);
+//            Assert.Empty(element.DiscoveryLocation);
+//        }
 
-            var element = new DiscoverableCollectionElement { AutoDiscover = false };
+//        [Fact]
+//        public void GetSetSerializationConverters()
+//        {
+//            var section = new Section();
 
-            section.SerializationConverters = element;
+//            var element = new DiscoverableCollectionElement { AutoDiscover = false };
 
-            Assert.Equal(element, section.SerializationConverters);
-        }
+//            section.SerializationConverters = element;
 
-        [Fact]
-        public void LoadUserServiceLocatorWhenConfigured()
-        {
-            var section = (Section)ConfigurationManager.GetSection("glimpse");
+//            Assert.Equal(element, section.SerializationConverters);
+//        }
 
-            Assert.NotNull(section.ServiceLocatorType);
-            Assert.True(section.ServiceLocatorType == typeof(DummyServiceLocator));
-        }
+//        [Fact]
+//        public void LoadUserServiceLocatorWhenConfigured()
+//        {
+//            var section = (Section)ConfigurationManager.GetSection("glimpse");
 
-        [Fact]
-        public void ReturnDefaultServiceLocatorType()
-        {
-            var section = new Section();
+//            Assert.NotNull(section.ServiceLocatorType);
+//            Assert.True(section.ServiceLocatorType == typeof(DummyServiceLocator));
+//        }
 
-            Assert.Null(section.ServiceLocatorType);
-        }
+//        [Fact]
+//        public void ReturnDefaultServiceLocatorType()
+//        {
+//            var section = new Section();
 
-        [Fact]
-        public void GetSetDefaultServiceLocatorType()
-        {
-            var section = new Section();
-            var type = typeof(SectionShould);
+//            Assert.Null(section.ServiceLocatorType);
+//        }
 
-            section.ServiceLocatorType = type;
+//        [Fact]
+//        public void GetSetDefaultServiceLocatorType()
+//        {
+//            var section = new Section();
+//            var type = typeof(SectionShould);
 
-            Assert.Equal(type, section.ServiceLocatorType);
-        }
-    }
-}
+//            section.ServiceLocatorType = type;
+
+//            Assert.Equal(type, section.ServiceLocatorType);
+//        }
+//    }
+//}

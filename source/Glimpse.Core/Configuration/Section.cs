@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Configuration;
+using System.Xml;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
 
@@ -27,8 +28,6 @@ namespace Glimpse.Core.Configuration
     /// </remarks>
     public class Section : ConfigurationSection
     {
-        internal const string DefaultLocation = "";
-
         /// <summary>
         /// Gets or sets the logging settings used by Glimpse.
         /// </summary>
@@ -382,7 +381,7 @@ namespace Glimpse.Core.Configuration
         /// ]]>
         /// </code>
         /// </example>
-        [ConfigurationProperty("discoveryLocation", DefaultValue = DefaultLocation)]
+        [ConfigurationProperty("discoveryLocation")]
         public string DiscoveryLocation
         {
             get { return (string)base["discoveryLocation"]; }

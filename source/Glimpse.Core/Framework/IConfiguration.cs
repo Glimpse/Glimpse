@@ -14,130 +14,147 @@ namespace Glimpse.Core.Framework
         /// Gets the client scripts.
         /// </summary>
         /// <value>The client scripts.</value>
-        ICollection<IClientScript> ClientScripts { get; set; }
+        ICollection<IClientScript> ClientScripts { get; }
 
         /// <summary>
         /// Gets the HTML encoder.
         /// </summary>
         /// <value>The HTML encoder.</value>
-        IHtmlEncoder HtmlEncoder { get; set; }
+        IHtmlEncoder HtmlEncoder { get; }
+
+        IConfiguration ReplaceHtmlEncoder(IHtmlEncoder htmlEncoder);
 
         /// <summary>
         /// Gets the logger.
         /// </summary>
         /// <value>The logger.</value>
-        ILogger Logger { get; set; }
+        ILogger Logger { get; }
+
+        IConfiguration ReplaceLogger(ILogger logger);
 
         /// <summary>
         /// Gets the persistence store.
         /// </summary>
         /// <value>The persistence store.</value>
-        IPersistenceStore PersistenceStore { get; set; }
+        IPersistenceStore PersistenceStore { get; }
+
+        IConfiguration ReplacePersistenceStore(IPersistenceStore persistenceStore);
 
         /// <summary>
         /// Gets the inspectors.
         /// </summary>
         /// <value>The inspectors.</value>
-        ICollection<IInspector> Inspectors { get; set; }
+        ICollection<IInspector> Inspectors { get; }
 
         /// <summary>
         /// Gets the resource endpoint.
         /// </summary>
         /// <value>The resource endpoint.</value>
-        IResourceEndpointConfiguration ResourceEndpoint { get; set; }
+        IResourceEndpointConfiguration ResourceEndpoint { get; }
+
+#warning should this be allowed? Is this not the responsibility of the framework provider?
+        IConfiguration ReplaceResourceEndpoint(IResourceEndpointConfiguration resourceEndpointConfiguration);
 
         /// <summary>
         /// Gets the resources.
         /// </summary>
         /// <value>The resources.</value>
-        ICollection<IResource> Resources { get; set; }
+        ICollection<IResource> Resources { get; }
 
         /// <summary>
         /// Gets the serializer.
         /// </summary>
         /// <value>The serializer.</value>
-        ISerializer Serializer { get; set; }
+        ISerializer Serializer { get; }
+
+        IConfiguration ReplaceSerializer(ISerializer serializer);
 
         /// <summary>
         /// Gets the tabs.
         /// </summary>
         /// <value>The tabs.</value>
-        ICollection<ITab> Tabs { get; set; }
+        ICollection<ITab> Tabs { get; }
 
         /// <summary>
         /// Gets the metadata extensions.
         /// </summary>
         /// <value>The metadata extensions.</value>
-        ICollection<IMetadata> Metadata { get; set; }
+        ICollection<IMetadata> Metadata { get; }
 
         /// <summary>
         /// Gets the tab metadata extensions.
         /// </summary>
         /// <value>The tab metadata extensions.</value>
-        ICollection<ITabMetadata> TabMetadata { get; set; }
+        ICollection<ITabMetadata> TabMetadata { get; }
 
         /// <summary>
         /// Gets the tab instance metadata extensions.
         /// </summary>
         /// <value>The tab metadata extensions.</value>
-        ICollection<IInstanceMetadata> InstanceMetadata { get; set; }
+        ICollection<IInstanceMetadata> InstanceMetadata { get; }
 
         [Obsolete]
-        ICollection<IDisplay> Displays { get; set; }
+        ICollection<IDisplay> Displays { get; }
 
         /// <summary>
         /// Gets the runtime policies.
         /// </summary>
         /// <value>The runtime policies.</value>
-        ICollection<IRuntimePolicy> RuntimePolicies { get; set; }
+        ICollection<IRuntimePolicy> RuntimePolicies { get; }
 
         /// <summary>
         /// Gets the default resource.
         /// </summary>
         /// <value>The default resource.</value>
-        IResource DefaultResource { get; set; }
+        IResource DefaultResource { get; }
+
+        IConfiguration ReplaceDefaultResource(IResource defaultResource);
 
         /// <summary>
         /// Gets the default runtime policy.
         /// </summary>
         /// <value>The default runtime policy.</value>
-        RuntimePolicy DefaultRuntimePolicy { get; set; }
+        RuntimePolicy DefaultRuntimePolicy { get; }
 
         /// <summary>
         /// Gets the proxy factory.
         /// </summary>
         /// <value>The proxy factory.</value>
-        IProxyFactory ProxyFactory { get; set; }
+        IProxyFactory ProxyFactory { get; }
+
+        IConfiguration ReplaceProxyFactory(IProxyFactory proxyFactory);
 
         /// <summary>
         /// Gets the message broker.
         /// </summary>
         /// <value>The message broker.</value>
-        IMessageBroker MessageBroker { get; set; }
+        IMessageBroker MessageBroker { get; }
+
+        IConfiguration ReplaceMessageBroker(IMessageBroker messageBroker);
 
         /// <summary>
         /// Gets the endpoint base URI.
         /// </summary>
         /// <value>The endpoint base URI.</value>
-        string EndpointBaseUri { get; set; }
+        string EndpointBaseUri { get; }
 
         /// <summary>
         /// Gets the configuration hash.
         /// </summary>
         /// <value>The hash.</value>
-        string Hash { get; set; }
+        string Hash { get; }
 
         /// <summary>
         /// Gets the version of Glimpse core.
         /// </summary>
         /// <value>The version.</value>
-        string Version { get; set; }
+        string Version { get; }
 
         /// <summary>
         /// Gets the configured <see cref="ICurrentGlimpseRequestIdTracker"/>
         /// </summary>
         ICurrentGlimpseRequestIdTracker CurrentGlimpseRequestIdTracker { get; }
 
-        void ApplyOverrides();
+        IConfiguration ReplaceCurrentGlimpseRequestIdTracker(ICurrentGlimpseRequestIdTracker currentGlimpseRequestIdTracker);
     }
 }
