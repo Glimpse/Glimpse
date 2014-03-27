@@ -12,7 +12,7 @@ namespace Glimpse.Core.Metadata
             get { return "plugins"; }
         }
 
-        public object GetMetadata(IReadonlyConfiguration configuration)
+        public object GetMetadata(IConfiguration configuration)
         {
             var logger = configuration.Logger;
             var tabMetadata = new Dictionary<string, object>();

@@ -5,9 +5,9 @@ namespace Glimpse.Core
 {
     public static class GlimpseConfiguration
     {
-        private static Func<IConfiguration, IConfiguration> @override = config => config;
+        private static Action<IConfiguration> @override = delegate{};
 
-        public static Func<IConfiguration, IConfiguration> Override
+        public static Action<IConfiguration> Override
         {
             get
             {

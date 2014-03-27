@@ -19,6 +19,6 @@ namespace Glimpse.Core.Extensibility
         /// <param name="configuration">Current configuration that the system has.</param>
         /// <param name="requestContext">Context of the current request.</param>
         /// <returns>The metadata to be used for the given key</returns>
-        object GetInstanceMetadata(IReadonlyConfiguration configuration, IGlimpseRequestContext requestContext);
+        object GetInstanceMetadata(IConfiguration configuration, IGlimpseRequestContext requestContext);
     }
 }

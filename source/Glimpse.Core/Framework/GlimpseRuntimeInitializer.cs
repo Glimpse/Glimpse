@@ -58,8 +58,7 @@ namespace Glimpse.Core.Framework
                     {
                         // Run user customizations to configuration before storing and then override 
                         // (some) changes made by the user to make sure .config file driven settings win
-                        var userUpdatedConfig = GlimpseConfiguration.Override(configuration);
-                        userUpdatedConfig.ApplyOverrides();
+                        GlimpseConfiguration.Override(configuration);
 
                         if (configuration.DefaultRuntimePolicy == RuntimePolicy.Off)
                         {
@@ -94,26 +93,24 @@ namespace Glimpse.Core.Framework
                             initializationMessage.WrittenToLog = true;
                         }
 
-                        var readonlyConfiguration = new ReadonlyConfigurationAdapter(userUpdatedConfig);
+                        var activeGlimpseRequestContexts = new ActiveGlimpseRequestContexts(configuration.CurrentGlimpseRequestIdTracker);
 
-                        var activeGlimpseRequestContexts = new ActiveGlimpseRequestContexts(readonlyConfiguration.CurrentGlimpseRequestIdTracker);
-
-                        var displayProvider = new DisplayProvider(readonlyConfiguration, activeGlimpseRequestContexts);
+                        var displayProvider = new DisplayProvider(configuration, activeGlimpseRequestContexts);
                         displayProvider.Setup();
 
-                        var tabProvider = new TabProvider(readonlyConfiguration, activeGlimpseRequestContexts);
+                        var tabProvider = new TabProvider(configuration, activeGlimpseRequestContexts);
                         tabProvider.Setup();
 
-                        var inspectorProvider = new InspectorProvider(readonlyConfiguration, activeGlimpseRequestContexts);
+                        var inspectorProvider = new InspectorProvider(configuration, activeGlimpseRequestContexts);
                         inspectorProvider.Setup();
 
-                        var metadataProvider = new MetadataProvider(readonlyConfiguration);
+                        var metadataProvider = new MetadataProvider(configuration);
                         metadataProvider.SaveMetadata();
 
-                        var runtimePolicyDeterminator = new RuntimePolicyDeterminator(readonlyConfiguration);
+                        var runtimePolicyDeterminator = new RuntimePolicyDeterminator(configuration);
 
                         GlimpseRuntime.Instance = new GlimpseRuntime(
-                            readonlyConfiguration,
+                            configuration,
                             activeGlimpseRequestContexts,
                             runtimePolicyDeterminator,
                             metadataProvider,
@@ -126,11 +123,11 @@ namespace Glimpse.Core.Framework
             private class InitializationMessage
             {
                 public LoggingLevel Level { get; set; }
-                
+
                 public string Message { get; set; }
-                
+
                 public Exception Exception { get; set; }
-                
+
                 public bool WrittenToLog { get; set; }
             }
         }

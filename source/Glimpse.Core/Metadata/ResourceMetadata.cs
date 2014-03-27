@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic; 
+﻿using System.Collections.Generic; 
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
 
@@ -12,7 +11,7 @@ namespace Glimpse.Core.Metadata
             get { return "resources"; }
         }
 
-        public object GetMetadata(IReadonlyConfiguration configuration)
+        public object GetMetadata(IConfiguration configuration)
         {
             var logger = configuration.Logger;
             var resourceMetadata = new Dictionary<string, string>();

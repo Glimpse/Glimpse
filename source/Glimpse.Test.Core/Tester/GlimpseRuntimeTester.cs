@@ -33,48 +33,48 @@ namespace Glimpse.Test.Core.Tester
             var persistenceStoreMock = new Mock<IPersistenceStore>();
             var encoderMock = new Mock<IHtmlEncoder>();
 
-            var resources = new ReflectionDiscoverableCollection<IResource>(loggerMock.Object);
-            var tabs = new ReflectionDiscoverableCollection<ITab>(loggerMock.Object);
-            var policies = new ReflectionDiscoverableCollection<IRuntimePolicy>(loggerMock.Object);
+            //var resources = new ReflectionDiscoverableCollection<IResource>(loggerMock.Object);
+            //var tabs = new ReflectionDiscoverableCollection<ITab>(loggerMock.Object);
+            //var policies = new ReflectionDiscoverableCollection<IRuntimePolicy>(loggerMock.Object);
 
-            var configuration = new Glimpse.Core.Framework.Configuration(new Mock<ResourceEndpointConfiguration>().Object,
-                new Mock<IPersistenceStore>().Object)
-            {
-                Logger = loggerMock.Object,
-                Resources = resources,
-                Tabs = tabs,
-                RuntimePolicies = policies,
-                Serializer = serializerMock.Object,
-                PersistenceStore = persistenceStoreMock.Object,
-                DefaultRuntimePolicy = RuntimePolicy.On,
-                HtmlEncoder = encoderMock.Object
-            };
+            //var configuration = new Glimpse.Core.Framework.Configuration(new Mock<ResourceEndpointConfiguration>().Object,
+            //    new Mock<IPersistenceStore>().Object)
+            //{
+            //    Logger = loggerMock.Object,
+            //    Resources = resources,
+            //    Tabs = tabs,
+            //    RuntimePolicies = policies,
+            //    Serializer = serializerMock.Object,
+            //    PersistenceStore = persistenceStoreMock.Object,
+            //    DefaultRuntimePolicy = RuntimePolicy.On,
+            //    HtmlEncoder = encoderMock.Object
+            //};
+#warning uncomment and fix
 
-            var readonlyConfiguration = new ReadonlyConfigurationAdapter(configuration);
+            //var activeGlimpseRequestContexts = new ActiveGlimpseRequestContexts(configuration.CurrentGlimpseRequestIdTracker);
 
-            var activeGlimpseRequestContexts = new ActiveGlimpseRequestContexts(readonlyConfiguration.CurrentGlimpseRequestIdTracker);
+            //var displayProvider = new DisplayProvider(configuration, activeGlimpseRequestContexts);
+            //displayProvider.Setup();
 
-            var displayProvider = new DisplayProvider(readonlyConfiguration, activeGlimpseRequestContexts);
-            displayProvider.Setup();
+            //var tabProvider = new TabProvider(configuration, activeGlimpseRequestContexts);
+            //tabProvider.Setup();
 
-            var tabProvider = new TabProvider(readonlyConfiguration, activeGlimpseRequestContexts);
-            tabProvider.Setup();
+            //var inspectorProvider = new InspectorProvider(configuration, activeGlimpseRequestContexts);
+            //inspectorProvider.Setup();
 
-            var inspectorProvider = new InspectorProvider(readonlyConfiguration, activeGlimpseRequestContexts);
-            inspectorProvider.Setup();
+            //var metadataProvider = new MetadataProvider(configuration);
+            //metadataProvider.SaveMetadata();
 
-            var metadataProvider = new MetadataProvider(readonlyConfiguration);
-            metadataProvider.SaveMetadata();
-
-            var runtimePolicyDeterminator = new RuntimePolicyDeterminator(readonlyConfiguration);
+            //var runtimePolicyDeterminator = new RuntimePolicyDeterminator(configuration);
 
             GlimpseRuntime = new GlimpseRuntime(
-                readonlyConfiguration,
-                activeGlimpseRequestContexts,
-                runtimePolicyDeterminator,
-                metadataProvider,
-                tabProvider,
-                displayProvider);
+                null, null, null, null, null, null);
+                //configuration,
+                //activeGlimpseRequestContexts,
+                //runtimePolicyDeterminator,
+                //metadataProvider,
+                //tabProvider,
+                //displayProvider);
 
             HttpRequestStoreMock = new Mock<IDataStore>();
             TabMock = new Mock<ITab>().Setup();

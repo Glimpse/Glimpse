@@ -11,7 +11,7 @@ namespace Glimpse.Test.AspNet.Tester
         public Mock<HttpContextBase> ContextMock { get; set; }
         public Mock<HttpApplicationStateBase> ApplicationStateMock { get; set; }
         public Mock<IGlimpseRuntime> RuntimeMock { get; set; }
-        public Mock<IReadonlyConfiguration> ConfigurationMock { get; set; }
+        public Mock<IConfiguration> ConfigurationMock { get; set; }
         public Mock<IRequestResponseAdapter> RequestResponseAdapterMock { get; set; }
         public NameValueCollection QueryString { get; set; }
         public string ResourceName { get; set; }
@@ -22,7 +22,7 @@ namespace Glimpse.Test.AspNet.Tester
             QueryString = new NameValueCollection {{"n", ResourceName}, {"One", "1"}};
 
             RequestResponseAdapterMock = new Mock<IRequestResponseAdapter>();
-            ConfigurationMock = new Mock<IReadonlyConfiguration>();
+            ConfigurationMock = new Mock<IConfiguration>();
 
             RuntimeMock = new Mock<IGlimpseRuntime>();
             RuntimeMock.Setup(r => r.Configuration).Returns(ConfigurationMock.Object);

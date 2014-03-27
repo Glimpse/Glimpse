@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using Glimpse.Core.Extensibility;
 
-namespace Glimpse.Core.Framework
+namespace Glimpse.Core.Configuration
 {
     /// <summary>
     /// Resolves type for requested assemblies and caches the results for later use

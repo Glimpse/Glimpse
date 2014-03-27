@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
 
-namespace Glimpse.Core.Framework
+namespace Glimpse.Core.Configuration
 {
     public static class ReflectionBlackList
     {
-        private static List<string> blackList = new List<string>();
+        private static readonly List<string> blackList = new List<string>();
 
         static ReflectionBlackList()
         {

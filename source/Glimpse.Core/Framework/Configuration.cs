@@ -21,61 +21,94 @@ namespace Glimpse.Core.Framework
     /// </summary>
     internal class Configuration : IConfiguration
     {
-        private IMessageBroker messageBroker;
-        private ILogger logger;
-        private ICollection<IClientScript> clientScripts;
-        private IResource defaultResource;
-        private string endpointBaseUri;
-        private IHtmlEncoder htmlEncoder;
-        private IPersistenceStore persistenceStore;
-        private ICollection<IInspector> inspectors;
-        private IProxyFactory proxyFactory;
-        private IResourceEndpointConfiguration resourceEndpoint;
-        private ICollection<IResource> resources;
-        private ICollection<IRuntimePolicy> runtimePolicies;
-        private ISerializer serializer;
-        private ICollection<ITab> tabs;
-        private ICollection<IMetadata> metadata;
-        private ICollection<ITabMetadata> tabMetadata;
-        private ICollection<IInstanceMetadata> instanceMetadata;
-        private ICollection<IDisplay> displays;
         private string hash;
-        private string version;
-        private Section xmlConfiguration;
-        private RuntimePolicy? defaultRuntimePolicy;
-        private ICollection<ISerializationConverter> serializationConverters;
 
-        public Configuration(ResourceEndpointConfiguration endpointConfiguration, IPersistenceStore persistenceStore, ICurrentGlimpseRequestIdTracker currentGlimpseRequestIdTracker = null)
+        public Configuration(IResourceEndpointConfiguration endpointConfiguration, IPersistenceStore persistenceStore, ICurrentGlimpseRequestIdTracker currentGlimpseRequestIdTracker = null)
             : this(endpointConfiguration, persistenceStore, "glimpse", currentGlimpseRequestIdTracker)
         {
         }
 
-        public Configuration(ResourceEndpointConfiguration endpointConfiguration, IPersistenceStore persistenceStore, string xmlConfigurationSectionName, ICurrentGlimpseRequestIdTracker currentGlimpseRequestIdTracker = null)
+        public Configuration(IResourceEndpointConfiguration endpointConfiguration, IPersistenceStore persistenceStore, string xmlConfigurationSectionName, ICurrentGlimpseRequestIdTracker currentGlimpseRequestIdTracker = null)
             : this(endpointConfiguration, persistenceStore, ConfigurationManager.GetSection(xmlConfigurationSectionName) as Section, currentGlimpseRequestIdTracker)
         {
         }
 
-        public Configuration(ResourceEndpointConfiguration endpointConfiguration, IPersistenceStore persistenceStore, Section xmlConfigurationSection, ICurrentGlimpseRequestIdTracker currentGlimpseRequestIdTracker = null)
+        public Configuration(IResourceEndpointConfiguration endpointConfiguration, IPersistenceStore persistenceStore, Section xmlConfiguration, ICurrentGlimpseRequestIdTracker currentGlimpseRequestIdTracker = null)
         {
-            if (endpointConfiguration == null)
-            {
-                throw new ArgumentNullException("endpointConfiguration");
-            }
-
-            if (persistenceStore == null)
-            {
-                throw new ArgumentNullException("persistenceStore");
-            }
-
-            if (xmlConfigurationSection == null)
-            {
-                throw new ArgumentNullException("xmlConfigurationSection");
-            }
+            Guard.ArgumentNotNull("endpointConfiguration", endpointConfiguration);
+            Guard.ArgumentNotNull("persistenceStore", persistenceStore);
+            Guard.ArgumentNotNull("xmlConfiguration", xmlConfiguration);
 
             ResourceEndpoint = endpointConfiguration;
             PersistenceStore = persistenceStore;
-            XmlConfiguration = xmlConfigurationSection;
             CurrentGlimpseRequestIdTracker = currentGlimpseRequestIdTracker ?? new CallContextCurrentGlimpseRequestIdTracker();
+
+#warning we kinda have a chicken and egg problem concerning the configuration, although if we say the config can be used to troubleshoot issues, then it might make sense
+#warning why the problem? well you need to fill all collections, as they may want to do some look ups or alter collections, yet that means that things have already been loaded
+#warning although that is something users can fix by setting discoverable to false in the config, no issue then...
+
+            Version = Assembly.GetExecutingAssembly().GetName().Version.ToString(3);
+            DefaultResource = new ConfigurationResource();
+            DefaultRuntimePolicy = xmlConfiguration.DefaultRuntimePolicy;
+            EndpointBaseUri = xmlConfiguration.EndpointBaseUri;
+            HtmlEncoder = new AntiXssEncoder();
+            Logger = CreateLogger(xmlConfiguration.Logging);
+#warning the logger we need here must be a wrapper around the real logger, because it is being passed in into the other collections and types, and if the logger should be replaced, then it wouldn't be used by those since they still have the old one referenced
+
+            MessageBroker = new MessageBroker(
+                    () => GlimpseRuntime.IsAvailable && GlimpseRuntime.Instance.CurrentRequestContext.CurrentRuntimePolicy != RuntimePolicy.Off,
+                    Logger);
+
+            ProxyFactory = new CastleDynamicProxyFactory(
+                    Logger,
+                    MessageBroker,
+                    () => GlimpseRuntime.IsAvailable ? GlimpseRuntime.Instance.CurrentRequestContext.CurrentExecutionTimer : UnavailableGlimpseRequestContext.Instance.CurrentExecutionTimer,
+                    () => GlimpseRuntime.IsAvailable ? GlimpseRuntime.Instance.CurrentRequestContext.CurrentRuntimePolicy : UnavailableGlimpseRequestContext.Instance.CurrentRuntimePolicy);
+
+
+            ClientScripts = new ClientScriptsCollection(
+                new CollectionConfigurationFactory(xmlConfiguration.ClientScripts.XmlContent, xmlConfiguration.DiscoveryLocation).Create(),
+                Logger);
+
+            Inspectors = new InspectorsCollection(
+                new CollectionConfigurationFactory(xmlConfiguration.Inspectors.XmlContent, xmlConfiguration.DiscoveryLocation).Create(),
+                Logger);
+
+            Resources = new ResourcesCollection(
+                new CollectionConfigurationFactory(xmlConfiguration.Resources.XmlContent, xmlConfiguration.DiscoveryLocation).Create(),
+                Logger);
+
+            RuntimePolicies = new RuntimePoliciesCollection(
+                new CollectionConfigurationFactory(xmlConfiguration.RuntimePolicies.XmlContent, xmlConfiguration.DiscoveryLocation).Create(),
+                Logger);
+
+            Tabs = new TabsCollection(
+                new CollectionConfigurationFactory(xmlConfiguration.Tabs.XmlContent, xmlConfiguration.DiscoveryLocation).Create(),
+                Logger);
+
+            SerializationConverters = new SerializationConvertersCollection(
+                new CollectionConfigurationFactory(xmlConfiguration.SerializationConverters.XmlContent, xmlConfiguration.DiscoveryLocation).Create(),
+                Logger);
+
+            var temp = new JsonNetSerializer(Logger);
+            temp.RegisterSerializationConverters(SerializationConverters);
+            Serializer = temp;
+
+            Metadata = new MetadataCollection(
+                new CollectionConfigurationFactory(xmlConfiguration.Metadata.XmlContent, xmlConfiguration.DiscoveryLocation).Create(),
+                Logger);
+
+            TabMetadata = new TabMetadataCollection(
+                new CollectionConfigurationFactory(xmlConfiguration.TabMetadata.XmlContent, xmlConfiguration.DiscoveryLocation).Create(),
+                Logger);
+
+            Displays = new DisplaysCollection(
+                new CollectionConfigurationFactory(xmlConfiguration.Displays.XmlContent, xmlConfiguration.DiscoveryLocation).Create(),
+                Logger);
+
+            InstanceMetadata = new InstanceMetadataCollection(
+                new CollectionConfigurationFactory(xmlConfiguration.InstanceMetadata.XmlContent, xmlConfiguration.DiscoveryLocation).Create(),
+                Logger);
 
             // TODO: Instantiate the user's IOC container (if they have one)
         }
@@ -88,24 +121,10 @@ namespace Glimpse.Core.Framework
         /// </value>
         public ICurrentGlimpseRequestIdTracker CurrentGlimpseRequestIdTracker { get; private set; }
 
-        public IServiceLocator UserServiceLocator { get; set; }
-
-        public Section XmlConfiguration 
+        public IConfiguration ReplaceCurrentGlimpseRequestIdTracker(ICurrentGlimpseRequestIdTracker currentGlimpseRequestIdTracker)
         {
-            get
-            {
-                return xmlConfiguration;
-            }
-
-            set
-            {
-                if (value == null)
-                {
-                    throw new ArgumentNullException("value");
-                }
-
-                xmlConfiguration = value;
-            }
+            CurrentGlimpseRequestIdTracker = currentGlimpseRequestIdTracker;
+            return this;
         }
 
         /// <summary>
@@ -116,29 +135,7 @@ namespace Glimpse.Core.Framework
         /// </value>
         /// <returns>A collection of <see cref="IClientScript"/> instances resolved by the <see cref="IServiceLocator"/>s, otherwise all <see cref="IClientScript"/>s discovered in the configured discovery location.</returns>
         /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
-        public ICollection<IClientScript> ClientScripts
-        {
-            get
-            {
-                if (clientScripts != null)
-                {
-                    return clientScripts;
-                }
-
-                clientScripts = InstantiateDiscoverableCollection<IClientScript>(XmlConfiguration.ClientScripts);
-                return clientScripts;
-            }
-
-            set
-            {
-                if (value == null)
-                {
-                    throw new ArgumentNullException("value");
-                }
-
-                clientScripts = value;
-            }
-        }
+        public ICollection<IClientScript> ClientScripts { get; private set; }
 
         /// <summary>
         /// Gets or sets the default <see cref="IResource"/> to execute.
@@ -148,33 +145,12 @@ namespace Glimpse.Core.Framework
         /// </value>
         /// <returns>A <see cref="IResource"/> instance resolved by the <see cref="IServiceLocator"/>s, otherwise <see cref="ConfigurationResource"/>.</returns>
         /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
-        public IResource DefaultResource
+        public IResource DefaultResource { get; private set; }
+
+        public IConfiguration ReplaceDefaultResource(IResource defaultResource)
         {
-            get
-            {
-                if (defaultResource != null)
-                {
-                    return defaultResource;
-                }
-
-                if (TrySingleInstanceFromServiceLocators(out defaultResource))
-                {
-                    return defaultResource;
-                }
-
-                defaultResource = new ConfigurationResource();
-                return defaultResource;
-            }
-
-            set
-            {
-                if (value == null)
-                {
-                    throw new ArgumentNullException("value");
-                }
-
-                defaultResource = value;
-            }
+            DefaultResource = defaultResource;
+            return this;
         }
 
         /// <summary>
@@ -184,24 +160,7 @@ namespace Glimpse.Core.Framework
         /// The default runtime policy.
         /// </value>
         /// <returns>A <see cref="RuntimePolicy"/> instance based on configuration settings.</returns>
-        public RuntimePolicy DefaultRuntimePolicy 
-        {
-            get
-            {
-                if (defaultRuntimePolicy.HasValue)
-                {
-                    return defaultRuntimePolicy.Value;
-                }
-
-                defaultRuntimePolicy = XmlConfiguration.DefaultRuntimePolicy;
-                return defaultRuntimePolicy.Value;
-            }
-
-            set
-            {
-                defaultRuntimePolicy = value;
-            }
-        }
+        public RuntimePolicy DefaultRuntimePolicy { get; private set; }
 
         /// <summary>
         /// Gets or sets the endpoint base URI.
@@ -210,61 +169,18 @@ namespace Glimpse.Core.Framework
         /// The endpoint base URI.
         /// </value>
         /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
-        public string EndpointBaseUri
-        {
-            get
-            {
-                if (!string.IsNullOrEmpty(endpointBaseUri))
-                {
-                    return endpointBaseUri;
-                }
-
-                endpointBaseUri = XmlConfiguration.EndpointBaseUri;
-                return endpointBaseUri;
-            }
-
-            set
-            {
-                if (string.IsNullOrEmpty(value))
-                {
-                    throw new ArgumentException("EndpointBaseUri must be a non-null, non-empty string.", "value");
-                }
-
-                endpointBaseUri = value;
-            }
-        }
+        public string EndpointBaseUri { get; private set; }
 
         /// <summary>
         /// Instantiates an instance of <see cref="IHtmlEncoder"/>.
         /// </summary>
         /// <returns>A <see cref="IHtmlEncoder"/> instance resolved by the <see cref="IServiceLocator"/>s, otherwise <see cref="AntiXssEncoder"/> (leveraging the <see href="http://wpl.codeplex.com/">Microsoft Web Protection Library</see>).</returns>
-        public IHtmlEncoder HtmlEncoder
+        public IHtmlEncoder HtmlEncoder { get; private set; }
+
+        public IConfiguration ReplaceHtmlEncoder(IHtmlEncoder htmlEncoder)
         {
-            get
-            {
-                if (htmlEncoder != null)
-                {
-                    return htmlEncoder;
-                }
-
-                if (TrySingleInstanceFromServiceLocators(out htmlEncoder))
-                {
-                    return htmlEncoder;
-                }
-
-                htmlEncoder = new AntiXssEncoder();
-                return htmlEncoder;
-            }
-
-            set
-            {
-                if (value == null)
-                {
-                    throw new ArgumentNullException("value");
-                }
-
-                htmlEncoder = value;
-            }
+            HtmlEncoder = htmlEncoder;
+            return this;
         }
 
         /// <summary>
@@ -275,41 +191,13 @@ namespace Glimpse.Core.Framework
         /// </value>
         /// <returns>A <see cref="ILogger"/> instance resolved by the <see cref="IServiceLocator"/>s, otherwise a <see cref="NullLogger"/> or <see cref="NLogLogger"/> (leveraging the <see href="http://nlog-project.org/">NLog</see> project) based on configuration settings.</returns>
         /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
-        public ILogger Logger
+        public ILogger Logger { get; private set; }
+
+        public IConfiguration ReplaceLogger(ILogger logger)
         {
-            get
-            {
-                if (logger != null)
-                {
-                    return logger;
-                }
-
-                if (TrySingleInstanceFromServiceLocators(out logger))
-                {
-                    return logger;
-                }
-
-                // use null logger if logging is off
-                var logLevel = XmlConfiguration.Logging.Level;
-                if (logLevel == LoggingLevel.Off)
-                {
-                    logger = new NullLogger();
-                    return logger;
-                }
-
-                logger = CreateLogger();
-                return logger;
-            }
-
-            set
-            {
-                if (value == null)
-                {
-                    throw new ArgumentNullException("value");
-                }
-
-                logger = value;
-            }
+#warning make sure to dispose the old one, before replacing it with the new one... beware, we should not store the Logger here but assign it to a LoggerWrapper -> see constructor for more details
+            Logger = logger;
+            return this;
         }
 
         /// <summary>
@@ -320,36 +208,12 @@ namespace Glimpse.Core.Framework
         /// The configured <see cref="IMessageBroker"/>.
         /// </value>
         /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
-        public IMessageBroker MessageBroker
+        public IMessageBroker MessageBroker { get; private set; }
+
+        public IConfiguration ReplaceMessageBroker(IMessageBroker messageBroker)
         {
-            get
-            {
-                if (messageBroker != null)
-                {
-                    return messageBroker;
-                }
-
-                if (TrySingleInstanceFromServiceLocators(out messageBroker))
-                {
-                    return messageBroker;
-                }
-
-                messageBroker = new MessageBroker(
-                    () => GlimpseRuntime.IsAvailable && GlimpseRuntime.Instance.CurrentRequestContext.CurrentRuntimePolicy != RuntimePolicy.Off,
-                    Logger);
-
-                return messageBroker;
-            }
-
-            set
-            {
-                if (value == null)
-                {
-                    throw new ArgumentNullException("value");
-                }
-
-                messageBroker = value;
-            }
+            MessageBroker = messageBroker;
+            return this;
         }
 
         /// <summary>
@@ -359,22 +223,12 @@ namespace Glimpse.Core.Framework
         /// The configured <see cref="IPersistenceStore"/>.
         /// </value>
         /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
-        public IPersistenceStore PersistenceStore
+        public IPersistenceStore PersistenceStore { get; private set; }
+
+        public IConfiguration ReplacePersistenceStore(IPersistenceStore persistenceStore)
         {
-            get
-            {
-                return persistenceStore;
-            }
-
-            set
-            {
-                if (value == null)
-                {
-                    throw new ArgumentNullException("value");
-                }
-
-                persistenceStore = value;
-            }
+            PersistenceStore = persistenceStore;
+            return this;
         }
 
         /// <summary>
@@ -385,29 +239,7 @@ namespace Glimpse.Core.Framework
         /// </value>
         /// <returns>A collection of <see cref="IInspector"/> instances resolved by the <see cref="IServiceLocator"/>s, otherwise all <see cref="IInspector"/>s discovered in the configured discovery location.</returns>
         /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
-        public ICollection<IInspector> Inspectors
-        {
-            get
-            {
-                if (inspectors != null)
-                {
-                    return inspectors;
-                }
-
-                inspectors = InstantiateDiscoverableCollection<IInspector>(XmlConfiguration.Inspectors);
-                return inspectors;
-            }
-
-            set
-            {
-                if (value == null)
-                {
-                    throw new ArgumentNullException("value");
-                }
-
-                inspectors = value;
-            }
-        }
+        public ICollection<IInspector> Inspectors { get; private set; }
 
         /// <summary>
         /// Gets or sets the <see cref="IProxyFactory"/>.
@@ -417,38 +249,12 @@ namespace Glimpse.Core.Framework
         /// </value>
         /// <returns>A <see cref="IProxyFactory"/> instance resolved by the <see cref="IServiceLocator"/>s, otherwise <see cref="CastleDynamicProxyFactory"/> (leveraging <see href="http://www.castleproject.org/projects/dynamicproxy/">Castle DynamicProxy</see>.).</returns>
         /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
-        public IProxyFactory ProxyFactory
+        public IProxyFactory ProxyFactory { get; private set; }
+
+        public IConfiguration ReplaceProxyFactory(IProxyFactory proxyFactory)
         {
-            get
-            {
-                if (proxyFactory != null)
-                {
-                    return proxyFactory;
-                }
-
-                if (TrySingleInstanceFromServiceLocators(out proxyFactory))
-                {
-                    return proxyFactory;
-                }
-
-                proxyFactory = new CastleDynamicProxyFactory(
-                    Logger,
-                    MessageBroker,
-                    () => GlimpseRuntime.IsAvailable ? GlimpseRuntime.Instance.CurrentRequestContext.CurrentExecutionTimer : UnavailableGlimpseRequestContext.Instance.CurrentExecutionTimer,
-                    () => GlimpseRuntime.IsAvailable ? GlimpseRuntime.Instance.CurrentRequestContext.CurrentRuntimePolicy : UnavailableGlimpseRequestContext.Instance.CurrentRuntimePolicy);
-
-                return proxyFactory;
-            }
-
-            set
-            {
-                if (value == null)
-                {
-                    throw new ArgumentNullException("value");
-                }
-
-                proxyFactory = value;
-            }
+            ProxyFactory = proxyFactory;
+            return this;
         }
 
         /// <summary>
@@ -458,22 +264,12 @@ namespace Glimpse.Core.Framework
         /// The configured <see cref="IResourceEndpointConfiguration"/>.
         /// </value>
         /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
-        public IResourceEndpointConfiguration ResourceEndpoint
+        public IResourceEndpointConfiguration ResourceEndpoint { get; private set; }
+
+        public IConfiguration ReplaceResourceEndpoint(IResourceEndpointConfiguration resourceEndpointConfiguration)
         {
-            get
-            {
-                return resourceEndpoint;
-            }
-
-            set
-            {
-                if (value == null)
-                {
-                    throw new ArgumentNullException("value");
-                }
-
-                resourceEndpoint = value;
-            }
+            ResourceEndpoint = resourceEndpointConfiguration;
+            return this;
         }
 
         /// <summary>
@@ -484,29 +280,7 @@ namespace Glimpse.Core.Framework
         /// </value>
         /// <returns>A collection of <see cref="IResource"/> instances resolved by the <see cref="IServiceLocator"/>s, otherwise all <see cref="IResource"/>s discovered in the configured discovery location.</returns>
         /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
-        public ICollection<IResource> Resources
-        {
-            get
-            {
-                if (resources != null)
-                {
-                    return resources;
-                }
-
-                resources = InstantiateDiscoverableCollection<IResource>(XmlConfiguration.Resources);
-                return resources;
-            }
-
-            set
-            {
-                if (value == null)
-                {
-                    throw new ArgumentNullException("value");
-                }
-
-                resources = value;
-            }
-        }
+        public ICollection<IResource> Resources { get; private set; }
 
         /// <summary>
         /// Gets or sets the collection of <see cref="IRuntimePolicy"/>.
@@ -516,29 +290,7 @@ namespace Glimpse.Core.Framework
         /// </value>
         /// <returns>A collection of <see cref="IRuntimePolicy"/> instances resolved by the <see cref="IServiceLocator"/>s, otherwise all <see cref="IRuntimePolicy"/>s discovered in the configured discovery location.</returns>
         /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
-        public ICollection<IRuntimePolicy> RuntimePolicies
-        {
-            get
-            {
-                if (runtimePolicies != null)
-                {
-                    return runtimePolicies;
-                }
-
-                runtimePolicies = InstantiateDiscoverableCollection<IRuntimePolicy>(XmlConfiguration.RuntimePolicies);
-                return runtimePolicies;
-            }
-
-            set
-            {
-                if (value == null)
-                {
-                    throw new ArgumentNullException("value");
-                }
-
-                runtimePolicies = value;
-            }
-        }
+        public ICollection<IRuntimePolicy> RuntimePolicies { get; private set; }
 
         /// <summary>
         /// Gets or sets the <see cref="ISerializer"/>.
@@ -548,64 +300,18 @@ namespace Glimpse.Core.Framework
         /// </value>
         /// <returns>A <see cref="ISerializer"/> instance resolved by the <see cref="IServiceLocator"/>s, otherwise <see cref="JsonNetSerializer"/> (leveraging <see href="http://json.codeplex.com/">Json.Net</see>).</returns>
         /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
-        public ISerializer Serializer
-        {
-            get
-            {
-                if (serializer != null)
-                {
-                    return serializer;
-                }
+        public ISerializer Serializer { get; private set; }
 
-                if (TrySingleInstanceFromServiceLocators(out serializer))
-                {
-                    return serializer;
-                }
-
-                var temp = new JsonNetSerializer(Logger);
-                temp.RegisterSerializationConverters(SerializationConverters);
-
-                serializer = temp;
-                return serializer;
-            }
-
-            set
-            {
-                if (value == null)
-                {
-                    throw new ArgumentNullException("value");
-                }
-
-                serializer = value;
-            }
-        }
-        
         /// <summary>
         /// Gets or sets a collection of <see cref="ISerializationConverter"/>s.
         /// </summary>
         /// <returns>A collection of <see cref="ISerializationConverter"/> instances resolved by the <see cref="IServiceLocator"/>s, otherwise all <see cref="ISerializationConverter"/>s discovered in the configured discovery location.</returns>
-        public ICollection<ISerializationConverter> SerializationConverters 
+        public ICollection<ISerializationConverter> SerializationConverters { get; private set; }
+
+        public IConfiguration ReplaceSerializer(ISerializer serializer)
         {
-            get
-            {
-                if (serializationConverters != null)
-                {
-                    return serializationConverters;
-                }
-
-                serializationConverters = InstantiateDiscoverableCollection<ISerializationConverter>(XmlConfiguration.SerializationConverters);
-                return serializationConverters;
-            }
-
-            set
-            {
-                if (value == null)
-                {
-                    throw new ArgumentNullException("value");
-                }
-
-                serializationConverters = value;
-            }
+            Serializer = serializer;
+            return this;
         }
 
         /// <summary>
@@ -616,29 +322,7 @@ namespace Glimpse.Core.Framework
         /// </value>
         /// <returns>A collection of <see cref="ITab"/> instances resolved by the <see cref="IServiceLocator"/>s, otherwise all <see cref="ITab"/>s discovered in the configured discovery location.</returns>
         /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
-        public ICollection<ITab> Tabs
-        {
-            get
-            {
-                if (tabs != null)
-                {
-                    return tabs;
-                }
-
-                tabs = InstantiateDiscoverableCollection<ITab>(XmlConfiguration.Tabs);
-                return tabs;
-            }
-
-            set
-            {
-                if (value == null)
-                {
-                    throw new ArgumentNullException("value");
-                }
-
-                tabs = value;
-            }
-        }
+        public ICollection<ITab> Tabs { get; private set; }
 
         /// <summary>
         /// Gets or sets the collection of <see cref="IMetadata"/>.
@@ -648,34 +332,7 @@ namespace Glimpse.Core.Framework
         /// </value>
         /// <returns>A collection of <see cref="IMetadata"/> instances resolved by the <see cref="IServiceLocator"/>s, otherwise all <see cref="ITab"/>s discovered in the configured discovery location.</returns>
         /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
-        public ICollection<IMetadata> Metadata
-        {
-            get
-            {
-                if (metadata != null)
-                {
-                    return metadata;
-                }
-
-                if (TryAllInstancesFromServiceLocators(out metadata))
-                {
-                    return metadata;
-                }
-
-                metadata = CreateDiscoverableCollection<IMetadata>(XmlConfiguration.Metadata);
-                return metadata;
-            }
-
-            set
-            {
-                if (value == null)
-                {
-                    throw new ArgumentNullException("value");
-                }
-
-                metadata = value;
-            }
-        }
+        public ICollection<IMetadata> Metadata { get; private set; }
 
         /// <summary>
         /// Gets or sets the collection of <see cref="ITabMetadata"/>.
@@ -685,34 +342,7 @@ namespace Glimpse.Core.Framework
         /// </value>
         /// <returns>A collection of <see cref="ITabMetadata"/> instances resolved by the <see cref="IServiceLocator"/>s, otherwise all <see cref="ITab"/>s discovered in the configured discovery location.</returns>
         /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
-        public ICollection<ITabMetadata> TabMetadata
-        {
-            get
-            {
-                if (tabMetadata != null)
-                {
-                    return tabMetadata;
-                }
-
-                if (TryAllInstancesFromServiceLocators(out tabMetadata))
-                {
-                    return tabMetadata;
-                }
-
-                tabMetadata = CreateDiscoverableCollection<ITabMetadata>(XmlConfiguration.TabMetadata);
-                return tabMetadata;
-            }
-
-            set
-            {
-                if (value == null)
-                {
-                    throw new ArgumentNullException("value");
-                }
-
-                tabMetadata = value;
-            }
-        }
+        public ICollection<ITabMetadata> TabMetadata { get; private set; }
 
         /// <summary>
         /// Gets or sets the collection of <see cref="IInstanceMetadata"/>.
@@ -722,251 +352,69 @@ namespace Glimpse.Core.Framework
         /// </value>
         /// <returns>A collection of <see cref="IInstanceMetadata"/> instances resolved by the <see cref="IServiceLocator"/>s, otherwise all <see cref="ITab"/>s discovered in the configured discovery location.</returns>
         /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
-        public ICollection<IInstanceMetadata> InstanceMetadata
+        public ICollection<IInstanceMetadata> InstanceMetadata { get; private set; }
+
+        public ICollection<IDisplay> Displays { get; private set; }
+
+        public string Hash { get { return hash = hash ?? GenerateHash(); } }
+
+        private string GenerateHash()
         {
-            get
+#warning the way the hash is being calculated, doesn't apply anymore if configuration can be changed afterwards, the hash should be stable
+
+            var configuredTypes = new List<Type> { GetType() };
+            configuredTypes.AddRange(Tabs.Select(tab => tab.GetType()).OrderBy(type => type.Name));
+            configuredTypes.AddRange(Inspectors.Select(inspector => inspector.GetType()).OrderBy(type => type.Name));
+            configuredTypes.AddRange(Resources.Select(resource => resource.GetType()).OrderBy(type => type.Name));
+            configuredTypes.AddRange(ClientScripts.Select(clientScript => clientScript.GetType()).OrderBy(type => type.Name));
+            configuredTypes.AddRange(RuntimePolicies.Select(policy => policy.GetType()).OrderBy(type => type.Name));
+            configuredTypes.AddRange(Metadata.Select(extensions => extensions.GetType()).OrderBy(type => type.Name));
+            configuredTypes.AddRange(TabMetadata.Select(extensions => extensions.GetType()).OrderBy(type => type.Name));
+
+            var crc32 = new Crc32();
+            var sb = new StringBuilder();
+            using (var memoryStream = new MemoryStream())
             {
-                if (instanceMetadata != null)
-                {
-                    return instanceMetadata;
-                }
+                var binaryFormatter = new BinaryFormatter();
+                binaryFormatter.Serialize(memoryStream, configuredTypes);
+                memoryStream.Position = 0;
 
-                if (TryAllInstancesFromServiceLocators(out instanceMetadata))
-                {
-                    return instanceMetadata;
-                }
+                var computeHash = crc32.ComputeHash(memoryStream);
 
-                instanceMetadata = CreateDiscoverableCollection<IInstanceMetadata>(XmlConfiguration.InstanceMetadata);
-                return instanceMetadata;
+                foreach (var b in computeHash)
+                {
+                    sb.Append(b.ToString("x2"));
+                }
             }
 
-            set
-            {
-                if (value == null)
-                {
-                    throw new ArgumentNullException("value");
-                }
-
-                instanceMetadata = value;
-            }
+            return sb.ToString();
         }
 
-        public ICollection<IDisplay> Displays
+        public string Version { get; private set; }
+
+        private ILogger CreateLogger(LoggingElement loggingElement)
         {
-            get
+            // use null logger if logging is off
+            if (loggingElement.Level == LoggingLevel.Off)
             {
-                if (displays != null)
-                {
-                    return displays;
-                }
-
-                displays = InstantiateDiscoverableCollection<IDisplay>(XmlConfiguration.Displays);
-                return displays;
+                return new NullLogger();
             }
 
-            set
-            {
-                if (value == null)
-                {
-                    throw new ArgumentNullException("value");
-                }
-
-                displays = value;
-            }
-        }
-
-        public string Hash
-        {
-            get
-            {
-                if (!string.IsNullOrEmpty(hash))
-                {
-                    return hash;
-                }
-
-                var configuredTypes = new List<Type> { GetType() };
-                configuredTypes.AddRange(Tabs.Select(tab => tab.GetType()).OrderBy(type => type.Name));
-                configuredTypes.AddRange(Inspectors.Select(inspector => inspector.GetType()).OrderBy(type => type.Name));
-                configuredTypes.AddRange(Resources.Select(resource => resource.GetType()).OrderBy(type => type.Name));
-                configuredTypes.AddRange(ClientScripts.Select(clientScript => clientScript.GetType()).OrderBy(type => type.Name));
-                configuredTypes.AddRange(RuntimePolicies.Select(policy => policy.GetType()).OrderBy(type => type.Name));
-                configuredTypes.AddRange(Metadata.Select(extensions => extensions.GetType()).OrderBy(type => type.Name));
-                configuredTypes.AddRange(TabMetadata.Select(extensions => extensions.GetType()).OrderBy(type => type.Name));
-
-                var crc32 = new Crc32();
-                var sb = new StringBuilder();
-                using (var memoryStream = new MemoryStream())
-                {
-                    var binaryFormatter = new BinaryFormatter();
-                    binaryFormatter.Serialize(memoryStream, configuredTypes);
-                    memoryStream.Position = 0;
-
-                    var computeHash = crc32.ComputeHash(memoryStream);
-
-                    foreach (var b in computeHash)
-                    {
-                        sb.Append(b.ToString("x2"));
-                    }
-                }
-
-                hash = sb.ToString();
-                return hash;
-            }
-
-            set
-            {
-                hash = value;
-            }
-        }
-
-        public string Version
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(version))
-                {
-                    version = Assembly.GetExecutingAssembly().GetName().Version.ToString(3);
-                }
-                 
-                return version;
-            }
-
-            set
-            {
-                version = value;
-            }
-        } 
-
-        public void ApplyOverrides()
-        {
-            // This method can be updated to ensure that web.config settings "win" - but that is difficult to do for most of them
-            DefaultRuntimePolicy = XmlConfiguration.DefaultRuntimePolicy;
-            EndpointBaseUri = XmlConfiguration.EndpointBaseUri;
-            if (XmlConfiguration.Logging.Level != LoggingLevel.Off)
-            {
-                Logger = CreateLogger();
-            }
-        }
-
-        private bool TrySingleInstanceFromServiceLocators<T>(out T instance) where T : class
-        {
-            if (UserServiceLocator != null)
-            {
-                instance = UserServiceLocator.GetInstance<T>();
-                if (instance != null)
-                {
-                    return true;
-                }
-            }
-
-            instance = null;
-            return false;
-        }
-
-        private ILogger CreateLogger()
-        {
             // Root the path if it isn't already and add a filename if one isn't specified
-            var configuredPath = XmlConfiguration.Logging.LogLocation;
+            var configuredPath = loggingElement.LogLocation;
             var logDirPath = Path.IsPathRooted(configuredPath) ? configuredPath : Path.Combine(AppDomain.CurrentDomain.BaseDirectory, configuredPath);
             var logFilePath = string.IsNullOrEmpty(Path.GetExtension(logDirPath)) ? Path.Combine(logDirPath, "Glimpse.log") : logDirPath;
- 
+
             var fileTarget = new FileTarget();
             fileTarget.FileName = logFilePath;
             fileTarget.Layout = "${longdate} | ${level:uppercase=true} | ${message} | ${exception:maxInnerExceptionLevel=5:format=type,message,stacktrace:separator=--:innerFormat=shortType,message,method:innerExceptionSeparator=>>}";
 
-            var asyncTarget = new AsyncTargetWrapper(fileTarget); 
+            var asyncTarget = new AsyncTargetWrapper(fileTarget);
             var loggingConfiguration = new LoggingConfiguration();
             loggingConfiguration.AddTarget("file", asyncTarget);
-            loggingConfiguration.LoggingRules.Add(new LoggingRule("*", LogLevel.FromOrdinal((int)XmlConfiguration.Logging.Level), asyncTarget));
+            loggingConfiguration.LoggingRules.Add(new LoggingRule("*", LogLevel.FromOrdinal((int)loggingElement.Level), asyncTarget));
 
             return new NLogLogger(new LogFactory(loggingConfiguration).GetLogger("Glimpse"));
-        }
-
-        private bool TryAllInstancesFromServiceLocators<T>(out ICollection<T> instance) where T : class
-        {
-            if (UserServiceLocator != null)
-            {
-                var result = UserServiceLocator.GetAllInstances<T>();
-                if (result != null)
-                {
-                    instance = result;
-                    return true;
-                }
-            }
-
-            instance = null;
-
-            return false;
-        }
-
-        private IDiscoverableCollection<T> CreateDiscoverableCollection<T>(DiscoverableCollectionElement config)
-        {
-            var discoverableCollection = new ReflectionDiscoverableCollection<T>(Logger);
-
-            discoverableCollection.IgnoredTypes.AddRange(config.IgnoredTypes);
-
-            // Default to config.DiscoveryLocation (collection specific) otherwise overrides 
-            // Configuration.DiscoveryLocation (on main <glimpse> node)
-            var locationCascade = string.IsNullOrEmpty(config.DiscoveryLocation) ? (string.IsNullOrEmpty(XmlConfiguration.DiscoveryLocation) ? null : XmlConfiguration.DiscoveryLocation) : config.DiscoveryLocation;
-            if (locationCascade != null)
-            {
-                discoverableCollection.DiscoveryLocation = locationCascade;
-            }
-
-            discoverableCollection.AutoDiscover = config.AutoDiscover;
-            if (discoverableCollection.AutoDiscover)
-            {
-                discoverableCollection.Discover();
-            }
-
-            return discoverableCollection;
-        }
-        
-        private ICollection<TElementType> InstantiateDiscoverableCollection<TElementType>(DiscoverableCollectionElement configuredDiscoverableCollection)
-            where TElementType : class
-        {
-            ICollection<TElementType> collection;
-            if (TryAllInstancesFromServiceLocators(out collection))
-            {
-                return collection;
-            }
-
-            var discoverableCollection = CreateDiscoverableCollection<TElementType>(configuredDiscoverableCollection);
-
-            // get the list of configurators
-            var configurators = discoverableCollection.OfType<IConfigurable>()
-                .Select(configurable => configurable.Configurator)
-                .GroupBy(configurator => configurator.CustomConfigurationKey);
-
-            // have each configurator, configure its "configurable"
-            foreach (var groupedConfigurators in configurators)
-            {
-                if (groupedConfigurators.Count() != 1)
-                {
-                    // there are multiple configurators using the same custom configuration key inside the same discoverable collection
-                    // this means that any existing custom configuration content must be resolved by using the custom configuration key
-                    // and the type for which the configurator is
-                    foreach (var configurator in groupedConfigurators)
-                    {
-                        string customConfiguration = configuredDiscoverableCollection.GetCustomConfiguration(configurator.CustomConfigurationKey, configurator.GetType());
-                        if (!string.IsNullOrEmpty(customConfiguration))
-                        {
-                            configurator.ProcessCustomConfiguration(customConfiguration);
-                        }
-                    }
-                }
-                else
-                {
-                    var configurator = groupedConfigurators.Single();
-                    string customConfiguration = configuredDiscoverableCollection.GetCustomConfiguration(configurator.CustomConfigurationKey);
-                    if (!string.IsNullOrEmpty(customConfiguration))
-                    {
-                        configurator.ProcessCustomConfiguration(customConfiguration);
-                    }
-                }
-            }
-
-            return discoverableCollection;
         }
     }
 }

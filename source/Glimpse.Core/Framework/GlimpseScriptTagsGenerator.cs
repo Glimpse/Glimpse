@@ -18,7 +18,7 @@ namespace Glimpse.Core.Framework
         /// <param name="glimpseRequestId">The Glimpse request Id for the request for which script tags must be generated</param>
         /// <param name="configuration">A <see cref="IConfiguration"/></param>
         /// <returns>The generated script tags</returns>
-        public static string Generate(Guid glimpseRequestId, IReadonlyConfiguration configuration)
+        public static string Generate(Guid glimpseRequestId, IConfiguration configuration)
         {
             var encoder = configuration.HtmlEncoder;
             var resourceEndpoint = configuration.ResourceEndpoint;

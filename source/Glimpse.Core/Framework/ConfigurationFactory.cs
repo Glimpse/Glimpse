@@ -10,7 +10,7 @@ namespace Glimpse.Core.Framework
             IPersistenceStore persistenceStore,
             ICurrentGlimpseRequestIdTracker currentGlimpseRequestIdTracker = null)
         {
-            return new Configuration(endpointConfiguration, persistenceStore, "glimpse", currentGlimpseRequestIdTracker);
+            return Create(endpointConfiguration, persistenceStore, "glimpse", currentGlimpseRequestIdTracker);
         }
 
         public static IConfiguration Create(
@@ -19,7 +19,7 @@ namespace Glimpse.Core.Framework
             string xmlConfigurationSectionName,
             ICurrentGlimpseRequestIdTracker currentGlimpseRequestIdTracker = null)
         {
-            return new Configuration(endpointConfiguration, persistenceStore, ConfigurationManager.GetSection(xmlConfigurationSectionName) as Section, currentGlimpseRequestIdTracker);
+            return Create(endpointConfiguration, persistenceStore, ConfigurationManager.GetSection(xmlConfigurationSectionName) as Section, currentGlimpseRequestIdTracker);
         }
 
         public static IConfiguration Create(
