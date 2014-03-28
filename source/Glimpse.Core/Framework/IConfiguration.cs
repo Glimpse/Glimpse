@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Glimpse.Core.Configuration;
 using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Core.Framework
@@ -10,6 +11,23 @@ namespace Glimpse.Core.Framework
     /// </summary>
     public interface IConfiguration
     {
+        /// <summary>
+        /// Gets configured <see cref="ILogger"/>.
+        /// </summary>
+        /// <returns>The configured <see cref="ILogger"/> which defaults to a <see cref="NullLogger" /> in case the configured log level is set 
+        /// to <see cref="LoggingLevel.Off"/> or with a <see cref="NLog.Logger" /> (leveraging the <see href="http://nlog-project.org/">NLog</see> project)
+        /// for all other log levels. The configured logger can be replaced with a call to <see cref="ReplaceLogger"/>.
+        /// </returns>
+        ILogger Logger { get; }
+
+        /// <summary>
+        /// Replaces the current configured logger with the <paramref name="logger" /> specified.
+        /// Keep in mind that the <paramref name="logger" /> will be ignored if the configured log level is set to <see cref="LoggingLevel.Off"/>
+        /// </summary>
+        /// <param name="logger">The logger to use from now on</param>
+        /// <returns>This configuration</returns>
+        IConfiguration ReplaceLogger(ILogger logger);
+
         /// <summary>
         /// Gets the client scripts.
         /// </summary>
@@ -23,14 +41,6 @@ namespace Glimpse.Core.Framework
         IHtmlEncoder HtmlEncoder { get; }
 
         IConfiguration ReplaceHtmlEncoder(IHtmlEncoder htmlEncoder);
-
-        /// <summary>
-        /// Gets the logger.
-        /// </summary>
-        /// <value>The logger.</value>
-        ILogger Logger { get; }
-
-        IConfiguration ReplaceLogger(ILogger logger);
 
         /// <summary>
         /// Gets the persistence store.
