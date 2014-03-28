@@ -145,6 +145,7 @@
     <Compile Include="Framework\ScriptTagsGenerator.cs" />
     <Compile Include="Framework\IResourceEndpointConfiguration.cs" />
     <Compile Include="Configuration\ReflectionBasedTypeDiscoverer.cs" />
+    <Compile Include="Framework\LoggerWrapper.cs" />
     <Compile Include="Framework\RuntimePolicyDeterminator.cs" />
     <Compile Include="Framework\TabProvider.cs" />
     <Compile Include="Framework\UnavailableGlimpseRequestContextHandle.cs" />

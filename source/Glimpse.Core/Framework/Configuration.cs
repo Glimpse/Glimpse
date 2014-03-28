@@ -9,10 +9,6 @@ using System.Text;
 using Glimpse.Core.Configuration;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Resource;
-using NLog;
-using NLog.Config;
-using NLog.Targets;
-using NLog.Targets.Wrappers;
 
 namespace Glimpse.Core.Framework
 {
@@ -21,6 +17,7 @@ namespace Glimpse.Core.Framework
     /// </summary>
     internal class Configuration : IConfiguration
     {
+        private readonly LoggerWrapper LoggerWrapper;
         private string hash;
 
         public Configuration(IResourceEndpointConfiguration endpointConfiguration, IPersistenceStore persistenceStore, ICurrentGlimpseRequestIdTracker currentGlimpseRequestIdTracker = null)
@@ -52,8 +49,7 @@ namespace Glimpse.Core.Framework
             DefaultRuntimePolicy = xmlConfiguration.DefaultRuntimePolicy;
             EndpointBaseUri = xmlConfiguration.EndpointBaseUri;
             HtmlEncoder = new AntiXssEncoder();
-            Logger = CreateLogger(xmlConfiguration.Logging);
-#warning the logger we need here must be a wrapper around the real logger, because it is being passed in into the other collections and types, and if the logger should be replaced, then it wouldn't be used by those since they still have the old one referenced
+            LoggerWrapper = new LoggerWrapper(xmlConfiguration.Logging.Level, xmlConfiguration.Logging.LogLocation);
 
             MessageBroker = new MessageBroker(
                     () => GlimpseRuntime.IsAvailable && GlimpseRuntime.Instance.CurrentRequestContext.CurrentRuntimePolicy != RuntimePolicy.Off,
@@ -184,19 +180,23 @@ namespace Glimpse.Core.Framework
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="ILogger"/>.
+        /// Gets configured <see cref="ILogger"/>.
         /// </summary>
-        /// <value>
-        /// The configured <see cref="ILogger"/>.
-        /// </value>
-        /// <returns>A <see cref="ILogger"/> instance resolved by the <see cref="IServiceLocator"/>s, otherwise a <see cref="NullLogger"/> or <see cref="NLogLogger"/> (leveraging the <see href="http://nlog-project.org/">NLog</see> project) based on configuration settings.</returns>
-        /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
-        public ILogger Logger { get; private set; }
+        /// <returns>The configured <see cref="ILogger"/> which defaults to a <see cref="NullLogger" /> in case the configured log level is set 
+        /// to <see cref="LoggingLevel.Off"/> or with a <see cref="NLog.Logger" /> (leveraging the <see href="http://nlog-project.org/">NLog</see> project)
+        /// for all other log levels. The configured logger can be replaced with a call to <see cref="ReplaceLogger"/>.
+        /// </returns>
+        public ILogger Logger { get { return LoggerWrapper; } }
 
+        /// <summary>
+        /// Replaces the current configured logger with the <paramref name="logger" /> specified.
+        /// Keep in mind that the <paramref name="logger" /> will be ignored if the configured log level is set to <see cref="LoggingLevel.Off"/>
+        /// </summary>
+        /// <param name="logger">The logger to use from now on</param>
+        /// <returns>This configuration</returns>
         public IConfiguration ReplaceLogger(ILogger logger)
         {
-#warning make sure to dispose the old one, before replacing it with the new one... beware, we should not store the Logger here but assign it to a LoggerWrapper -> see constructor for more details
-            Logger = logger;
+            LoggerWrapper.SwitchLogger(logger);
             return this;
         }
 
@@ -391,30 +391,5 @@ namespace Glimpse.Core.Framework
         }
 
         public string Version { get; private set; }
-
-        private ILogger CreateLogger(LoggingElement loggingElement)
-        {
-            // use null logger if logging is off
-            if (loggingElement.Level == LoggingLevel.Off)
-            {
-                return new NullLogger();
-            }
-
-            // Root the path if it isn't already and add a filename if one isn't specified
-            var configuredPath = loggingElement.LogLocation;
-            var logDirPath = Path.IsPathRooted(configuredPath) ? configuredPath : Path.Combine(AppDomain.CurrentDomain.BaseDirectory, configuredPath);
-            var logFilePath = string.IsNullOrEmpty(Path.GetExtension(logDirPath)) ? Path.Combine(logDirPath, "Glimpse.log") : logDirPath;
-
-            var fileTarget = new FileTarget();
-            fileTarget.FileName = logFilePath;
-            fileTarget.Layout = "${longdate} | ${level:uppercase=true} | ${message} | ${exception:maxInnerExceptionLevel=5:format=type,message,stacktrace:separator=--:innerFormat=shortType,message,method:innerExceptionSeparator=>>}";
-
-            var asyncTarget = new AsyncTargetWrapper(fileTarget);
-            var loggingConfiguration = new LoggingConfiguration();
-            loggingConfiguration.AddTarget("file", asyncTarget);
-            loggingConfiguration.LoggingRules.Add(new LoggingRule("*", LogLevel.FromOrdinal((int)loggingElement.Level), asyncTarget));
-
-            return new NLogLogger(new LogFactory(loggingConfiguration).GetLogger("Glimpse"));
-        }
     }
 }
