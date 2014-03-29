@@ -12,6 +12,36 @@ namespace Glimpse.Core.Framework
     public interface IConfiguration
     {
         /// <summary>
+        /// Gets the resource endpoint.
+        /// </summary>
+        /// <value>The resource endpoint.</value>
+        IResourceEndpointConfiguration ResourceEndpoint { get; }
+
+#warning should this be allowed? Is this not the responsibility of the framework provider?
+        IConfiguration ReplaceResourceEndpoint(IResourceEndpointConfiguration resourceEndpointConfiguration);
+
+        /// <summary>
+        /// Gets the persistence store.
+        /// </summary>
+        /// <value>The persistence store.</value>
+        IPersistenceStore PersistenceStore { get; }
+
+        IConfiguration ReplacePersistenceStore(IPersistenceStore persistenceStore);
+
+        /// <summary>
+        /// Gets the configured <see cref="ICurrentGlimpseRequestIdTracker"/>
+        /// </summary>
+        ICurrentGlimpseRequestIdTracker CurrentGlimpseRequestIdTracker { get; }
+
+        IConfiguration ReplaceCurrentGlimpseRequestIdTracker(ICurrentGlimpseRequestIdTracker currentGlimpseRequestIdTracker);
+
+        /// <summary>
+        /// Gets the current version of the Glimpse core assembly.
+        /// </summary>
+        /// <value>The version.</value>
+        string Version { get; }
+
+        /// <summary>
         /// Gets configured <see cref="ILogger"/>.
         /// </summary>
         /// <returns>The configured <see cref="ILogger"/> which defaults to a <see cref="NullLogger" /> in case the configured log level is set 
@@ -43,27 +73,10 @@ namespace Glimpse.Core.Framework
         IConfiguration ReplaceHtmlEncoder(IHtmlEncoder htmlEncoder);
 
         /// <summary>
-        /// Gets the persistence store.
-        /// </summary>
-        /// <value>The persistence store.</value>
-        IPersistenceStore PersistenceStore { get; }
-
-        IConfiguration ReplacePersistenceStore(IPersistenceStore persistenceStore);
-
-        /// <summary>
         /// Gets the inspectors.
         /// </summary>
         /// <value>The inspectors.</value>
         ICollection<IInspector> Inspectors { get; }
-
-        /// <summary>
-        /// Gets the resource endpoint.
-        /// </summary>
-        /// <value>The resource endpoint.</value>
-        IResourceEndpointConfiguration ResourceEndpoint { get; }
-
-#warning should this be allowed? Is this not the responsibility of the framework provider?
-        IConfiguration ReplaceResourceEndpoint(IResourceEndpointConfiguration resourceEndpointConfiguration);
 
         /// <summary>
         /// Gets the resources.
@@ -154,17 +167,7 @@ namespace Glimpse.Core.Framework
         /// <value>The hash.</value>
         string Hash { get; }
 
-        /// <summary>
-        /// Gets the version of Glimpse core.
-        /// </summary>
-        /// <value>The version.</value>
-        string Version { get; }
 
-        /// <summary>
-        /// Gets the configured <see cref="ICurrentGlimpseRequestIdTracker"/>
-        /// </summary>
-        ICurrentGlimpseRequestIdTracker CurrentGlimpseRequestIdTracker { get; }
-
-        IConfiguration ReplaceCurrentGlimpseRequestIdTracker(ICurrentGlimpseRequestIdTracker currentGlimpseRequestIdTracker);
+        
     }
 }

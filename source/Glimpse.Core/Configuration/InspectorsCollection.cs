@@ -1,4 +1,5 @@
-﻿using Glimpse.Core.Configuration;
+﻿using System;
+using Glimpse.Core.Configuration;
 using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Core.Framework
@@ -7,8 +8,9 @@ namespace Glimpse.Core.Framework
     {
         public InspectorsCollection(
             CollectionConfiguration configuration,
-            ILogger logger)
-            : base(configuration, logger)
+            ILogger logger,
+            EventHandler onChange = null)
+            : base(configuration, logger, onChange)
         {
         }
     }
