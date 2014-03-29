@@ -1,11 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
 using Glimpse.Core.Configuration;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Resource;
@@ -18,7 +15,6 @@ namespace Glimpse.Core.Framework
     internal class Configuration : IConfiguration
     {
         private readonly LoggerWrapper LoggerWrapper;
-        private string hash;
 
         public Configuration(IResourceEndpointConfiguration endpointConfiguration, IPersistenceStore persistenceStore, ICurrentGlimpseRequestIdTracker currentGlimpseRequestIdTracker = null)
             : this(endpointConfiguration, persistenceStore, "glimpse", currentGlimpseRequestIdTracker)
@@ -40,10 +36,6 @@ namespace Glimpse.Core.Framework
             PersistenceStore = persistenceStore;
             CurrentGlimpseRequestIdTracker = currentGlimpseRequestIdTracker ?? new CallContextCurrentGlimpseRequestIdTracker();
 
-#warning we kinda have a chicken and egg problem concerning the configuration, although if we say the config can be used to troubleshoot issues, then it might make sense
-#warning why the problem? well you need to fill all collections, as they may want to do some look ups or alter collections, yet that means that things have already been loaded
-#warning although that is something users can fix by setting discoverable to false in the config, no issue then...
-
             Version = Assembly.GetExecutingAssembly().GetName().Version.ToString(3);
             DefaultResource = new ConfigurationResource();
             DefaultRuntimePolicy = xmlConfiguration.DefaultRuntimePolicy;
@@ -61,26 +53,30 @@ namespace Glimpse.Core.Framework
                     () => GlimpseRuntime.IsAvailable ? GlimpseRuntime.Instance.CurrentRequestContext.CurrentExecutionTimer : UnavailableGlimpseRequestContext.Instance.CurrentExecutionTimer,
                     () => GlimpseRuntime.IsAvailable ? GlimpseRuntime.Instance.CurrentRequestContext.CurrentRuntimePolicy : UnavailableGlimpseRequestContext.Instance.CurrentRuntimePolicy);
 
-
             ClientScripts = new ClientScriptsCollection(
                 new CollectionConfigurationFactory(xmlConfiguration.ClientScripts.XmlContent, xmlConfiguration.DiscoveryLocation).Create(),
-                Logger);
+                Logger,
+                (sender, e) => GenerateAndStoreHash());
 
             Inspectors = new InspectorsCollection(
                 new CollectionConfigurationFactory(xmlConfiguration.Inspectors.XmlContent, xmlConfiguration.DiscoveryLocation).Create(),
-                Logger);
+                Logger,
+                (sender, e) => GenerateAndStoreHash());
 
             Resources = new ResourcesCollection(
                 new CollectionConfigurationFactory(xmlConfiguration.Resources.XmlContent, xmlConfiguration.DiscoveryLocation).Create(),
-                Logger);
+                 Logger,
+                (sender, e) => GenerateAndStoreHash());
 
             RuntimePolicies = new RuntimePoliciesCollection(
                 new CollectionConfigurationFactory(xmlConfiguration.RuntimePolicies.XmlContent, xmlConfiguration.DiscoveryLocation).Create(),
-                Logger);
+                 Logger,
+                (sender, e) => GenerateAndStoreHash());
 
             Tabs = new TabsCollection(
                 new CollectionConfigurationFactory(xmlConfiguration.Tabs.XmlContent, xmlConfiguration.DiscoveryLocation).Create(),
-                Logger);
+                 Logger,
+                (sender, e) => GenerateAndStoreHash());
 
             SerializationConverters = new SerializationConvertersCollection(
                 new CollectionConfigurationFactory(xmlConfiguration.SerializationConverters.XmlContent, xmlConfiguration.DiscoveryLocation).Create(),
@@ -92,21 +88,57 @@ namespace Glimpse.Core.Framework
 
             Metadata = new MetadataCollection(
                 new CollectionConfigurationFactory(xmlConfiguration.Metadata.XmlContent, xmlConfiguration.DiscoveryLocation).Create(),
-                Logger);
+                 Logger,
+                (sender, e) => GenerateAndStoreHash());
 
             TabMetadata = new TabMetadataCollection(
                 new CollectionConfigurationFactory(xmlConfiguration.TabMetadata.XmlContent, xmlConfiguration.DiscoveryLocation).Create(),
-                Logger);
+                 Logger,
+                (sender, e) => GenerateAndStoreHash());
 
             Displays = new DisplaysCollection(
                 new CollectionConfigurationFactory(xmlConfiguration.Displays.XmlContent, xmlConfiguration.DiscoveryLocation).Create(),
-                Logger);
+                 Logger,
+                (sender, e) => GenerateAndStoreHash());
 
             InstanceMetadata = new InstanceMetadataCollection(
                 new CollectionConfigurationFactory(xmlConfiguration.InstanceMetadata.XmlContent, xmlConfiguration.DiscoveryLocation).Create(),
-                Logger);
+                 Logger,
+                (sender, e) => GenerateAndStoreHash());
+
+            GenerateAndStoreHash();
 
             // TODO: Instantiate the user's IOC container (if they have one)
+        }
+
+        /// <summary>
+        /// Gets or sets the <see cref="IResourceEndpointConfiguration"/>.
+        /// </summary>
+        /// <value>
+        /// The configured <see cref="IResourceEndpointConfiguration"/>.
+        /// </value>
+        /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
+        public IResourceEndpointConfiguration ResourceEndpoint { get; private set; }
+
+        public IConfiguration ReplaceResourceEndpoint(IResourceEndpointConfiguration resourceEndpointConfiguration)
+        {
+            ResourceEndpoint = resourceEndpointConfiguration;
+            return this;
+        }
+
+        /// <summary>
+        /// Gets or sets the <see cref="IPersistenceStore"/>.
+        /// </summary>
+        /// <value>
+        /// The configured <see cref="IPersistenceStore"/>.
+        /// </value>
+        /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
+        public IPersistenceStore PersistenceStore { get; private set; }
+
+        public IConfiguration ReplacePersistenceStore(IPersistenceStore persistenceStore)
+        {
+            PersistenceStore = persistenceStore;
+            return this;
         }
 
         /// <summary>
@@ -122,6 +154,12 @@ namespace Glimpse.Core.Framework
             CurrentGlimpseRequestIdTracker = currentGlimpseRequestIdTracker;
             return this;
         }
+
+        /// <summary>
+        /// Gets the current version of the Glimpse core assembly.
+        /// </summary>
+        /// <value>The version.</value>
+        public string Version { get; private set; }
 
         /// <summary>
         /// Gets or sets the client scripts collection.
@@ -216,20 +254,7 @@ namespace Glimpse.Core.Framework
             return this;
         }
 
-        /// <summary>
-        /// Gets or sets the <see cref="IPersistenceStore"/>.
-        /// </summary>
-        /// <value>
-        /// The configured <see cref="IPersistenceStore"/>.
-        /// </value>
-        /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
-        public IPersistenceStore PersistenceStore { get; private set; }
 
-        public IConfiguration ReplacePersistenceStore(IPersistenceStore persistenceStore)
-        {
-            PersistenceStore = persistenceStore;
-            return this;
-        }
 
         /// <summary>
         /// Gets or sets the collection of <see cref="IInspector"/>.
@@ -257,20 +282,7 @@ namespace Glimpse.Core.Framework
             return this;
         }
 
-        /// <summary>
-        /// Gets or sets the <see cref="IResourceEndpointConfiguration"/>.
-        /// </summary>
-        /// <value>
-        /// The configured <see cref="IResourceEndpointConfiguration"/>.
-        /// </value>
-        /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
-        public IResourceEndpointConfiguration ResourceEndpoint { get; private set; }
 
-        public IConfiguration ReplaceResourceEndpoint(IResourceEndpointConfiguration resourceEndpointConfiguration)
-        {
-            ResourceEndpoint = resourceEndpointConfiguration;
-            return this;
-        }
 
         /// <summary>
         /// Gets or sets the collection of <see cref="IResource"/>.
@@ -356,12 +368,10 @@ namespace Glimpse.Core.Framework
 
         public ICollection<IDisplay> Displays { get; private set; }
 
-        public string Hash { get { return hash = hash ?? GenerateHash(); } }
+        public string Hash { get; private set; }
 
-        private string GenerateHash()
+        private void GenerateAndStoreHash()
         {
-#warning the way the hash is being calculated, doesn't apply anymore if configuration can be changed afterwards, the hash should be stable
-
             var configuredTypes = new List<Type> { GetType() };
             configuredTypes.AddRange(Tabs.Select(tab => tab.GetType()).OrderBy(type => type.Name));
             configuredTypes.AddRange(Inspectors.Select(inspector => inspector.GetType()).OrderBy(type => type.Name));
@@ -370,26 +380,10 @@ namespace Glimpse.Core.Framework
             configuredTypes.AddRange(RuntimePolicies.Select(policy => policy.GetType()).OrderBy(type => type.Name));
             configuredTypes.AddRange(Metadata.Select(extensions => extensions.GetType()).OrderBy(type => type.Name));
             configuredTypes.AddRange(TabMetadata.Select(extensions => extensions.GetType()).OrderBy(type => type.Name));
+            configuredTypes.AddRange(InstanceMetadata.Select(extensions => extensions.GetType()).OrderBy(type => type.Name));
+            configuredTypes.AddRange(Displays.Select(extensions => extensions.GetType()).OrderBy(type => type.Name));
 
-            var crc32 = new Crc32();
-            var sb = new StringBuilder();
-            using (var memoryStream = new MemoryStream())
-            {
-                var binaryFormatter = new BinaryFormatter();
-                binaryFormatter.Serialize(memoryStream, configuredTypes);
-                memoryStream.Position = 0;
-
-                var computeHash = crc32.ComputeHash(memoryStream);
-
-                foreach (var b in computeHash)
-                {
-                    sb.Append(b.ToString("x2"));
-                }
-            }
-
-            return sb.ToString();
+            Hash = HashGenerator.Generate(configuredTypes);
         }
-
-        public string Version { get; private set; }
     }
 }

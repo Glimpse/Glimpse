@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Glimpse.Core.Extensibility;
@@ -12,6 +13,11 @@ namespace Glimpse.Core.Configuration
     /// <typeparam name="TItem">The type of the items in the collection.</typeparam>
     public abstract class DiscoverableCollection<TItem> : ICollection<TItem>
     {
+        /// <summary>
+        /// Occurs when a change has been made to the collection. The change can be an addition or a removal
+        /// </summary>
+        public event EventHandler Changed = delegate { };
+
         private CollectionConfiguration Configuration { get; set; }
 
         protected ILogger Logger { get; private set; }
@@ -23,7 +29,8 @@ namespace Glimpse.Core.Configuration
         /// </summary>
         /// <param name="configuration">The configuration.</param>
         /// <param name="logger">The logger.</param>
-        protected DiscoverableCollection(CollectionConfiguration configuration, ILogger logger)
+        /// <param name="onChange">Event handler to call when the collection has changed.</param>
+        protected DiscoverableCollection(CollectionConfiguration configuration, ILogger logger, EventHandler onChange = null)
         {
             Guard.ArgumentNotNull("configuration", configuration);
             Guard.ArgumentNotNull("logger", logger);
@@ -46,6 +53,8 @@ namespace Glimpse.Core.Configuration
 
                 AssignInitialCustomConfigurations();
             }
+
+            Changed += onChange;
         }
 
         private void AssignInitialCustomConfigurations()
@@ -91,6 +100,7 @@ namespace Glimpse.Core.Configuration
         public virtual void Add(TItem item)
         {
             AddCore(item);
+            Changed(this, EventArgs.Empty);
         }
 
         private void AddCore(TItem item)
@@ -114,6 +124,8 @@ namespace Glimpse.Core.Configuration
                 Logger.Debug(Resources.DiscoverableCollectionRemoveItem, typeof(TItem).Name, item.GetType());
             }
 
+            Changed(this, EventArgs.Empty);
+
             return result;
         }
 
@@ -124,6 +136,8 @@ namespace Glimpse.Core.Configuration
         {
             Items.Clear();
             Logger.Debug(Resources.DiscoverableCollectionClearItems, typeof(TItem).Name);
+
+            Changed(this, EventArgs.Empty);
         }
 
         /// <summary>

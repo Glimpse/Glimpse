@@ -134,6 +134,7 @@
     <Compile Include="Framework\DisplayProvider.cs" />
     <Compile Include="Framework\GlimpseRuntimeNotAvailableException.cs" />
     <Compile Include="Framework\GlimpseRuntimeInitializer.cs" />
+    <Compile Include="Framework\HashGenerator.cs" />
     <Compile Include="Framework\InspectorProvider.cs" />
     <Compile Include="Framework\KeyCreator.cs" />
     <Compile Include="Framework\ICurrentGlimpseRequestIdTracker.cs" />
