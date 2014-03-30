@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using System.Reflection;
 using Glimpse.Core.Configuration;
@@ -16,32 +15,21 @@ namespace Glimpse.Core.Framework
     {
         private readonly LoggerWrapper LoggerWrapper;
 
-        public Configuration(IResourceEndpointConfiguration endpointConfiguration, IPersistenceStore persistenceStore, ICurrentGlimpseRequestIdTracker currentGlimpseRequestIdTracker = null)
-            : this(endpointConfiguration, persistenceStore, "glimpse", currentGlimpseRequestIdTracker)
+        public Configuration(ConfigurationSettings configurationSettings)
         {
-        }
+            Guard.ArgumentNotNull("configurationSettings", configurationSettings);
 
-        public Configuration(IResourceEndpointConfiguration endpointConfiguration, IPersistenceStore persistenceStore, string xmlConfigurationSectionName, ICurrentGlimpseRequestIdTracker currentGlimpseRequestIdTracker = null)
-            : this(endpointConfiguration, persistenceStore, ConfigurationManager.GetSection(xmlConfigurationSectionName) as Section, currentGlimpseRequestIdTracker)
-        {
-        }
-
-        public Configuration(IResourceEndpointConfiguration endpointConfiguration, IPersistenceStore persistenceStore, Section xmlConfiguration, ICurrentGlimpseRequestIdTracker currentGlimpseRequestIdTracker = null)
-        {
-            Guard.ArgumentNotNull("endpointConfiguration", endpointConfiguration);
-            Guard.ArgumentNotNull("persistenceStore", persistenceStore);
-            Guard.ArgumentNotNull("xmlConfiguration", xmlConfiguration);
-
-            ResourceEndpoint = endpointConfiguration;
-            PersistenceStore = persistenceStore;
-            CurrentGlimpseRequestIdTracker = currentGlimpseRequestIdTracker ?? new CallContextCurrentGlimpseRequestIdTracker();
+            ResourceEndpoint = configurationSettings.ResourceEndpointConfiguration;
+            PersistenceStore = configurationSettings.PersistenceStore;
+            CurrentGlimpseRequestIdTracker = configurationSettings.CurrentGlimpseRequestIdTracker;
+            DefaultRuntimePolicy = configurationSettings.DefaultRuntimePolicy;
+            EndpointBaseUri = configurationSettings.EndpointBaseUri;
 
             Version = Assembly.GetExecutingAssembly().GetName().Version.ToString(3);
+            LoggerWrapper = new LoggerWrapper(configurationSettings.Logging.Level, configurationSettings.Logging.LogLocation);
+
             DefaultResource = new ConfigurationResource();
-            DefaultRuntimePolicy = xmlConfiguration.DefaultRuntimePolicy;
-            EndpointBaseUri = xmlConfiguration.EndpointBaseUri;
             HtmlEncoder = new AntiXssEncoder();
-            LoggerWrapper = new LoggerWrapper(xmlConfiguration.Logging.Level, xmlConfiguration.Logging.LogLocation);
 
             MessageBroker = new MessageBroker(
                     () => GlimpseRuntime.IsAvailable && GlimpseRuntime.Instance.CurrentRequestContext.CurrentRuntimePolicy != RuntimePolicy.Off,
@@ -53,58 +41,20 @@ namespace Glimpse.Core.Framework
                     () => GlimpseRuntime.IsAvailable ? GlimpseRuntime.Instance.CurrentRequestContext.CurrentExecutionTimer : UnavailableGlimpseRequestContext.Instance.CurrentExecutionTimer,
                     () => GlimpseRuntime.IsAvailable ? GlimpseRuntime.Instance.CurrentRequestContext.CurrentRuntimePolicy : UnavailableGlimpseRequestContext.Instance.CurrentRuntimePolicy);
 
-            ClientScripts = new ClientScriptsCollection(
-                new CollectionConfigurationFactory(xmlConfiguration.ClientScripts.XmlContent, xmlConfiguration.DiscoveryLocation).Create(),
-                Logger,
-                (sender, e) => GenerateAndStoreHash());
-
-            Inspectors = new InspectorsCollection(
-                new CollectionConfigurationFactory(xmlConfiguration.Inspectors.XmlContent, xmlConfiguration.DiscoveryLocation).Create(),
-                Logger,
-                (sender, e) => GenerateAndStoreHash());
-
-            Resources = new ResourcesCollection(
-                new CollectionConfigurationFactory(xmlConfiguration.Resources.XmlContent, xmlConfiguration.DiscoveryLocation).Create(),
-                 Logger,
-                (sender, e) => GenerateAndStoreHash());
-
-            RuntimePolicies = new RuntimePoliciesCollection(
-                new CollectionConfigurationFactory(xmlConfiguration.RuntimePolicies.XmlContent, xmlConfiguration.DiscoveryLocation).Create(),
-                 Logger,
-                (sender, e) => GenerateAndStoreHash());
-
-            Tabs = new TabsCollection(
-                new CollectionConfigurationFactory(xmlConfiguration.Tabs.XmlContent, xmlConfiguration.DiscoveryLocation).Create(),
-                 Logger,
-                (sender, e) => GenerateAndStoreHash());
-
-            SerializationConverters = new SerializationConvertersCollection(
-                new CollectionConfigurationFactory(xmlConfiguration.SerializationConverters.XmlContent, xmlConfiguration.DiscoveryLocation).Create(),
-                Logger);
+            ClientScripts = new ClientScriptsCollection(configurationSettings.ClientScriptsConfiguration, Logger, (sender, e) => GenerateAndStoreHash());
+            Inspectors = new InspectorsCollection(configurationSettings.InspectorsConfiguration, Logger, (sender, e) => GenerateAndStoreHash());
+            Resources = new ResourcesCollection(configurationSettings.ResourcesConfiguration, Logger, (sender, e) => GenerateAndStoreHash());
+            RuntimePolicies = new RuntimePoliciesCollection(configurationSettings.RuntimePoliciesConfiguration, Logger, (sender, e) => GenerateAndStoreHash());
+            Tabs = new TabsCollection(configurationSettings.TabsConfiguration, Logger, (sender, e) => GenerateAndStoreHash());
+            SerializationConverters = new SerializationConvertersCollection(configurationSettings.SerializationConvertersConfiguration, Logger);
+            Metadata = new MetadataCollection(configurationSettings.MetadataConfiguration, Logger, (sender, e) => GenerateAndStoreHash());
+            TabMetadata = new TabMetadataCollection(configurationSettings.TabMetadataConfiguration, Logger, (sender, e) => GenerateAndStoreHash());
+            Displays = new DisplaysCollection(configurationSettings.DisplaysConfiguration, Logger, (sender, e) => GenerateAndStoreHash());
+            InstanceMetadata = new InstanceMetadataCollection(configurationSettings.InstanceMetadataConfiguration, Logger, (sender, e) => GenerateAndStoreHash());
 
             var temp = new JsonNetSerializer(Logger);
             temp.RegisterSerializationConverters(SerializationConverters);
             Serializer = temp;
-
-            Metadata = new MetadataCollection(
-                new CollectionConfigurationFactory(xmlConfiguration.Metadata.XmlContent, xmlConfiguration.DiscoveryLocation).Create(),
-                 Logger,
-                (sender, e) => GenerateAndStoreHash());
-
-            TabMetadata = new TabMetadataCollection(
-                new CollectionConfigurationFactory(xmlConfiguration.TabMetadata.XmlContent, xmlConfiguration.DiscoveryLocation).Create(),
-                 Logger,
-                (sender, e) => GenerateAndStoreHash());
-
-            Displays = new DisplaysCollection(
-                new CollectionConfigurationFactory(xmlConfiguration.Displays.XmlContent, xmlConfiguration.DiscoveryLocation).Create(),
-                 Logger,
-                (sender, e) => GenerateAndStoreHash());
-
-            InstanceMetadata = new InstanceMetadataCollection(
-                new CollectionConfigurationFactory(xmlConfiguration.InstanceMetadata.XmlContent, xmlConfiguration.DiscoveryLocation).Create(),
-                 Logger,
-                (sender, e) => GenerateAndStoreHash());
 
             GenerateAndStoreHash();
 

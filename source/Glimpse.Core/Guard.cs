@@ -19,5 +19,18 @@ namespace Glimpse.Core
                 throw new ArgumentNullException(argumentName);
             }
         }
+
+        /// <summary>
+        /// Guards against null or empty values
+        /// </summary>
+        /// <param name="argumentName">The name of the argument used when throwing a <see cref="ArgumentNullException"/></param>
+        /// <param name="argumentValue">The argument to check against <code>null</code> or an empty string</param>
+        public static void StringNotNullOrEmpty(string argumentName, string argumentValue)
+        {
+            if (string.IsNullOrEmpty(argumentValue))
+            {
+                throw new ArgumentNullException(argumentName);
+            }
+        }
     }
 }
