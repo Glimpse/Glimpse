@@ -28,25 +28,13 @@ namespace Glimpse.Core.Framework
             Section xmlConfigurationSection,
             ICurrentGlimpseRequestIdTracker currentGlimpseRequestIdTracker = null)
         {
-            var configurationSettings = new ConfigurationSettings(
-                endpointConfiguration,
-                persistenceStore,
-                currentGlimpseRequestIdTracker ?? new CallContextCurrentGlimpseRequestIdTracker(),
-                xmlConfigurationSection.DefaultRuntimePolicy,
-                xmlConfigurationSection.EndpointBaseUri,
-                new ConfigurationLoggingSettings(xmlConfigurationSection.Logging.Level, xmlConfigurationSection.Logging.LogLocation),
-                new CollectionConfigurationFactory(xmlConfigurationSection.ClientScripts.XmlContent, xmlConfigurationSection.DiscoveryLocation).Create(),
-                new CollectionConfigurationFactory(xmlConfigurationSection.Inspectors.XmlContent, xmlConfigurationSection.DiscoveryLocation).Create(),
-                new CollectionConfigurationFactory(xmlConfigurationSection.Resources.XmlContent, xmlConfigurationSection.DiscoveryLocation).Create(),
-                new CollectionConfigurationFactory(xmlConfigurationSection.RuntimePolicies.XmlContent, xmlConfigurationSection.DiscoveryLocation).Create(),
-                new CollectionConfigurationFactory(xmlConfigurationSection.Tabs.XmlContent, xmlConfigurationSection.DiscoveryLocation).Create(),
-                new CollectionConfigurationFactory(xmlConfigurationSection.SerializationConverters.XmlContent, xmlConfigurationSection.DiscoveryLocation).Create(),
-                new CollectionConfigurationFactory(xmlConfigurationSection.Metadata.XmlContent, xmlConfigurationSection.DiscoveryLocation).Create(),
-                new CollectionConfigurationFactory(xmlConfigurationSection.TabMetadata.XmlContent, xmlConfigurationSection.DiscoveryLocation).Create(),
-                new CollectionConfigurationFactory(xmlConfigurationSection.Displays.XmlContent, xmlConfigurationSection.DiscoveryLocation).Create(),
-                new CollectionConfigurationFactory(xmlConfigurationSection.InstanceMetadata.XmlContent, xmlConfigurationSection.DiscoveryLocation).Create());
+#warning based on the Section we could allow another IConfigurationSettingsProvider to be set, so that the complete configuration could be loaded from somewhere else... (DB, File, ...)
 
-            return new Configuration(configurationSettings);
+            return new Configuration(
+                new ConfigurationSettingsXmlProvider(xmlConfigurationSection).GetConfigurationSettings(
+                    endpointConfiguration,
+                    persistenceStore,
+                    currentGlimpseRequestIdTracker ?? new CallContextCurrentGlimpseRequestIdTracker()));
         }
     }
 }

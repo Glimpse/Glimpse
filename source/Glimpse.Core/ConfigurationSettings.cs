@@ -48,7 +48,6 @@ namespace Glimpse.Core
             EndpointBaseUri = endpointBaseUri;
             Logging = configurationLoggingSettings;
             ClientScriptsConfiguration = clientScriptsConfiguration;
-            ClientScriptsConfiguration = clientScriptsConfiguration;
             InspectorsConfiguration = inspectorsConfiguration;
             ResourcesConfiguration = resourcesConfiguration;
             RuntimePoliciesConfiguration = runtimePoliciesConfiguration;
