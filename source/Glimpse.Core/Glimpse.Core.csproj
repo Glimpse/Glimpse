@@ -73,6 +73,8 @@
     <Compile Include="ClientScript\Client.cs" />
     <Compile Include="ClientScript\Data.cs" />
     <Compile Include="ClientScript\Metadata.cs" />
+    <Compile Include="ConfigurationLoggingSettings.cs" />
+    <Compile Include="ConfigurationSettings.cs" />
     <Compile Include="Configuration\InstanceMetadataCollection.cs" />
     <Compile Include="Configuration\MetadataCollection.cs" />
     <Compile Include="Configuration\DisplaysCollection.cs" />
