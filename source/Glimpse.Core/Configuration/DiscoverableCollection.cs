@@ -18,7 +18,7 @@ namespace Glimpse.Core.Configuration
         /// </summary>
         public event EventHandler Changed = delegate { };
 
-        private CollectionConfiguration Configuration { get; set; }
+        private CollectionSettings Configuration { get; set; }
 
         protected ILogger Logger { get; private set; }
 
@@ -30,7 +30,7 @@ namespace Glimpse.Core.Configuration
         /// <param name="configuration">The configuration.</param>
         /// <param name="logger">The logger.</param>
         /// <param name="onChange">Event handler to call when the collection has changed.</param>
-        protected DiscoverableCollection(CollectionConfiguration configuration, ILogger logger, EventHandler onChange = null)
+        protected DiscoverableCollection(CollectionSettings configuration, ILogger logger, EventHandler onChange = null)
         {
             Guard.ArgumentNotNull("configuration", configuration);
             Guard.ArgumentNotNull("logger", logger);

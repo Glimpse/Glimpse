@@ -7,7 +7,7 @@ namespace Glimpse.Core.Framework
     public class TabsCollection : DiscoverableCollection<ITab>
     {
         public TabsCollection(
-            CollectionConfiguration configuration,
+            CollectionSettings configuration,
             ILogger logger,
             EventHandler onChange = null)
             : base(configuration, logger, onChange)

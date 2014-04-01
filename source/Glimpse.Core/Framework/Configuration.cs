@@ -26,7 +26,7 @@ namespace Glimpse.Core.Framework
             EndpointBaseUri = configurationSettings.EndpointBaseUri;
 
             Version = Assembly.GetExecutingAssembly().GetName().Version.ToString(3);
-            LoggerWrapper = new LoggerWrapper(configurationSettings.Logging.Level, configurationSettings.Logging.LogLocation);
+            LoggerWrapper = new LoggerWrapper(configurationSettings.LoggingSettings.Level, configurationSettings.LoggingSettings.LogLocation);
 
             DefaultResource = new ConfigurationResource();
             HtmlEncoder = new AntiXssEncoder();
@@ -41,16 +41,16 @@ namespace Glimpse.Core.Framework
                     () => GlimpseRuntime.IsAvailable ? GlimpseRuntime.Instance.CurrentRequestContext.CurrentExecutionTimer : UnavailableGlimpseRequestContext.Instance.CurrentExecutionTimer,
                     () => GlimpseRuntime.IsAvailable ? GlimpseRuntime.Instance.CurrentRequestContext.CurrentRuntimePolicy : UnavailableGlimpseRequestContext.Instance.CurrentRuntimePolicy);
 
-            ClientScripts = new ClientScriptsCollection(configurationSettings.ClientScriptsConfiguration, Logger, (sender, e) => GenerateAndStoreHash());
-            Inspectors = new InspectorsCollection(configurationSettings.InspectorsConfiguration, Logger, (sender, e) => GenerateAndStoreHash());
-            Resources = new ResourcesCollection(configurationSettings.ResourcesConfiguration, Logger, (sender, e) => GenerateAndStoreHash());
-            RuntimePolicies = new RuntimePoliciesCollection(configurationSettings.RuntimePoliciesConfiguration, Logger, (sender, e) => GenerateAndStoreHash());
-            Tabs = new TabsCollection(configurationSettings.TabsConfiguration, Logger, (sender, e) => GenerateAndStoreHash());
-            SerializationConverters = new SerializationConvertersCollection(configurationSettings.SerializationConvertersConfiguration, Logger);
-            Metadata = new MetadataCollection(configurationSettings.MetadataConfiguration, Logger, (sender, e) => GenerateAndStoreHash());
-            TabMetadata = new TabMetadataCollection(configurationSettings.TabMetadataConfiguration, Logger, (sender, e) => GenerateAndStoreHash());
-            Displays = new DisplaysCollection(configurationSettings.DisplaysConfiguration, Logger, (sender, e) => GenerateAndStoreHash());
-            InstanceMetadata = new InstanceMetadataCollection(configurationSettings.InstanceMetadataConfiguration, Logger, (sender, e) => GenerateAndStoreHash());
+            ClientScripts = new ClientScriptsCollection(configurationSettings.ClientScriptsSettings, Logger, (sender, e) => GenerateAndStoreHash());
+            Inspectors = new InspectorsCollection(configurationSettings.InspectorsSettings, Logger, (sender, e) => GenerateAndStoreHash());
+            Resources = new ResourcesCollection(configurationSettings.ResourcesSettings, Logger, (sender, e) => GenerateAndStoreHash());
+            RuntimePolicies = new RuntimePoliciesCollection(configurationSettings.RuntimePoliciesSettings, Logger, (sender, e) => GenerateAndStoreHash());
+            Tabs = new TabsCollection(configurationSettings.TabsSettings, Logger, (sender, e) => GenerateAndStoreHash());
+            SerializationConverters = new SerializationConvertersCollection(configurationSettings.SerializationConvertersSettings, Logger);
+            Metadata = new MetadataCollection(configurationSettings.MetadataSettings, Logger, (sender, e) => GenerateAndStoreHash());
+            TabMetadata = new TabMetadataCollection(configurationSettings.TabMetadataSettings, Logger, (sender, e) => GenerateAndStoreHash());
+            Displays = new DisplaysCollection(configurationSettings.DisplaysSettings, Logger, (sender, e) => GenerateAndStoreHash());
+            InstanceMetadata = new InstanceMetadataCollection(configurationSettings.InstanceMetadataSettings, Logger, (sender, e) => GenerateAndStoreHash());
 
             var temp = new JsonNetSerializer(Logger);
             temp.RegisterSerializationConverters(SerializationConverters);

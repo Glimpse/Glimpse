@@ -7,7 +7,7 @@ namespace Glimpse.Core.Framework
     public class ClientScriptsCollection : DiscoverableCollection<IClientScript>
     {
         public ClientScriptsCollection(
-            CollectionConfiguration configuration,
+            CollectionSettings configuration,
             ILogger logger,
             EventHandler onChange = null)
             : base(configuration, logger, onChange)

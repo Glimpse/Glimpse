@@ -4,82 +4,162 @@ using Glimpse.Core.Framework;
 
 namespace Glimpse.Core
 {
+    /// <summary>
+    /// Contains all the settings necessary to create a <see cref="Configuration" />. This abstraction allows any <see cref="IConfigurationSettingsProvider" /> 
+    /// implementation to provide those settings, independing of where and how they are stored.
+    /// </summary>
     public class ConfigurationSettings
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConfigurationSettings" /> class
+        /// </summary>
+        /// <param name="resourceEndpointConfiguration">The resource endpoint configuration</param>
+        /// <param name="persistenceStore">The persistence store</param>
+        /// <param name="currentGlimpseRequestIdTracker">The current Glimpse request id tracker</param>
+        /// <param name="defaultRuntimePolicy">The default runtime policy</param>
+        /// <param name="endpointBaseUri">The endpoint base URI</param>
+        /// <param name="loggingSettings">The logging settings</param>
+        /// <param name="clientScriptsSettings">The client scripts settings</param>
+        /// <param name="inspectorsSettings">The inspectors settings</param>
+        /// <param name="resourcesSettings">The resources settings</param>
+        /// <param name="runtimePoliciesSettings">The runtime policies settings</param>
+        /// <param name="tabsSettings">The tabs settings</param>
+        /// <param name="serializationConvertersSettings">The serialization converters settings</param>
+        /// <param name="metadataSettings">The metadata settings</param>
+        /// <param name="tabMetadataSettings">The tab metadata settings</param>
+        /// <param name="displaysSettings">The displays settings</param>
+        /// <param name="instanceMetadataSettings">The instance metadata settings</param>
         public ConfigurationSettings(
             IResourceEndpointConfiguration resourceEndpointConfiguration,
             IPersistenceStore persistenceStore,
             ICurrentGlimpseRequestIdTracker currentGlimpseRequestIdTracker,
             RuntimePolicy defaultRuntimePolicy,
             string endpointBaseUri,
-            ConfigurationLoggingSettings configurationLoggingSettings,
-            CollectionConfiguration clientScriptsConfiguration,
-            CollectionConfiguration inspectorsConfiguration,
-            CollectionConfiguration resourcesConfiguration,
-            CollectionConfiguration runtimePoliciesConfiguration,
-            CollectionConfiguration tabsConfiguration,
-            CollectionConfiguration serializationConvertersConfiguration,
-            CollectionConfiguration metadataConfiguration,
-            CollectionConfiguration tabMetadataConfiguration,
-            CollectionConfiguration displaysConfiguration,
-            CollectionConfiguration instanceMetadataConfiguration)
+            LoggingSettings loggingSettings,
+            CollectionSettings clientScriptsSettings,
+            CollectionSettings inspectorsSettings,
+            CollectionSettings resourcesSettings,
+            CollectionSettings runtimePoliciesSettings,
+            CollectionSettings tabsSettings,
+            CollectionSettings serializationConvertersSettings,
+            CollectionSettings metadataSettings,
+            CollectionSettings tabMetadataSettings,
+            CollectionSettings displaysSettings,
+            CollectionSettings instanceMetadataSettings)
         {
             Guard.ArgumentNotNull("resourceEndpointConfiguration", resourceEndpointConfiguration);
             Guard.ArgumentNotNull("persistenceStore", persistenceStore);
             Guard.ArgumentNotNull("currentGlimpseRequestIdTracker", currentGlimpseRequestIdTracker);
             Guard.StringNotNullOrEmpty("endpointBaseUri", endpointBaseUri);
-            Guard.ArgumentNotNull("configurationLoggingSettings", configurationLoggingSettings);
-            Guard.ArgumentNotNull("clientScripts", clientScriptsConfiguration);
-            Guard.ArgumentNotNull("inspectorsConfiguration", inspectorsConfiguration);
-            Guard.ArgumentNotNull("resourcesConfiguration", resourcesConfiguration);
-            Guard.ArgumentNotNull("resourcesConfiguration", resourcesConfiguration);
-            Guard.ArgumentNotNull("runtimePoliciesConfiguration", runtimePoliciesConfiguration);
-            Guard.ArgumentNotNull("tabsConfiguration", tabsConfiguration);
-            Guard.ArgumentNotNull("serializationConvertersConfiguration", serializationConvertersConfiguration);
-            Guard.ArgumentNotNull("metadataConfiguration", metadataConfiguration);
-            Guard.ArgumentNotNull("tabMetadataConfiguration", tabMetadataConfiguration);
-            Guard.ArgumentNotNull("displaysConfiguration", displaysConfiguration);
-            Guard.ArgumentNotNull("instanceMetadataConfiguration", instanceMetadataConfiguration);
+            Guard.ArgumentNotNull("LoggingSettings", loggingSettings);
+            Guard.ArgumentNotNull("clientScripts", clientScriptsSettings);
+            Guard.ArgumentNotNull("inspectorsSettings", inspectorsSettings);
+            Guard.ArgumentNotNull("resourcesSettings", resourcesSettings);
+            Guard.ArgumentNotNull("resourcesSettings", resourcesSettings);
+            Guard.ArgumentNotNull("runtimePoliciesSettings", runtimePoliciesSettings);
+            Guard.ArgumentNotNull("tabsSettings", tabsSettings);
+            Guard.ArgumentNotNull("serializationConvertersSettings", serializationConvertersSettings);
+            Guard.ArgumentNotNull("metadataSettings", metadataSettings);
+            Guard.ArgumentNotNull("tabMetadataSettings", tabMetadataSettings);
+            Guard.ArgumentNotNull("displaysSettings", displaysSettings);
+            Guard.ArgumentNotNull("instanceMetadataSettings", instanceMetadataSettings);
 
             ResourceEndpointConfiguration = resourceEndpointConfiguration;
             PersistenceStore = persistenceStore;
             CurrentGlimpseRequestIdTracker = currentGlimpseRequestIdTracker;
             DefaultRuntimePolicy = defaultRuntimePolicy;
             EndpointBaseUri = endpointBaseUri;
-            Logging = configurationLoggingSettings;
-            ClientScriptsConfiguration = clientScriptsConfiguration;
-            InspectorsConfiguration = inspectorsConfiguration;
-            ResourcesConfiguration = resourcesConfiguration;
-            RuntimePoliciesConfiguration = runtimePoliciesConfiguration;
-            TabsConfiguration = tabsConfiguration;
-            SerializationConvertersConfiguration = serializationConvertersConfiguration;
-            MetadataConfiguration = metadataConfiguration;
-            TabMetadataConfiguration = tabMetadataConfiguration;
-            DisplaysConfiguration = displaysConfiguration;
-            InstanceMetadataConfiguration = instanceMetadataConfiguration;
+            LoggingSettings = loggingSettings;
+            ClientScriptsSettings = clientScriptsSettings;
+            InspectorsSettings = inspectorsSettings;
+            ResourcesSettings = resourcesSettings;
+            RuntimePoliciesSettings = runtimePoliciesSettings;
+            TabsSettings = tabsSettings;
+            SerializationConvertersSettings = serializationConvertersSettings;
+            MetadataSettings = metadataSettings;
+            TabMetadataSettings = tabMetadataSettings;
+            DisplaysSettings = displaysSettings;
+            InstanceMetadataSettings = instanceMetadataSettings;
         }
 
+        /// <summary>
+        /// Gets the resource endpoint configuration
+        /// </summary>
         public IResourceEndpointConfiguration ResourceEndpointConfiguration { get; private set; }
 
+        /// <summary>
+        /// Gets the persistence store
+        /// </summary>
         public IPersistenceStore PersistenceStore { get; private set; }
 
-        public ConfigurationLoggingSettings Logging { get; private set; }
+        /// <summary>
+        /// Gets the logging settings
+        /// </summary>
+        public LoggingSettings LoggingSettings { get; private set; }
 
+        /// <summary>
+        /// Gets the current Glimpse request id tracker
+        /// </summary>
         public ICurrentGlimpseRequestIdTracker CurrentGlimpseRequestIdTracker { get; private set; }
 
+        /// <summary>
+        /// Gets the default runtime policy
+        /// </summary>
         public RuntimePolicy DefaultRuntimePolicy { get; private set; }
 
+        /// <summary>
+        /// Gets the endpoint base URI
+        /// </summary>
         public string EndpointBaseUri { get; private set; }
 
-        public CollectionConfiguration ClientScriptsConfiguration { get; private set; }
-        public CollectionConfiguration InspectorsConfiguration { get; private set; }
-        public CollectionConfiguration ResourcesConfiguration { get; private set; }
-        public CollectionConfiguration RuntimePoliciesConfiguration { get; private set; }
-        public CollectionConfiguration TabsConfiguration { get; private set; }
-        public CollectionConfiguration SerializationConvertersConfiguration { get; private set; }
-        public CollectionConfiguration MetadataConfiguration { get; private set; }
-        public CollectionConfiguration TabMetadataConfiguration { get; private set; }
-        public CollectionConfiguration DisplaysConfiguration { get; private set; }
-        public CollectionConfiguration InstanceMetadataConfiguration { get; private set; }
+        /// <summary>
+        /// Gets the client scripts settings
+        /// </summary>
+        public CollectionSettings ClientScriptsSettings { get; private set; }
+
+        /// <summary>
+        /// Gets the inspectors settings
+        /// </summary>
+        public CollectionSettings InspectorsSettings { get; private set; }
+
+        /// <summary>
+        /// Gets the resources settings
+        /// </summary>
+        public CollectionSettings ResourcesSettings { get; private set; }
+
+        /// <summary>
+        /// Gets the runtime policies settings
+        /// </summary>
+        public CollectionSettings RuntimePoliciesSettings { get; private set; }
+
+        /// <summary>
+        /// Gets the tabs settings
+        /// </summary>
+        public CollectionSettings TabsSettings { get; private set; }
+
+        /// <summary>
+        /// Gets the serialization converters settings
+        /// </summary>
+        public CollectionSettings SerializationConvertersSettings { get; private set; }
+
+        /// <summary>
+        /// Gets the metadata settings
+        /// </summary>
+        public CollectionSettings MetadataSettings { get; private set; }
+
+        /// <summary>
+        /// Gets the tab metadata settings
+        /// </summary>
+        public CollectionSettings TabMetadataSettings { get; private set; }
+
+        /// <summary>
+        /// Gets the display settings
+        /// </summary>
+        public CollectionSettings DisplaysSettings { get; private set; }
+
+        /// <summary>
+        /// Gets the instance metadata settings
+        /// </summary>
+        public CollectionSettings InstanceMetadataSettings { get; private set; }
     }
 }

@@ -7,7 +7,7 @@ namespace Glimpse.Core.Framework
     public class RuntimePoliciesCollection : DiscoverableCollection<IRuntimePolicy>
     {
         public RuntimePoliciesCollection(
-            CollectionConfiguration configuration,
+            CollectionSettings configuration,
             ILogger logger,
             EventHandler onChange = null)
             : base(configuration, logger, onChange)

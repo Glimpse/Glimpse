@@ -4,14 +4,17 @@ using Glimpse.Core.Framework;
 
 namespace Glimpse.Core.Configuration
 {
-    public class CollectionConfiguration
+    /// <summary>
+    /// Represents the settings for a collection
+    /// </summary>
+    public class CollectionSettings
     {
         private CustomConfiguration[] CustomConfigurations { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CollectionConfiguration" /> class
+        /// Initializes a new instance of the <see cref="CollectionSettings" /> class
         /// </summary>
-        public CollectionConfiguration(
+        public CollectionSettings(
             Type[] typesToIgnore,
             CustomConfiguration[] customConfigurations,
             bool autoDiscover = false,
