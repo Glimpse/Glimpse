@@ -6,8 +6,7 @@ using Glimpse.Core.Extensibility;
 namespace Glimpse.Core.Framework
 {
     /// <summary>
-    /// Defines properties to provide access to system providers, stores, collections,
-    /// factories, etc.
+    /// Represents all the configuration required by the <see cref="IGlimpseRuntime"/> instance to execute.
     /// </summary>
     public interface IConfiguration
     {
@@ -168,6 +167,6 @@ namespace Glimpse.Core.Framework
         string Hash { get; }
 
 
-        
+
     }
 }
