@@ -7,7 +7,7 @@ namespace Glimpse.Core.Framework
     public class MetadataCollection : DiscoverableCollection<IMetadata>
     {
         public MetadataCollection(
-            CollectionConfiguration configuration,
+            CollectionSettings configuration,
             ILogger logger,
             EventHandler onChange = null)
             : base(configuration, logger, onChange)

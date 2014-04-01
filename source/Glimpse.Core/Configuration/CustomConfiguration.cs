@@ -8,7 +8,7 @@ namespace Glimpse.Core.Configuration
     public class CustomConfiguration
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="CollectionConfiguration" /> class
+        /// Initializes a new instance of the <see cref="CollectionSettings" /> class
         /// </summary>
         /// <param name="key">The custom configuration key</param>
         /// <param name="configurationContent">The actual custom configuration content</param>

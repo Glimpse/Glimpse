@@ -7,7 +7,7 @@ namespace Glimpse.Core.Framework
     public class DisplaysCollection : DiscoverableCollection<IDisplay>
     {
         public DisplaysCollection(
-            CollectionConfiguration configuration,
+            CollectionSettings configuration,
             ILogger logger,
             EventHandler onChange = null)
             : base(configuration, logger, onChange)

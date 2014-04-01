@@ -6,7 +6,7 @@ namespace Glimpse.Core.Framework
     public class SerializationConvertersCollection : DiscoverableCollection<ISerializationConverter>
     {
         public SerializationConvertersCollection(
-            CollectionConfiguration configuration, 
+            CollectionSettings configuration, 
             ILogger logger) : base(configuration, logger)
         {
         }

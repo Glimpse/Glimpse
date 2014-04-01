@@ -6,18 +6,15 @@ namespace Glimpse.Core
     /// Contains the logging settings used by Glimpse which is mostly used to diagnose problems with Glimpse itself. 
     /// Logging is off by default, but can be configured to output log statements at various levels.
     /// </summary>
-    public class ConfigurationLoggingSettings
+    public class LoggingSettings
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ConfigurationLoggingSettings" /> class
+        /// Initializes a new instance of the <see cref="LoggingSettings" /> class
         /// </summary>
         /// <param name="level">The logging level, which defaults to <c>LoggingLevel.Off</c>.</param>
         /// <param name="logLocation">The file path to the Glimpse log file, which defaults to Glimpse.log</param>
-        public ConfigurationLoggingSettings(
-            LoggingLevel level = LoggingLevel.Off,
-            string logLocation = "Glimpse.log")
+        public LoggingSettings(LoggingLevel level = LoggingLevel.Off, string logLocation = "Glimpse.log")
         {
-
             Level = level;
             LogLocation = string.IsNullOrEmpty(logLocation) ? "Glimpse.log" : logLocation;
         }

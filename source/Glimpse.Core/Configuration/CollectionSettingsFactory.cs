@@ -5,38 +5,43 @@ using Glimpse.Core.Framework;
 
 namespace Glimpse.Core.Configuration
 {
-    public class CollectionConfigurationFactory
+    /// <summary>
+    /// Factory of <see cref="CollectionSettings" /> instances
+    /// </summary>
+    public class CollectionSettingsFactory
     {
-        private XmlElement XmlConfiguration { get; set; }
-
         private string DefaultDiscoveryLocation { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CollectionConfigurationFactory" /> class
+        /// Initializes a new instance of the <see cref="CollectionSettingsFactory" /> class
         /// </summary>
-        /// <param name="xmlConfiguration">The xml configuration.</param>
         /// <param name="defaultDiscoveryLocation">The default discovery location to use if the configuration has none specified.</param>
-        public CollectionConfigurationFactory(XmlElement xmlConfiguration, string defaultDiscoveryLocation)
+        public CollectionSettingsFactory(string defaultDiscoveryLocation)
         {
-            Guard.ArgumentNotNull("xmlConfiguration", xmlConfiguration);
-            XmlConfiguration = xmlConfiguration;
             DefaultDiscoveryLocation = defaultDiscoveryLocation;
         }
 
-        public CollectionConfiguration Create()
+        /// <summary>
+        /// Creates a <see cref="CollectionSettings" /> based on the given <paramref name="xmlConfiguration" />
+        /// </summary>
+        /// <param name="xmlConfiguration">The xml configuration.</param>
+        /// <returns>The <see cref="CollectionSettings" /> based on the given <paramref name="xmlConfiguration"/></returns>
+        public CollectionSettings Create(XmlElement xmlConfiguration)
         {
+            Guard.ArgumentNotNull("xmlConfiguration", xmlConfiguration);
+
             bool autoDiscover = true;
             string discoveryLocation = null;
             List<Type> typesToIgnore = new List<Type>();
             List<CustomConfiguration> customConfigurations = new List<CustomConfiguration>();
 
-            var autoDiscoverAttribute = XmlConfiguration.Attributes["autoDiscover"];
+            var autoDiscoverAttribute = xmlConfiguration.Attributes["autoDiscover"];
             if (autoDiscoverAttribute != null)
             {
                 autoDiscover = bool.Parse(autoDiscoverAttribute.Value);
             }
 
-            var discoveryLocationAttribute = XmlConfiguration.Attributes["discoveryLocation"];
+            var discoveryLocationAttribute = xmlConfiguration.Attributes["discoveryLocation"];
             if (discoveryLocationAttribute != null)
             {
                 discoveryLocation = discoveryLocationAttribute.Value;
@@ -48,7 +53,7 @@ namespace Glimpse.Core.Configuration
                 discoveryLocation = DefaultDiscoveryLocation;
             }
 
-            foreach (XmlNode element in XmlConfiguration.ChildNodes)
+            foreach (XmlNode element in xmlConfiguration.ChildNodes)
             {
                 if (element == null)
                 {
@@ -91,7 +96,7 @@ namespace Glimpse.Core.Configuration
                 }
             }
 
-            return new CollectionConfiguration(
+            return new CollectionSettings(
                 typesToIgnore.ToArray(),
                 customConfigurations.ToArray(),
                 autoDiscover,

@@ -7,7 +7,7 @@ namespace Glimpse.Core.Framework
     public class InspectorsCollection : DiscoverableCollection<IInspector>
     {
         public InspectorsCollection(
-            CollectionConfiguration configuration,
+            CollectionSettings configuration,
             ILogger logger,
             EventHandler onChange = null)
             : base(configuration, logger, onChange)

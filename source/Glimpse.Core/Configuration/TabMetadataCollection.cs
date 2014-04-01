@@ -7,7 +7,7 @@ namespace Glimpse.Core.Framework
     public class TabMetadataCollection : DiscoverableCollection<ITabMetadata>
     {
         public TabMetadataCollection(
-            CollectionConfiguration configuration,
+            CollectionSettings configuration,
             ILogger logger,
             EventHandler onChange = null)
             : base(configuration, logger, onChange)

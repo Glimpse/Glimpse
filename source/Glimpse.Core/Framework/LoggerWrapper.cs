@@ -73,7 +73,7 @@ namespace Glimpse.Core.Framework
             };
 
             var asyncTarget = new AsyncTargetWrapper(fileTarget);
-            var loggingConfiguration = new LoggingConfiguration();
+            var loggingConfiguration = new NLog.Config.LoggingConfiguration();
             loggingConfiguration.AddTarget("file", asyncTarget);
             loggingConfiguration.LoggingRules.Add(new LoggingRule("*", LogLevel.FromOrdinal((int)logLevel), asyncTarget));
 
