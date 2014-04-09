@@ -67,6 +67,7 @@ Glimpse follows a loose set of coding conventions. Chiefly among them:
 
 ## Additional Resources
 
+* [Project Governance Model](http://getglimpse.com/Docs/Governance-Model)
 * [General GitHub documentation](http://help.github.com/)
 * [GitHub pull request documentation](http://help.github.com/send-pull-requests/)
 * [Nightly NuGet Feed](http://www.myget.org/F/glimpsenightly/)
