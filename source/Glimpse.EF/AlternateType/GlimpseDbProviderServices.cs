@@ -29,7 +29,7 @@ namespace Glimpse.EF.AlternateType
             InnerProviderServices = innerProviderServices;
 
 #if (EF5 && NET45) || EF6
-            setParameterValueMethod = InnerProviderServices.GetType().GetMethod("SetParameterValue", BindingFlags.NonPublic | BindingFlags.Instance);
+            setParameterValueMethod = InnerProviderServices.GetType().GetMethod("SetParameterValue", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
 #endif
         }
 
