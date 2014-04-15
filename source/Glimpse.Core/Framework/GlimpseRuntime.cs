@@ -150,13 +150,14 @@ namespace Glimpse.Core.Framework
 
             glimpseRequestContext.CurrentRuntimePolicy = runtimePolicy;
 
+            var glimpseRequestContextHandle = ActiveGlimpseRequestContexts.Add(glimpseRequestContext);
+
             try
             {
                 glimpseRequestContext.StartTiming();
 
                 // When we are dealing with a resource request, there is no need to further 
                 // continue setting up the request.
-            var glimpseRequestContextHandle = ActiveGlimpseRequestContexts.Add(glimpseRequestContext);
                 if (glimpseRequestContextHandle.RequestHandlingMode == RequestHandlingMode.ResourceRequest)
                 {
                     return glimpseRequestContextHandle;
