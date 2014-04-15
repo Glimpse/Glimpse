@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Linq; 
@@ -10,6 +11,8 @@ namespace Glimpse.Ado.Inspector.Core
 {
     public class DbProviderFactoriesExecutionTask : IExecutionTask
     {
+        public readonly static Dictionary<string, string> Factories = new Dictionary<string, string>(); 
+
         public DbProviderFactoriesExecutionTask(ILogger logger)
         {
             Logger = logger;
@@ -57,6 +60,8 @@ namespace Glimpse.Ado.Inspector.Core
                 }
 
                 var proxyType = typeof(GlimpseDbProviderFactory<>).MakeGenericType(factory.GetType());
+
+                Factories.Add(row["InvariantName"].ToString(), row["AssemblyQualifiedName"].ToString());
 
                 var newRow = table.NewRow();
                 newRow["Name"] = row["Name"];

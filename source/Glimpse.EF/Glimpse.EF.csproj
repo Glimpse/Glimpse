@@ -60,6 +60,7 @@
     <Compile Include="Inspector\Core\DbConfigurationExecutionTask.cs" />
     <Compile Include="Inspector\Core\DbConnectionFactoriesExecutionTask.cs" />
     <Compile Include="Inspector\Core\EntityFrameworkExecutionBlock.cs" />
+    <Compile Include="AlternateType\InvariantNameResolver.cs" />
     <Compile Include="Inspector\EntityFrameworkInspector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.Designer.cs">
