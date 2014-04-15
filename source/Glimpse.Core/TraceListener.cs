@@ -80,9 +80,7 @@ namespace Glimpse.Core
                         {
                             var currentRequestContext = GlimpseRuntime.Instance.CurrentRequestContext;
 
-                            return currentRequestContext.CurrentRuntimePolicy != RuntimePolicy.Off
-                                ? currentRequestContext.CurrentExecutionTimer
-                                : null;
+                            return currentRequestContext.CurrentRuntimePolicy != RuntimePolicy.Off ? currentRequestContext.CurrentExecutionTimer : null;
                         };
                     }
                 }
