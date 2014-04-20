@@ -24,19 +24,7 @@ namespace Glimpse.EF.AlternateType
                         if (registeredFactories == null)
                         {
                             registeredFactories = DbProviderFactoriesExecutionTask.Factories
-                                .ToDictionary(
-                                    x =>
-                                    {
-                                        var type = x.Value;
-                                        if (!string.IsNullOrEmpty(type))
-                                        {
-                                            var typeIndex = type.IndexOf(',');
-                                            type = type.Substring(0, typeIndex < 0 ? type.Length : typeIndex);
-                                        }
-
-                                        return type;
-                                    },
-                                    x => x.Key);
+                                .ToDictionary(x => x.Value, x => x.Key);
                         }
                     }
                 }
@@ -49,7 +37,7 @@ namespace Glimpse.EF.AlternateType
         {
             if (type == typeof(IProviderInvariantName))
             { 
-                var factoryType = key.GetType().FullName;
+                var factoryType = key.GetType().AssemblyQualifiedName;
 
                 var factoryName = (string)null;
                 if (RegisteredFactories.TryGetValue(factoryType, out factoryName))
