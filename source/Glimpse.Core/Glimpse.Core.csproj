@@ -74,7 +74,7 @@
     <Compile Include="ClientScript\Data.cs" />
     <Compile Include="ClientScript\Metadata.cs" />
     <Compile Include="LoggingSettings.cs" />
-    <Compile Include="ConfigurationSettings.cs" />
+    <Compile Include="Configuration\ConfigurationSettings.cs" />
     <Compile Include="Configuration\ConfigurationSettingsXmlProvider.cs" />
     <Compile Include="Configuration\IConfigurationSettingsProvider.cs" />
     <Compile Include="Configuration\InstanceMetadataCollection.cs" />
@@ -133,7 +133,7 @@
     <Compile Include="Framework\BaseProvider.cs" />
     <Compile Include="Framework\CallContextCurrentGlimpseRequestIdTracker.cs" />
     <Compile Include="Configuration\ClientScriptsCollection.cs" />
-    <Compile Include="Framework\ConfigurationFactory.cs" />
+    <Compile Include="Configuration\ConfigurationFactory.cs" />
     <Compile Include="Framework\Crc32.cs" />
     <Compile Include="Framework\DisplayProvider.cs" />
     <Compile Include="Framework\GlimpseRuntimeNotAvailableException.cs" />
@@ -145,7 +145,7 @@
     <Compile Include="Framework\IGlimpseRequestContext.cs" />
     <Compile Include="Framework\GlimpseRequestContext.cs" />
     <Compile Include="Framework\GlimpseScriptTagsGenerator.cs" />
-    <Compile Include="Framework\IResourceEndpointConfiguration.cs" />
+    <Compile Include="Configuration\IResourceEndpointConfiguration.cs" />
     <Compile Include="Configuration\ReflectionBasedTypeDiscoverer.cs" />
     <Compile Include="Framework\LoggerWrapper.cs" />
     <Compile Include="Framework\RuntimePolicyDeterminator.cs" />
@@ -249,14 +249,14 @@
     <Compile Include="Framework\GlimpseRequest.cs" />
     <Compile Include="Framework\GlimpseRequestHeaders.cs" />
     <Compile Include="Framework\IDiscoverableCollection.cs" />
-    <Compile Include="Framework\IConfiguration.cs" />
+    <Compile Include="Configuration\IConfiguration.cs" />
     <Compile Include="Framework\IGlimpseRuntime.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Framework\IPersistenceStore.cs" />
     <Compile Include="Framework\IReadOnlyPersistenceStore.cs" />
     <Compile Include="Framework\IServiceLocator.cs" />
     <Compile Include="Configuration\DiscoverableCollection.cs" />
-    <Compile Include="Framework\ResourceEndpointConfiguration.cs" />
+    <Compile Include="Configuration\ResourceEndpointConfiguration.cs" />
     <Compile Include="Framework\ResourceParameters.cs" />
     <Compile Include="Extensibility\SubscriberOfT.cs" />
     <Compile Include="Framework\TabResult.cs" />
@@ -271,7 +271,7 @@
     <Compile Include="Extensibility\ISerializer.cs" />
     <Compile Include="Extensibility\ITabContext.cs" />
     <Compile Include="Framework\IRequestResponseAdapter.cs" />
-    <Compile Include="Framework\Configuration.cs" />
+    <Compile Include="Configuration\Configuration.cs" />
     <Compile Include="Framework\GlimpseRuntime.cs" />
     <Compile Include="Message\IMessage.cs" />
     <Compile Include="Message\ITimedMessage.cs" />

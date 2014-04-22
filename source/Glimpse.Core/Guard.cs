@@ -10,9 +10,9 @@ namespace Glimpse.Core
         /// <summary>
         /// Guards against null values
         /// </summary>
-        /// <param name="argumentName">The name of the argument used when throwing a <see cref="ArgumentNullException"/></param>
         /// <param name="argumentValue">The argument to check against <code>null</code></param>
-        public static void ArgumentNotNull(string argumentName, object argumentValue)
+        /// <param name="argumentName">The name of the argument used when throwing a <see cref="ArgumentNullException"/></param>
+        public static void ArgumentNotNull(object argumentValue, string argumentName)
         {
             if (argumentValue == null)
             {
@@ -23,9 +23,9 @@ namespace Glimpse.Core
         /// <summary>
         /// Guards against null or empty values
         /// </summary>
-        /// <param name="argumentName">The name of the argument used when throwing a <see cref="ArgumentNullException"/></param>
         /// <param name="argumentValue">The argument to check against <code>null</code> or an empty string</param>
-        public static void StringNotNullOrEmpty(string argumentName, string argumentValue)
+        /// <param name="argumentName">The name of the argument used when throwing a <see cref="ArgumentNullException"/></param>
+        public static void StringNotNullOrEmpty(string argumentValue, string argumentName)
         {
             if (string.IsNullOrEmpty(argumentValue))
             {

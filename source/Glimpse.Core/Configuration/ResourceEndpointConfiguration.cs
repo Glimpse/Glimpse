@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Glimpse.Core.Extensibility;
 
-namespace Glimpse.Core.Framework
+namespace Glimpse.Core.Configuration
 {
     /// <summary>
     /// Defines methods to implement a resource endpoint configuration.

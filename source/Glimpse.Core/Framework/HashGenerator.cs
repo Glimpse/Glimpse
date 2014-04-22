@@ -16,7 +16,7 @@ namespace Glimpse.Core.Framework
         /// <returns>The resulting hash</returns>
         public static string Generate(object instance)
         {
-            Guard.ArgumentNotNull("instance", instance);
+            Guard.ArgumentNotNull(instance, "instance");
 
             var crc32 = new Crc32();
             var hashContent = new StringBuilder();

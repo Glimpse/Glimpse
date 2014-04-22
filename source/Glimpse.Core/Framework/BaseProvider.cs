@@ -1,4 +1,6 @@
-﻿namespace Glimpse.Core.Framework
+﻿using Glimpse.Core.Configuration;
+
+namespace Glimpse.Core.Framework
 {
     internal class BaseProvider
     {

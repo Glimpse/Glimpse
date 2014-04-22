@@ -1,5 +1,5 @@
 using System;
-using Glimpse.Core.Framework;
+using Glimpse.Core.Configuration;
 using Glimpse.Core.Policy;
 using Moq;
 

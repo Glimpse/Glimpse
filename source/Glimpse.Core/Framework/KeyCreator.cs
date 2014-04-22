@@ -14,7 +14,7 @@ namespace Glimpse.Core.Framework
         /// <returns>The key</returns>
         public static string Create(object obj)
         {
-            Guard.ArgumentNotNull("obj", obj);
+            Guard.ArgumentNotNull(obj, "obj");
 
             var keyProvider = obj as IKey;
 

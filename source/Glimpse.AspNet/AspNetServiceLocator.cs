@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Glimpse.Core.Configuration;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
 using System.Web;

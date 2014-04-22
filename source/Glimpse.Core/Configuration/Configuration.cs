@@ -2,18 +2,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Glimpse.Core.Configuration;
 using Glimpse.Core.Extensibility;
+using Glimpse.Core.Framework;
 using Glimpse.Core.Resource;
 
-namespace Glimpse.Core.Framework
+namespace Glimpse.Core.Configuration
 {
     /// <summary>
     /// Contains all the configuration required by the <see cref="IGlimpseRuntime"/> instance to execute.
     /// </summary>
     internal class Configuration : IConfiguration
     {
-        private readonly LoggerWrapper LoggerWrapper;
+        private readonly LoggerWrapper loggerWrapper;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Configuration" /> class
@@ -21,7 +21,7 @@ namespace Glimpse.Core.Framework
         /// <param name="configurationSettings">The configuration settings</param>
         public Configuration(ConfigurationSettings configurationSettings)
         {
-            Guard.ArgumentNotNull("configurationSettings", configurationSettings);
+            Guard.ArgumentNotNull(configurationSettings, "configurationSettings");
 
             ResourceEndpoint = configurationSettings.ResourceEndpointConfiguration;
             PersistenceStore = configurationSettings.PersistenceStore;
@@ -30,7 +30,7 @@ namespace Glimpse.Core.Framework
             EndpointBaseUri = configurationSettings.EndpointBaseUri;
 
             Version = Assembly.GetExecutingAssembly().GetName().Version.ToString(3);
-            LoggerWrapper = new LoggerWrapper(configurationSettings.LoggingSettings.Level, configurationSettings.LoggingSettings.LogLocation);
+            loggerWrapper = new LoggerWrapper(configurationSettings.LoggingSettings.Level, configurationSettings.LoggingSettings.LogLocation);
 
             DefaultResource = new ConfigurationResource();
             HtmlEncoder = new AntiXssEncoder();
@@ -178,7 +178,10 @@ namespace Glimpse.Core.Framework
         /// to <see cref="LoggingLevel.Off"/> or with a <see cref="NLog.Logger" /> (leveraging the <see href="http://nlog-project.org/">NLog</see> project)
         /// for all other log levels. The configured logger can be replaced with a call to <see cref="ReplaceLogger"/>.
         /// </returns>
-        public ILogger Logger { get { return LoggerWrapper; } }
+        public ILogger Logger
+        {
+            get { return loggerWrapper; }
+        }
 
         /// <summary>
         /// Replaces the current configured logger with the <paramref name="logger" /> specified.
@@ -188,7 +191,7 @@ namespace Glimpse.Core.Framework
         /// <returns>This configuration</returns>
         public IConfiguration ReplaceLogger(ILogger logger)
         {
-            LoggerWrapper.SwitchLogger(logger);
+            loggerWrapper.SwitchLogger(logger);
             return this;
         }
 
@@ -207,8 +210,6 @@ namespace Glimpse.Core.Framework
             MessageBroker = messageBroker;
             return this;
         }
-
-
 
         /// <summary>
         /// Gets or sets the collection of <see cref="IInspector"/>.
@@ -235,8 +236,6 @@ namespace Glimpse.Core.Framework
             ProxyFactory = proxyFactory;
             return this;
         }
-
-
 
         /// <summary>
         /// Gets or sets the collection of <see cref="IResource"/>.

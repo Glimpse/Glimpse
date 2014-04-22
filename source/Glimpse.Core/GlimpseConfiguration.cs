@@ -1,11 +1,11 @@
 ﻿using System;
-using Glimpse.Core.Framework;
+using Glimpse.Core.Configuration;
 
 namespace Glimpse.Core
 {
     public static class GlimpseConfiguration
     {
-        private static Action<IConfiguration> @override = delegate{};
+        private static Action<IConfiguration> @override = delegate { };
 
         public static Action<IConfiguration> Override
         {

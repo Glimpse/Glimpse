@@ -1,5 +1,6 @@
 using System.Web;
 using Glimpse.AspNet;
+using Glimpse.Core.Configuration;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
 using Moq;

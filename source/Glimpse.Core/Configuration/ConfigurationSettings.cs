@@ -1,12 +1,11 @@
-﻿using Glimpse.Core.Configuration;
-using Glimpse.Core.Extensibility;
+﻿using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
 
-namespace Glimpse.Core
+namespace Glimpse.Core.Configuration
 {
     /// <summary>
     /// Contains all the settings necessary to create a <see cref="Configuration" />. This abstraction allows any <see cref="IConfigurationSettingsProvider" /> 
-    /// implementation to provide those settings, independing of where and how they are stored.
+    /// implementation to provide those settings, independent of where and how they are stored.
     /// </summary>
     public class ConfigurationSettings
     {
@@ -47,22 +46,22 @@ namespace Glimpse.Core
             CollectionSettings displaysCollectionSettings,
             CollectionSettings instanceMetadataCollectionSettings)
         {
-            Guard.ArgumentNotNull("resourceEndpointConfiguration", resourceEndpointConfiguration);
-            Guard.ArgumentNotNull("persistenceStore", persistenceStore);
-            Guard.ArgumentNotNull("currentGlimpseRequestIdTracker", currentGlimpseRequestIdTracker);
-            Guard.StringNotNullOrEmpty("endpointBaseUri", endpointBaseUri);
-            Guard.ArgumentNotNull("LoggingSettings", loggingSettings);
-            Guard.ArgumentNotNull("clientScriptsCollectionSettings", clientScriptsCollectionSettings);
-            Guard.ArgumentNotNull("inspectorsCollectionSettings", inspectorsCollectionSettings);
-            Guard.ArgumentNotNull("resourcesCollectionSettings", resourcesCollectionSettings);
-            Guard.ArgumentNotNull("resourcesCollectionSettings", resourcesCollectionSettings);
-            Guard.ArgumentNotNull("runtimePoliciesCollectionSettings", runtimePoliciesCollectionSettings);
-            Guard.ArgumentNotNull("tabsCollectionSettings", tabsCollectionSettings);
-            Guard.ArgumentNotNull("serializationConvertersCollectionSettings", serializationConvertersCollectionSettings);
-            Guard.ArgumentNotNull("metadataCollectionSettings", metadataCollectionSettings);
-            Guard.ArgumentNotNull("tabMetadataCollectionSettings", tabMetadataCollectionSettings);
-            Guard.ArgumentNotNull("displaysCollectionSettings", displaysCollectionSettings);
-            Guard.ArgumentNotNull("instanceMetadataCollectionSettings", instanceMetadataCollectionSettings);
+            Guard.ArgumentNotNull(resourceEndpointConfiguration, "resourceEndpointConfiguration");
+            Guard.ArgumentNotNull(persistenceStore, "persistenceStore");
+            Guard.ArgumentNotNull(currentGlimpseRequestIdTracker, "currentGlimpseRequestIdTracker");
+            Guard.StringNotNullOrEmpty(endpointBaseUri, "endpointBaseUri");
+            Guard.ArgumentNotNull(loggingSettings, "LoggingSettings");
+            Guard.ArgumentNotNull(clientScriptsCollectionSettings, "clientScriptsCollectionSettings");
+            Guard.ArgumentNotNull(inspectorsCollectionSettings, "inspectorsCollectionSettings");
+            Guard.ArgumentNotNull(resourcesCollectionSettings, "resourcesCollectionSettings");
+            Guard.ArgumentNotNull(resourcesCollectionSettings, "resourcesCollectionSettings");
+            Guard.ArgumentNotNull(runtimePoliciesCollectionSettings, "runtimePoliciesCollectionSettings");
+            Guard.ArgumentNotNull(tabsCollectionSettings, "tabsCollectionSettings");
+            Guard.ArgumentNotNull(serializationConvertersCollectionSettings, "serializationConvertersCollectionSettings");
+            Guard.ArgumentNotNull(metadataCollectionSettings, "metadataCollectionSettings");
+            Guard.ArgumentNotNull(tabMetadataCollectionSettings, "tabMetadataCollectionSettings");
+            Guard.ArgumentNotNull(displaysCollectionSettings, "displaysCollectionSettings");
+            Guard.ArgumentNotNull(instanceMetadataCollectionSettings, "instanceMetadataCollectionSettings");
 
             ResourceEndpointConfiguration = resourceEndpointConfiguration;
             PersistenceStore = persistenceStore;

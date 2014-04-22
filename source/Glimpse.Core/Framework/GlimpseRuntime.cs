@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Reflection;
+using Glimpse.Core.Configuration;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
 using Glimpse.Core.Message;
@@ -93,12 +94,12 @@ namespace Glimpse.Core.Framework
             TabProvider tabProvider,
             DisplayProvider displayProvider)
         {
-            Guard.ArgumentNotNull("configuration", configuration);
-            Guard.ArgumentNotNull("activeGlimpseRequestContexts", activeGlimpseRequestContexts);
-            Guard.ArgumentNotNull("runtimePolicyDeterminator", runtimePolicyDeterminator);
-            Guard.ArgumentNotNull("metadataProvider", metadataProvider);
-            Guard.ArgumentNotNull("tabProvider", tabProvider);
-            Guard.ArgumentNotNull("displayProvider", displayProvider);
+            Guard.ArgumentNotNull(configuration, "configuration");
+            Guard.ArgumentNotNull(activeGlimpseRequestContexts, "activeGlimpseRequestContexts");
+            Guard.ArgumentNotNull(runtimePolicyDeterminator, "runtimePolicyDeterminator");
+            Guard.ArgumentNotNull(metadataProvider, "metadataProvider");
+            Guard.ArgumentNotNull(tabProvider, "tabProvider");
+            Guard.ArgumentNotNull(displayProvider, "displayProvider");
 
             Configuration = configuration;
             ActiveGlimpseRequestContexts = activeGlimpseRequestContexts;

@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Glimpse.Core.Configuration;
 using Glimpse.Core.Extensibility;
+using Glimpse.Core.Framework;
 
-namespace Glimpse.Core.Framework
+namespace Glimpse.Core.Configuration
 {
     /// <summary>
     /// Represents all the configuration required by the <see cref="IGlimpseRuntime"/> instance to execute.
@@ -165,8 +165,5 @@ namespace Glimpse.Core.Framework
         /// </summary>
         /// <value>The hash.</value>
         string Hash { get; }
-
-
-
     }
 }

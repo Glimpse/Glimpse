@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Glimpse.Core.Configuration;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Resource;
 
@@ -30,7 +31,7 @@ namespace Glimpse.Core.ClientScript
         /// Name of the <see cref="IResource" /> to link to.
         /// </returns>
         /// <remarks>
-        ///   <see cref="IResource" /> Uri generation is handled by implementations of <see cref="Glimpse.Core.Framework.ResourceEndpointConfiguration" />.
+        ///   <see cref="IResource" /> Uri generation is handled by implementations of <see cref="ResourceEndpointConfiguration" />.
         /// </remarks>
         public string GetResourceName()
         {

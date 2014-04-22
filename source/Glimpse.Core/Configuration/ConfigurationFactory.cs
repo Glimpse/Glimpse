@@ -1,7 +1,7 @@
 ﻿using System.Configuration;
-using Glimpse.Core.Configuration;
+using Glimpse.Core.Framework;
 
-namespace Glimpse.Core.Framework
+namespace Glimpse.Core.Configuration
 {
     /// <summary>
     /// Factory for <see cref="IConfiguration" /> instances
@@ -20,7 +20,7 @@ namespace Glimpse.Core.Framework
             IPersistenceStore persistenceStore,
             ICurrentGlimpseRequestIdTracker currentGlimpseRequestIdTracker = null)
         {
-            return Create(resourceEndpointConfiguration, persistenceStore, "glimpse", currentGlimpseRequestIdTracker);
+            return Create(resourceEndpointConfiguration, persistenceStore, ConfigurationManager.GetSection("glimpse") as Section, currentGlimpseRequestIdTracker);
         }
 
         /// <summary>

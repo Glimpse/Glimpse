@@ -1,7 +1,6 @@
-﻿using Glimpse.Core.Configuration;
-using Glimpse.Core.Extensibility;
+﻿using Glimpse.Core.Extensibility;
 
-namespace Glimpse.Core.Framework
+namespace Glimpse.Core.Configuration
 {
     /// <summary>
     /// Represents a collection of <see cref="ISerializationConverter"/>

@@ -1,5 +1,5 @@
-﻿using Glimpse.Core.Extensibility;
-using Glimpse.Core.Framework;
+﻿using Glimpse.Core.Configuration;
+using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Core.Metadata
 {

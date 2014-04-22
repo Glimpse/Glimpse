@@ -49,7 +49,7 @@ namespace Glimpse.Core.Framework
             /// <param name="configuration">The configuration used to initialize the Glimpse runtime</param>
             public void Initialize(IConfiguration configuration)
             {
-                Guard.ArgumentNotNull("configuration", configuration);
+                Guard.ArgumentNotNull(configuration, "configuration");
 
                 lock (initializationLock)
                 {
