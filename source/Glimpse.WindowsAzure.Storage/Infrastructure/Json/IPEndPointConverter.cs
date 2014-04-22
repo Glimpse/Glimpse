@@ -5,11 +5,11 @@ using Newtonsoft.Json.Linq;
 
 namespace Glimpse.WindowsAzure.Storage.Infrastructure.Json
 {
-    class IPEndPointConverter : JsonConverter
+    internal class IPEndPointConverter : JsonConverter
     {
         public override bool CanConvert(Type objectType)
         {
-            return (objectType == typeof(IPEndPoint));
+            return objectType == typeof(IPEndPoint);
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)

@@ -19,6 +19,6 @@ using Glimpse.Core.Extensibility;
 [assembly: AssemblyFileVersion("1.8.0")]
 [assembly: AssemblyInformationalVersion("1.8.0")] // Used to specify the NuGet version number at build time
 
-[assembly: CLSCompliant(true)]
+[assembly: CLSCompliant(false)]
 [assembly: InternalsVisibleTo("Glimpse.Test.WindowsAzure")]
 [assembly: NuGetPackage("Glimpse.WindowsAzure")]

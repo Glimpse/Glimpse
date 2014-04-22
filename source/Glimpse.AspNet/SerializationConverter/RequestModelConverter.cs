@@ -70,6 +70,7 @@ namespace Glimpse.AspNet.SerializationConverter
             {
                 return null;
             }
+
             return filesList;
         }
 
@@ -80,6 +81,7 @@ namespace Glimpse.AspNet.SerializationConverter
             {
                 return null;
             }
+
             return formVariablesList;
         }
 
@@ -91,6 +93,7 @@ namespace Glimpse.AspNet.SerializationConverter
             {
                 return null;
             }
+
             return headerFieldsList.Where(h => h.Key.ToLower() != "cookie");
         }
 

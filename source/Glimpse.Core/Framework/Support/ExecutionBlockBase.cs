@@ -4,7 +4,7 @@ using Glimpse.Core.Extensibility;
 namespace Glimpse.Core.Framework.Support
 {
     /// <summary>
-    /// Base class which encapulates the logic to ensure that 
+    /// Base class which encapsulates the logic to ensure that 
     /// a given block of code is only executed once.
     /// </summary>
     public abstract class ExecutionBlockBase

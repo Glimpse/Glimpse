@@ -15,8 +15,7 @@
         <summary>ASP.NET 4.5 web debugging and diagnostics tool.</summary>
         <releaseNotes>
 Featherweight release for Core:
- - Fix up edge case where UI would not be resizable 
- - Extending the ContentTypeElement to include optional RuntimePolicy
+ - Fix where Clients that have a name with quotes in it blows up
         </releaseNotes>
         <tags>ASP.NET Web WebForms Glimpse diagnostics performance profiling timing</tags>
     </metadata>

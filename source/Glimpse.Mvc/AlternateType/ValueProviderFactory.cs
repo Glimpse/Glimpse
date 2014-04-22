@@ -110,6 +110,7 @@ namespace Glimpse.Mvc.AlternateType
         private class UnvalidatedEnumerableValueProvider : IUnvalidatedEnumerableValueProvider
         {
             private IUnvalidatedValueProvider ValueProviderAsUnvalidatedValueProvider { get; set; }
+
             private IEnumerableValueProvider ValueProviderAsEnumerableValueProvider { get; set; }
 
             public UnvalidatedEnumerableValueProvider(object valueProvider)

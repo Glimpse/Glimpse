@@ -13,42 +13,47 @@ namespace Glimpse.Ado.Tab
     {
         private static readonly object Layout =
             TabLayout.Create()
-                .Cell("SQL Statistics", TabLayout.Create().Row(r => 
-                {
-                    r.Cell("connectionCount").WidthInPixels(150).WithTitle("# Connections");
-                    r.Cell("queryCount").WidthInPixels(150).WithTitle("# Queries");
-                    r.Cell("transactionCount").WidthInPixels(150).WithTitle("# Transactions");
-                    r.Cell("queryExecutionTime").WidthInPixels(250).Suffix(" ms").Class("mono").WithTitle("Total query execution time");
-                    r.Cell("connectionOpenTime").Suffix(" ms").Class("mono").WithTitle("Total connection open time");
-                }))
-                .Cell("Queries", TabLayout.Create().Row(r => {
-                    r.Cell(0).DisablePreview().SetLayout(TabLayout.Create().Row(x =>
-                            x.Cell(0).SpanColumns(7).DisablePreview().AsMinimalDisplay().SetLayout(TabLayout.Create().Row(y =>
-                            {
-                                y.Cell(0).WidthInPixels(165);
-                                y.Cell(1);
-                            }))).Row(x =>
-                            {
-                                x.Cell(1).WidthInPixels(55);
-                                x.Cell(2).AsCode(CodeType.Sql).DisablePreview();
-                                x.Cell(3).WidthInPercent(25).DisablePreview();
-                                x.Cell(4).WidthInPixels(60);
-                                x.Cell(5).WidthInPixels(85).Suffix(" ms").Class("mono");
-                                x.Cell(6).WidthInPixels(95).Prefix("T+ ").Suffix(" ms").Class("mono");
-                                x.Cell(7).WidthInPixels(45);
-                            }).Row(x =>
-                            x.Cell(9).SpanColumns(7).DisablePreview().AsMinimalDisplay().SetLayout(TabLayout.Create().Row(y =>
-                            {
-                                y.Cell(0).WidthInPercent(20);
-                                y.Cell(1).Class("mono").DisablePreview();
-                            }))).Row(x =>
-                            x.Cell(8).SpanColumns(7).DisablePreview().AsMinimalDisplay().SetLayout(TabLayout.Create().Row(y =>
-                            {
-                                y.Cell(0).WidthInPixels(165);
-                                y.Cell(1);
-                            }))));
-                    r.Cell(1).WidthInPixels(75).Suffix(" ms").Class("mono");
-                }))
+                .Cell(
+                    "SQL Statistics", 
+                    TabLayout.Create().Row(r => 
+                    {
+                        r.Cell("connectionCount").WidthInPixels(150).WithTitle("# Connections");
+                        r.Cell("queryCount").WidthInPixels(150).WithTitle("# Queries");
+                        r.Cell("transactionCount").WidthInPixels(150).WithTitle("# Transactions");
+                        r.Cell("queryExecutionTime").WidthInPixels(250).Suffix(" ms").Class("mono").WithTitle("Total query execution time");
+                        r.Cell("connectionOpenTime").Suffix(" ms").Class("mono").WithTitle("Total connection open time");
+                    }))
+                .Cell(
+                    "Queries", 
+                    TabLayout.Create().Row(r => 
+                    {
+                        r.Cell(0).DisablePreview().SetLayout(TabLayout.Create().Row(x =>
+                                x.Cell(0).SpanColumns(7).DisablePreview().AsMinimalDisplay().SetLayout(TabLayout.Create().Row(y =>
+                                {
+                                    y.Cell(0).WidthInPixels(165);
+                                    y.Cell(1);
+                                }))).Row(x =>
+                                {
+                                    x.Cell(1).WidthInPixels(55);
+                                    x.Cell(2).AsCode(CodeType.Sql).DisablePreview();
+                                    x.Cell(3).WidthInPercent(25).DisablePreview();
+                                    x.Cell(4).WidthInPixels(60);
+                                    x.Cell(5).WidthInPixels(85).Suffix(" ms").Class("mono");
+                                    x.Cell(6).WidthInPixels(95).Prefix("T+ ").Suffix(" ms").Class("mono");
+                                    x.Cell(7).WidthInPixels(45);
+                                }).Row(x =>
+                                x.Cell(9).SpanColumns(7).DisablePreview().AsMinimalDisplay().SetLayout(TabLayout.Create().Row(y =>
+                                {
+                                    y.Cell(0).WidthInPercent(20);
+                                    y.Cell(1).Class("mono").DisablePreview();
+                                }))).Row(x =>
+                                x.Cell(8).SpanColumns(7).DisablePreview().AsMinimalDisplay().SetLayout(TabLayout.Create().Row(y =>
+                                {
+                                    y.Cell(0).WidthInPixels(165);
+                                    y.Cell(1);
+                                }))));
+                        r.Cell(1).WidthInPixels(75).Suffix(" ms").Class("mono");
+                    }))
                 .Build();
 
         public override string Name

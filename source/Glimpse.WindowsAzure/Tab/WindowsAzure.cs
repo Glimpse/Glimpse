@@ -3,7 +3,6 @@ using Glimpse.WindowsAzure.Infrastructure;
 
 namespace Glimpse.WindowsAzure.Tab
 {
-
     public class WindowsAzure
         : TabBase, IKey
     {
@@ -34,6 +33,7 @@ namespace Glimpse.WindowsAzure.Tab
             {
                 return windowsAzureEnvironment;
             }
+
             return "The application is not running in Windows Azure Cloud Services or Windows Azure Websites.";
         }
     }

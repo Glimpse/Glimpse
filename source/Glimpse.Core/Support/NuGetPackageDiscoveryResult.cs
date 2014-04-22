@@ -36,7 +36,7 @@ namespace Glimpse.Core.Support
         public NuGetPackageAttribute[] FoundNuGetPackages { get; private set; }
 
         /// <summary>
-        /// Gets the list of assemblies that could npt be processed during discovery
+        /// Gets the list of assemblies that could not be processed during discovery
         /// </summary>
         public Assembly[] NonProcessableAssemblies { get; private set; }
     }

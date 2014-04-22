@@ -19,6 +19,7 @@ namespace Glimpse.Core
         private IMessageBroker messageBroker;
 
         // ReSharper disable UnusedMember.Global 
+
         /// <summary>
         /// These constructors used by .NET when TraceListener is set via web.config
         /// </summary>
@@ -37,6 +38,7 @@ namespace Glimpse.Core
             MessageBroker = GlimpseConfiguration.GetConfiguredMessageBroker();
             TimerStrategy = GlimpseConfiguration.GetConfiguredTimerStrategy();
         }
+
         //// ReSharper restore UnusedMember.Global
 
         /// <summary>

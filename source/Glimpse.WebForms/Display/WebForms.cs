@@ -1,11 +1,8 @@
-﻿
-    
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq; 
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
-using Glimpse.Core.Message;
 using Glimpse.WebForms.Inspector;
 
 namespace Glimpse.WebForms.Display

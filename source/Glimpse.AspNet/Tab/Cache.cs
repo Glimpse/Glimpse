@@ -22,7 +22,7 @@ namespace Glimpse.AspNet.Tab
         static Cache()
         {
             // Need an item in the cache to call the MethodInfoCacheGet.Invoke below.
-            HttpRuntime.Cache.Add(TestCacheKey, "", null, DateTime.Now.AddHours(1), System.Web.Caching.Cache.NoSlidingExpiration, CacheItemPriority.AboveNormal, null);
+            HttpRuntime.Cache.Add(TestCacheKey, string.Empty, null, DateTime.Now.AddHours(1), System.Web.Caching.Cache.NoSlidingExpiration, CacheItemPriority.AboveNormal, null);
             
             var cacheEntry = MethodInfoCacheGet.Invoke(HttpRuntime.Cache, new object[] { TestCacheKey, 1 }); 
             var typeCacheEntity = cacheEntry.GetType();

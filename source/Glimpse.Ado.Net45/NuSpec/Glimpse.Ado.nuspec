@@ -15,13 +15,11 @@
         <summary>Glimpse tabs for ADO.</summary>
         <releaseNotes>
 Welterweight release for Ado:
- - Support for Async queries
- - Added async indicator column to the SQL tab
- - Minor adjustment to the width of the transaction title column in SQL tab
+ - Significant performance improvement when calling stored procedure with binary data param
         </releaseNotes>
         <tags>ASP.NET Web WebForms Glimpse ADO ADO.NET SQL performance profiling timing diagnostics</tags>
         <dependencies>
-          <dependency id="Glimpse" version="1.8.0" />
+          <dependency id="Glimpse" version="1.8.5" />
         </dependencies>
     </metadata>
     <files>

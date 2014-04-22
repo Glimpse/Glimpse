@@ -16,7 +16,7 @@ namespace Glimpse.AspNet
         /// </summary>
         private HttpContextBase context;
 
-        private readonly static bool AsyncSupportDisabled = Convert.ToBoolean(ConfigurationManager.AppSettings["Glimpse:DisableAsyncSupport"]);
+        private static readonly bool AsyncSupportDisabled = Convert.ToBoolean(ConfigurationManager.AppSettings["Glimpse:DisableAsyncSupport"]);
 
         public AspNetFrameworkProvider(ILogger logger)
         {
@@ -57,7 +57,9 @@ namespace Glimpse.AspNet
             }
 
             if (HttpContext.Current == null)
+            {
                 return AntiSerializationWrapper<HttpContextBase>.Unwrap(CallContext.LogicalGetData("Glimpse.HttpContext"));
+            }
 
             var context = new HttpContextWrapper(HttpContext.Current);
             CallContext.LogicalSetData("Glimpse.HttpContext", new AntiSerializationWrapper<HttpContextBase>(context));
@@ -164,7 +166,9 @@ namespace Glimpse.AspNet
             public static T Unwrap(object wrapper)
             {
                 if (ReferenceEquals(wrapper, null))
+                {
                     return default(T);
+                }
 
                 return ((AntiSerializationWrapper<T>)wrapper).value;
             }

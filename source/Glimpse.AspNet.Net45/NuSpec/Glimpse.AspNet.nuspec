@@ -15,11 +15,11 @@
         <summary>ASP.NET 4.5 web debugging and diagnostics tool.</summary>
         <releaseNotes>
 Bantamweight release for Asp.Net:
- - Update to RouteInspector to ignore non AspNet routes doesn't work for WebHosted WebAPIs
+ - Added support for MVC attribute routes
         </releaseNotes>
         <tags>ASP.NET Web WebForms Glimpse</tags>
         <dependencies>
-          <dependency id="Glimpse" version="1.8.2" />
+          <dependency id="Glimpse" version="1.8.5" />
         </dependencies>
     </metadata>
     <files>

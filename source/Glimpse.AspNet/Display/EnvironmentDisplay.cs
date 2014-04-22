@@ -30,7 +30,7 @@ namespace Glimpse.AspNet.Display
                     serverName = Environment.MachineName,
                     user = Thread.CurrentPrincipal.Identity.Name,
                     serverTime = time,
-                    serverTimezoneOffset = time.ToString("zz00"), //timeZoneInfo.BaseUtcOffset.Hours + (isDaylightSavingTime ? 1 : 0),
+                    serverTimezoneOffset = time.ToString("zz00"), // timeZoneInfo.BaseUtcOffset.Hours + (isDaylightSavingTime ? 1 : 0),
                     serverDaylightSavingTime = isDaylightSavingTime
                 };
         }

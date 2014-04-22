@@ -68,8 +68,10 @@ namespace Glimpse.Ado.AlternateType
          
         public object GetService(Type serviceType)
         {
-            if (serviceType == GetType()) 
+            if (serviceType == GetType())
+            {
                 return InnerFactory;
+            }
 
             var service = ((IServiceProvider)InnerFactory).GetService(serviceType);
 

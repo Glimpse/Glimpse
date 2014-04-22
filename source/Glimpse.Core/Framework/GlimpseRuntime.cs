@@ -7,7 +7,6 @@ using System.Text;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
 using Glimpse.Core.Message;
-using Glimpse.Core.Resource;
 using Glimpse.Core.ResourceResult;
 using Glimpse.Core.Tab.Assist;
 using Tavis.UriTemplates;
@@ -134,7 +133,9 @@ namespace Glimpse.Core.Framework
             }
 
             if (HasOffRuntimePolicy(RuntimeEvent.BeginRequest))
+            {
                 return;
+            }
 
             ExecuteTabs(RuntimeEvent.BeginRequest);
 
@@ -154,11 +155,7 @@ namespace Glimpse.Core.Framework
         private bool HasOffRuntimePolicy(RuntimeEvent policyName)
         {
             var policy = DetermineAndStoreAccumulatedRuntimePolicy(policyName);
-            if (policy.HasFlag(RuntimePolicy.Off))
-            {
-                return true;
-            }
-            return false;
+            return policy.HasFlag(RuntimePolicy.Off);
         }
 
         /// <summary>
@@ -168,7 +165,9 @@ namespace Glimpse.Core.Framework
         public void EndRequest() // TODO: Add PRG support
         {
             if (HasOffRuntimePolicy(RuntimeEvent.EndRequest))
+            {
                 return;
+            }
 
             var frameworkProvider = Configuration.FrameworkProvider;
             var requestStore = frameworkProvider.HttpRequestStore;
@@ -245,8 +244,9 @@ namespace Glimpse.Core.Framework
         public void BeginSessionAccess()
         {
             if (HasOffRuntimePolicy(RuntimeEvent.BeginSessionAccess))
+            {
                 return;
-
+            }
 
             ExecuteTabs(RuntimeEvent.BeginSessionAccess);
         }
@@ -257,7 +257,9 @@ namespace Glimpse.Core.Framework
         public void EndSessionAccess()
         {
             if (HasOffRuntimePolicy(RuntimeEvent.EndSessionAccess))
+            {
                 return;
+            }
 
             ExecuteTabs(RuntimeEvent.EndSessionAccess);
         }
@@ -402,7 +404,6 @@ namespace Glimpse.Core.Framework
                                     logger.Error(Resources.InitializeTabError, exception, key);
                                 }
                             }
-
 
                             var tabsThatRequireSetup = Configuration.Tabs.Where(tab => tab is ITabSetup).Select(tab => tab);
                             foreach (ITabSetup tab in tabsThatRequireSetup)
