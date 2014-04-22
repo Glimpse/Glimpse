@@ -1,6 +1,7 @@
 using System.Collections.Specialized;
 using System.Web;
 using Glimpse.AspNet;
+using Glimpse.Core.Configuration;
 using Glimpse.Core.Framework;
 using Moq;
 

@@ -1,7 +1,7 @@
 using System;
 using Glimpse.Core.Extensibility;
 
-namespace Glimpse.Core.Framework
+namespace Glimpse.Core.Configuration
 {
     /// <summary>
     /// Represents a Glimpse resource endpoint configuration

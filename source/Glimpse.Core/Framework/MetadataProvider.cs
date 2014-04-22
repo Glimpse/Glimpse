@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Collections.Generic; 
+using System.Collections.Generic;
+using Glimpse.Core.Configuration;
 
 namespace Glimpse.Core.Framework
 {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Glimpse.Core.Configuration;
 using Glimpse.Core.Extensibility;
 using Tavis.UriTemplates;
 

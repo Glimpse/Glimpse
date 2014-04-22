@@ -15,7 +15,7 @@ namespace Glimpse.Core.Configuration
         /// <param name="xmlConfiguration">The xml configuration</param>
         public ConfigurationSettingsXmlProvider(Section xmlConfiguration)
         {
-            Guard.ArgumentNotNull("xmlConfiguration", xmlConfiguration);
+            Guard.ArgumentNotNull(xmlConfiguration, "xmlConfiguration");
             XmlConfiguration = xmlConfiguration;
         }
 
@@ -31,9 +31,9 @@ namespace Glimpse.Core.Configuration
             IPersistenceStore persistenceStore,
             ICurrentGlimpseRequestIdTracker currentGlimpseRequestIdTracker)
         {
-            Guard.ArgumentNotNull("resourceEndpointConfiguration", resourceEndpointConfiguration);
-            Guard.ArgumentNotNull("persistenceStore", persistenceStore);
-            Guard.ArgumentNotNull("currentGlimpseRequestIdTracker", currentGlimpseRequestIdTracker);
+            Guard.ArgumentNotNull(resourceEndpointConfiguration, "resourceEndpointConfiguration");
+            Guard.ArgumentNotNull(persistenceStore, "persistenceStore");
+            Guard.ArgumentNotNull(currentGlimpseRequestIdTracker, "currentGlimpseRequestIdTracker");
 
             var collectionSettingsFactory = new CollectionSettingsFactory(XmlConfiguration.DiscoveryLocation);
 

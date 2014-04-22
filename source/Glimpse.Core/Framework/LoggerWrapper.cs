@@ -31,7 +31,7 @@ namespace Glimpse.Core.Framework
 
         public void SwitchLogger(ILogger logger)
         {
-            Guard.ArgumentNotNull("logger", logger);
+            Guard.ArgumentNotNull(logger, "logger");
 
             if (ConfiguredLogLevel == LoggingLevel.Off)
             {

@@ -28,7 +28,7 @@ namespace Glimpse.Core.Configuration
         /// <returns>The <see cref="CollectionSettings" /> based on the given <paramref name="xmlConfiguration"/></returns>
         public CollectionSettings Create(XmlElement xmlConfiguration)
         {
-            Guard.ArgumentNotNull("xmlConfiguration", xmlConfiguration);
+            Guard.ArgumentNotNull(xmlConfiguration, "xmlConfiguration");
 
             bool autoDiscover = true;
             string discoveryLocation = null;

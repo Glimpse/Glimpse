@@ -1,4 +1,4 @@
-﻿using Glimpse.Core.Framework;
+﻿using Glimpse.Core.Configuration;
 
 namespace Glimpse.Core.Extensibility
 {

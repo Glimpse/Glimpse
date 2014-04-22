@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace Glimpse.Core.Configuration
 {
-    public static class ReflectionBlackList
+    internal static class ReflectionBlackList
     {
         private static readonly List<string> blackList = new List<string>();
 

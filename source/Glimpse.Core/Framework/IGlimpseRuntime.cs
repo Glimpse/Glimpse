@@ -1,4 +1,5 @@
 using System;
+using Glimpse.Core.Configuration;
 
 namespace Glimpse.Core.Framework
 {

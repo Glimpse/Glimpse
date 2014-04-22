@@ -1,8 +1,7 @@
 ﻿using System;
-using Glimpse.Core.Configuration;
 using Glimpse.Core.Extensibility;
 
-namespace Glimpse.Core.Framework
+namespace Glimpse.Core.Configuration
 {
     /// <summary>
     /// Represents a collection of <see cref="IInspector"/>
@@ -14,7 +13,7 @@ namespace Glimpse.Core.Framework
         /// </summary>
         /// <param name="collectionSettings">The collection settings</param>
         /// <param name="logger">The logger</param>
-        /// <param name="onChange">Eventhandler to call when the Change event is raised</param>
+        /// <param name="onChange">Event handler to call when the Change event is raised</param>
         public InspectorsCollection(CollectionSettings collectionSettings, ILogger logger, EventHandler onChange = null)
             : base(collectionSettings, logger, onChange)
         {

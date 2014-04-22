@@ -20,8 +20,8 @@ namespace Glimpse.Core.Configuration
             bool autoDiscover = false,
             string discoveryLocation = null)
         {
-            Guard.ArgumentNotNull("typesToIgnore", typesToIgnore);
-            Guard.ArgumentNotNull("customConfigurations", customConfigurations);
+            Guard.ArgumentNotNull(typesToIgnore, "typesToIgnore");
+            Guard.ArgumentNotNull(customConfigurations, "customConfigurations");
 
             TypesToIgnore = typesToIgnore;
             CustomConfigurations = customConfigurations;

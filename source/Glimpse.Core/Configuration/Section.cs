@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Configuration;
-using System.Xml;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
 
