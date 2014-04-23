@@ -9,6 +9,8 @@ using Glimpse.Core.Tab.Assist;
 using MvcRoute = System.Web.Routing.Route;
 using MvcRouteBase = System.Web.Routing.RouteBase;
 using MvcRouteValueDictionary = System.Web.Routing.RouteValueDictionary;
+using System.Reflection;
+using Glimpse.AspNet.Message;
 
 namespace Glimpse.AspNet.Tab
 {
@@ -61,14 +63,14 @@ namespace Glimpse.AspNet.Tab
 
         public void Setup(ITabSetupContext context)
         {
-            context.PersistMessages<RouteBase.ProcessConstraint.Message>();
-            context.PersistMessages<RouteBase.GetRouteData.Message>();
+            context.PersistMessages<ProcessConstraintMessage>();
+            context.PersistMessages<RouteDataMessage>();
         }
 
         public override object GetData(ITabContext context)
         {
-            var routeMessages = ProcessMessages(context.GetMessages<RouteBase.GetRouteData.Message>());
-            var constraintMessages = ProcessMessages(context.GetMessages<RouteBase.ProcessConstraint.Message>());
+            var routeMessages = ProcessMessages(context.GetMessages<RouteDataMessage>());
+            var constraintMessages = ProcessMessages(context.GetMessages<ProcessConstraintMessage>());
 
             var result = new List<RouteModel>();
             
@@ -76,9 +78,31 @@ namespace Glimpse.AspNet.Tab
             {
                 foreach (var routeBase in System.Web.Routing.RouteTable.Routes)
                 {
-                    var routeModel = GetRouteModelForRoute(context, routeBase, routeMessages, constraintMessages);
-                    
-                    result.Add(routeModel);
+                    if (routeBase.GetType().ToString() == "System.Web.Mvc.Routing.LinkGenerationRoute")
+                    {
+                        continue;
+                    }
+
+                    if (routeBase.GetType().ToString() == "System.Web.Mvc.Routing.RouteCollectionRoute")
+                    {
+                        // This catches any routing that has been defined using Attribute Based Routing
+                        // System.Web.Http.Routing.RouteCollectionRoute is a collection of HttpRoutes
+
+                        var subRoutes = routeBase.GetType().GetField("_subRoutes", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(routeBase);
+                        var _routes = (IList<System.Web.Routing.Route>)subRoutes.GetType().GetField("_routes", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(subRoutes);
+
+                        for (var i = 0; i < _routes.Count; i++)
+                        {
+                            var routeModel = GetRouteModelForRoute(context, _routes[i], routeMessages, constraintMessages);
+                            result.Add(routeModel);
+                        }
+                    }
+                    else
+                    {
+                        var routeModel = GetRouteModelForRoute(context, routeBase, routeMessages, constraintMessages);
+
+                        result.Add(routeModel);
+                    }
                 }
             }
 
@@ -95,27 +119,27 @@ namespace Glimpse.AspNet.Tab
             return source.FirstOrDefault();
         }
 
-        private Dictionary<int, List<RouteBase.GetRouteData.Message>> ProcessMessages(IEnumerable<RouteBase.GetRouteData.Message> messages)
+        private Dictionary<int, List<RouteDataMessage>> ProcessMessages(IEnumerable<RouteDataMessage> messages)
         { 
             if (messages == null)
             {
-                return new Dictionary<int, List<RouteBase.GetRouteData.Message>>();
+                return new Dictionary<int, List<RouteDataMessage>>();
             }
 
             return messages.GroupBy(x => x.RouteHashCode).ToDictionary(x => x.Key, x => x.ToList());
         }
 
-        private Dictionary<int, Dictionary<int, List<RouteBase.ProcessConstraint.Message>>> ProcessMessages(IEnumerable<RouteBase.ProcessConstraint.Message> messages)
+        private Dictionary<int, Dictionary<int, List<ProcessConstraintMessage>>> ProcessMessages(IEnumerable<ProcessConstraintMessage> messages)
         {
             if (messages == null)
             {
-                return new Dictionary<int, Dictionary<int, List<RouteBase.ProcessConstraint.Message>>>();
+                return new Dictionary<int, Dictionary<int, List<ProcessConstraintMessage>>>();
             }
 
             return messages.GroupBy(x => x.RouteHashCode).ToDictionary(x => x.Key, x => x.ToList().GroupBy(y => y.ConstraintHashCode).ToDictionary(y => y.Key, y => y.ToList()));
         }
 
-        private RouteModel GetRouteModelForRoute(ITabContext context, MvcRouteBase routeBase, Dictionary<int, List<RouteBase.GetRouteData.Message>> routeMessages, Dictionary<int, Dictionary<int, List<RouteBase.ProcessConstraint.Message>>> constraintMessages)
+        private RouteModel GetRouteModelForRoute(ITabContext context, MvcRouteBase routeBase, Dictionary<int, List<RouteDataMessage>> routeMessages, Dictionary<int, Dictionary<int, List<ProcessConstraintMessage>>> constraintMessages)
         {
             var routeModel = new RouteModel();
 
@@ -149,7 +173,7 @@ namespace Glimpse.AspNet.Tab
             return routeModel;
         }
 
-        private IEnumerable<RouteDataItemModel> ProcessRouteData(MvcRouteValueDictionary dataDefaults, RouteBase.GetRouteData.Message routeMessage)
+        private IEnumerable<RouteDataItemModel> ProcessRouteData(MvcRouteValueDictionary dataDefaults, RouteDataMessage routeMessage)
         {
             if (dataDefaults == null || dataDefaults.Count == 0)
             {
@@ -174,7 +198,7 @@ namespace Glimpse.AspNet.Tab
             return routeData;
         }
 
-        private IEnumerable<RouteConstraintModel> ProcessConstraints(ITabContext context, MvcRoute route, Dictionary<int, Dictionary<int, List<RouteBase.ProcessConstraint.Message>>> constraintMessages)
+        private IEnumerable<RouteConstraintModel> ProcessConstraints(ITabContext context, MvcRoute route, Dictionary<int, Dictionary<int, List<ProcessConstraintMessage>>> constraintMessages)
         {
             if (route.Constraints == null || route.Constraints.Count == 0)
             {
@@ -206,6 +230,7 @@ namespace Glimpse.AspNet.Tab
 
             return result;
         }
+
 
         private IDictionary<string, object> ProcessDataTokens(IDictionary<string, object> dataTokens)
         {

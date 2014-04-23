@@ -29,7 +29,7 @@ namespace Glimpse.Test.AspNet.Inspector
         public void IntergrationTestRouteProxing(RoutesInspector sut, System.Web.Routing.IRouteHandler routeHandler, IInspectorContext context)
         {
             RouteTable.Routes.Clear();
-            RouteTable.Routes.Add("Test", new Route("Test", routeHandler));
+            RouteTable.Routes.Add("Test", new System.Web.Routing.Route("Test", routeHandler));
             RouteTable.Routes.Add("BaseTyped", new NewRouteBase());
             RouteTable.Routes.Add("BaseTestTyped", new NewConstructorRouteBase("Name"));
             RouteTable.Routes.Add("SubTyped", new NewRoute("test", routeHandler));
@@ -57,12 +57,12 @@ namespace Glimpse.Test.AspNet.Inspector
         }
 
         [Theory, AutoMock]
-        public void ExtendsMvcRoutes(System.Web.Routing.IRouteHandler routeHandler, RoutesInspector sut, IInspectorContext context, Route newRoute)
+        public void ExtendsMvcRoutes(System.Web.Routing.IRouteHandler routeHandler, RoutesInspector sut, IInspectorContext context, System.Web.Routing.Route newRoute)
         {
             RouteTable.Routes.Clear();
-            RouteTable.Routes.Add("Test", new Route("Test", routeHandler));
+            RouteTable.Routes.Add("Test", new System.Web.Routing.Route("Test", routeHandler));
 
-            context.ProxyFactory.Setup(x => x.ExtendClass<Route>(It.IsAny<IEnumerable<IAlternateMethod>>(), It.IsAny<IEnumerable<object>>(), It.IsAny<object[]>())).Returns(newRoute).Verifiable();
+            context.ProxyFactory.Setup(x => x.ExtendClass<System.Web.Routing.Route>(It.IsAny<IEnumerable<IAlternateMethod>>(), It.IsAny<IEnumerable<object>>(), It.IsAny<object[]>())).Returns(newRoute).Verifiable();
 
             sut.Setup(context);
 
@@ -71,13 +71,13 @@ namespace Glimpse.Test.AspNet.Inspector
         }
 
         [Theory, AutoMock]
-        public void WrapsMvcRouteDerivedTypes(RoutesInspector sut, System.Web.Routing.IRouteHandler routeHandler, IInspectorContext context, NewRoute route, Route newRoute)
+        public void WrapsMvcRouteDerivedTypes(RoutesInspector sut, System.Web.Routing.IRouteHandler routeHandler, IInspectorContext context, NewRoute route, System.Web.Routing.Route newRoute)
         {
             RouteTable.Routes.Clear();
             RouteTable.Routes.Add("Test", route);
 
-            context.ProxyFactory.Setup(x => x.IsWrapClassEligible(typeof(Route))).Returns(true).Verifiable();
-            context.ProxyFactory.Setup(x => x.WrapClass((Route)route, It.IsAny<IEnumerable<IAlternateMethod>>(), It.IsAny<IEnumerable<object>>(), It.IsAny<object[]>())).Returns(newRoute).Verifiable();
+            context.ProxyFactory.Setup(x => x.IsWrapClassEligible(typeof(System.Web.Routing.Route))).Returns(true).Verifiable();
+            context.ProxyFactory.Setup(x => x.WrapClass((System.Web.Routing.Route)route, It.IsAny<IEnumerable<IAlternateMethod>>(), It.IsAny<IEnumerable<object>>(), It.IsAny<object[]>())).Returns(newRoute).Verifiable();
 
             sut.Setup(context);
 
@@ -101,15 +101,15 @@ namespace Glimpse.Test.AspNet.Inspector
         }
 
         [Theory, AutoMock]
-        public void ExtendsStringConstraints(RoutesInspector sut, IInspectorContext context, NewRoute route, Route newRoute, string routeConstraint)
+        public void ExtendsStringConstraints(RoutesInspector sut, IInspectorContext context, NewRoute route, System.Web.Routing.Route newRoute, string routeConstraint)
         {
             route.Constraints = new RouteValueDictionary { { "controller", routeConstraint } };
 
             RouteTable.Routes.Clear();
             RouteTable.Routes.Add("Test", route);
 
-            context.ProxyFactory.Setup(x => x.IsWrapClassEligible(typeof(Route))).Returns(true).Verifiable();
-            context.ProxyFactory.Setup(x => x.WrapClass((Route)route, It.IsAny<IEnumerable<IAlternateMethod>>(), It.IsAny<IEnumerable<object>>(), It.IsAny<object[]>())).Returns(newRoute).Verifiable();
+            context.ProxyFactory.Setup(x => x.IsWrapClassEligible(typeof(System.Web.Routing.Route))).Returns(true).Verifiable();
+            context.ProxyFactory.Setup(x => x.WrapClass((System.Web.Routing.Route)route, It.IsAny<IEnumerable<IAlternateMethod>>(), It.IsAny<IEnumerable<object>>(), It.IsAny<object[]>())).Returns(newRoute).Verifiable();
 
             sut.Setup(context);
 
@@ -118,15 +118,15 @@ namespace Glimpse.Test.AspNet.Inspector
         }
          
         [Theory, AutoMock]
-        public void ExtendsRouteConstraintConstraints(RoutesInspector sut, IInspectorContext context, NewRoute route, Route newRoute, IRouteConstraint routeConstraint, IRouteConstraint newRouteConstraint)
+        public void ExtendsRouteConstraintConstraints(RoutesInspector sut, IInspectorContext context, NewRoute route, System.Web.Routing.Route newRoute, IRouteConstraint routeConstraint, IRouteConstraint newRouteConstraint)
         {
             route.Constraints = new RouteValueDictionary { { "controller", routeConstraint } };
 
             RouteTable.Routes.Clear();
             RouteTable.Routes.Add("Test", route);
 
-            context.ProxyFactory.Setup(x => x.IsWrapClassEligible(typeof(Route))).Returns(true).Verifiable();
-            context.ProxyFactory.Setup(x => x.WrapClass((Route)route, It.IsAny<IEnumerable<IAlternateMethod>>(), It.IsAny<IEnumerable<object>>(), It.IsAny<object[]>())).Returns(newRoute).Verifiable();
+            context.ProxyFactory.Setup(x => x.IsWrapClassEligible(typeof(System.Web.Routing.Route))).Returns(true).Verifiable();
+            context.ProxyFactory.Setup(x => x.WrapClass((System.Web.Routing.Route)route, It.IsAny<IEnumerable<IAlternateMethod>>(), It.IsAny<IEnumerable<object>>(), It.IsAny<object[]>())).Returns(newRoute).Verifiable();
             context.ProxyFactory.Setup(x => x.IsWrapInterfaceEligible<IRouteConstraint>(typeof(IRouteConstraint))).Returns(true).Verifiable();
             context.ProxyFactory.Setup(x => x.WrapInterface(routeConstraint, It.IsAny<IEnumerable<IAlternateMethod>>(), It.IsAny<IEnumerable<object>>())).Returns(newRouteConstraint).Verifiable();
 
@@ -157,7 +157,7 @@ namespace Glimpse.Test.AspNet.Inspector
             }
         }
 
-        public class NewRoute : Route
+        public class NewRoute : System.Web.Routing.Route
         {
             public NewRoute(string url, System.Web.Routing.IRouteHandler routeHandler)
                 : base(url, routeHandler)
@@ -180,7 +180,7 @@ namespace Glimpse.Test.AspNet.Inspector
             }
         }
 
-        public class NewConstructorRoute : Route
+        public class NewConstructorRoute : System.Web.Routing.Route
         {
             public NewConstructorRoute(string url, System.Web.Routing.IRouteHandler routeHandler, string name)
                 : base(url, routeHandler)

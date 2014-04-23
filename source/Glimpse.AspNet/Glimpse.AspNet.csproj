@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AlternateType\IRouteNameMixin.cs" />
+    <Compile Include="AlternateType\Route.cs" />
     <Compile Include="AlternateType\RouteBase.cs" />
     <Compile Include="AlternateType\RouteConstraint.cs" />
     <Compile Include="AlternateType\RouteConstraintRegex.cs" />
@@ -70,6 +71,7 @@
     <Compile Include="HttpModule.cs" />
     <Compile Include="HttpRuntimeShutdownMessageResolver.cs" />
     <Compile Include="Message\ProcessConstraintMessage.cs" />
+    <Compile Include="Message\RouteDataMessage.cs" />
     <Compile Include="Model\CacheConfigurationModel.cs" />
     <Compile Include="Model\CacheItemModel.cs" />
     <Compile Include="Model\CacheModel.cs" />

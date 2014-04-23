@@ -1,0 +1,13 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Glimpse Attribute Routing Test Index</h2>
+
+<p>Click one of the attribute  routes below:</p>
+
+<a href="@Url.RouteUrl("attrTest1")">attrRoute/test</a>
+<a href="@Url.RouteUrl("attrTest2", new { id = 1 } )">attrRoute/test/{id}</a>
+<a href="@Url.RouteUrl("attrTest3", new { id = 1, param = "exampleParam" })">attrRoute/{param}/test/{id}</a>
+
