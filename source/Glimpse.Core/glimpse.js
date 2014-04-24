@@ -3472,6 +3472,96 @@ glimpse.tab = (function($, pubsub, data) {
     })();
 })(jQueryGlimpse, glimpse.pubsub, glimpse.settings, glimpse.util, glimpse.render.engine);
 
+// glimpse.middleware.js
+(function($, pubsub, util, settings, elements, data, renderEngine) {
+    var middleware = {};
+
+    var generateColor = (function() {
+            var color = ['#9b59b6','#3498db','#2ecc71','#1abc9c','#f1c40f','#e67e22','#e74c3c'],
+                index = -1;
+
+            return function() {
+                index = index >= color.length - 1 ? 0 : index + 1;
+
+                return color[index];
+            };
+        })(),
+        renderArrow = function(side, color) {
+            return '<div class="glimpse-arrow-holder-' + side + '"><div class="glimpse-arrow-bar" style="background-color:' + color + ';"></div><div class="glimpse-arrow-head-back"></div><div class="glimpse-arrow-head" style="border-' + (side == 'left' ? 'right' : 'left') + '-color:' + color + '"></div></div>';
+        }, 
+        renderMiddlewareItem = function(item, previousColor) {
+            var nextColor = item.color || generateColor(),
+                html = '<table class="glimpse-middleware-holder' + (!item.children ? ' glimpse-middleware-holder-childless' : '') + (item.childlessDuration ? ' glimpse-middleware-holder-important' : '') + '"><tr>';
+
+            // item 
+            html += '<td style="background-color:' + nextColor + ';">';
+
+                // arror
+                if (item.duration) {
+                    html += renderArrow('right', previousColor);
+                    html += renderArrow('left', nextColor);
+                }
+                // content
+                html += '<div class="glimpse-middleware-content">';
+                    html += '<div class="glimpse-middleware-title" title="' + item.type + '">' + item.title + '</div>'; 
+                    if (item.childlessDuration != null) {
+                        var durationTitle = item.duration != null ? ' title="Total Duration ' + item.duration + 'ms"' : ''; 
+                        html += '<div' + durationTitle + ' class="glimpse-middleware-duration">' + item.childlessDuration + '<span>ms</span></div>';
+                    }
+                html += '</div>';
+
+            html += '</td>'
+
+            // children
+            if (item.children) {
+                html += '<td>';
+                item.children.forEach(function(element) {
+                    html += renderMiddlewareItem(element, nextColor);
+                });
+                html += '</td>';
+            }
+
+            return html + '</tr></table>';
+        },
+        renderMiddleware = function(item) { 
+            var html = '<div class="glimpse-header">Execution Pipline</div>';
+            html += '<table class="glimpse-middleware-holder"><tr><td class="glimpse-middleware-holder-main"><div class="glimpse-middleware-main-title">Host</div></td><td>'
+            html += renderMiddlewareItem(item, '#d6d6d6'); //' + renderArrow('right', '#d6d6d6') + '
+            html += '</td></tr></table>'
+
+            return html;
+        },
+        init = function(args) {
+            if (!args.data)
+                return;
+
+            var html = renderMiddleware(args.data);
+
+            args.scope.html(html);
+        },
+        modify = function(options) {
+            options.templates.css += '.glimpse-arrow-holder-left, .glimpse-arrow-holder-right {position: absolute;z-index: 1;}.glimpse-arrow-holder-left {bottom: 33px;left: -19px;}.glimpse-arrow-holder-right {top: 3px;left: -10px;}.glimpse-arrow-head, .glimpse-arrow-head-back {width: 0;height: 0;position: absolute;}.glimpse-arrow-head {border-top: 15px solid transparent;border-bottom: 15px solid transparent;}.glimpse-arrow-head-back {border-top: 17px solid transparent;border-bottom: 17px solid transparent;top: -2px;}.glimpse-arrow-bar {position: absolute;width: 5px;height: 14px;top: 8px;}.glimpse-arrow-holder-right .glimpse-arrow-head {border-left: 14px solid;left: 5px;}.glimpse-arrow-holder-right .glimpse-arrow-head-back { border-left: 16px solid white;left: 5px;} .glimpse-arrow-holder-left .glimpse-arrow-head {border-right: 14px solid; }.glimpse-arrow-holder-left .glimpse-arrow-head-back {border-right: 16px solid white;left: -2px;}.glimpse-arrow-holder-left .glimpse-arrow-bar {left: 14px;}.glimpse .glimpse-middleware-holder {margin: 10px;width: inherit;}.glimpse .glimpse-middleware-holder-main {background: #d6d6d6;}.glimpse .glimpse-middleware-holder-childless {margin-right: 0;}.glimpse .glimpse-middleware-holder-important {min-height: 70px;}.glimpse .glimpse-middleware-holder td {padding:0px;position:relative;}.glimpse .glimpse-middleware-content {color: white;}.glimpse .glimpse-middleware-title, .glimpse .glimpse-middleware-main-title {font-size: 140%;font-weight: bold;font-family: "Segoe UI Light", "Segoe UI Web Regular", "Segoe UI", "Helvetica Neue", Helvetica, Arial;}.glimpse .glimpse-middleware-title {margin: 10px 15px;}.glimpse .glimpse-middleware-main-title {-webkit-transform-origin: bottom center;-moz-transform-origin: bottom center;-ms-transform-origin: bottom center;-o-transform-origin: bottom center;-webkit-transform: rotate(-90deg);-moz-transform: rotate(-90deg);-ms-transform: rotate(-90deg);-o-transform: rotate(-90deg);padding: 6px 6px 2px 0;}.glimpse .glimpse-middleware-duration {font-size: 3.5em;line-height: 1em;opacity: 0.8;position: absolute;bottom: -11px;font-family: "Segoe UI Light", "Segoe UI Web Regular", "Segoe UI", "Helvetica Neue", Helvetica, Arial;}.glimpse .glimpse-middleware-duration span {font-size: 0.5em;}';
+        },
+        prerender = function(args) {
+            args.pluginData._data = args.pluginData.data;
+            args.pluginData.data = 'Loading data, please wait...';
+        },
+        postrender = function(args) {
+            args.pluginData.data = args.pluginData._data;
+            args.pluginData._data = null;
+
+            pubsub.publishAsync('trigger.middleware.init', { scope: args.panel, data:  args.pluginData.data });
+        };
+
+
+    pubsub.subscribe('trigger.middleware.init', init);
+    pubsub.subscribe('action.template.processing', modify);
+    pubsub.subscribe('action.panel.rendering.glimpse_middleware', prerender);
+    pubsub.subscribe('action.panel.rendered.glimpse_middleware', postrender);
+
+
+})(jQueryGlimpse, glimpse.pubsub, glimpse.util, glimpse.settings, glimpse.elements, glimpse.data, glimpse.render.engine);
+
 // glimpse.hud.js
 (function($, pubsub, data, elements, util) {
     var modify = function(options) {
