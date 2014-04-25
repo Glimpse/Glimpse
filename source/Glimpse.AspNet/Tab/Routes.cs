@@ -161,7 +161,7 @@ namespace Glimpse.AspNet.Tab
             }
             else
             {
-                routeModel.Url = routeModel.ToString();
+                routeModel.Url = routeBase.ToString();
             }
 
             var routeName = routeBase as IRouteNameMixin;
