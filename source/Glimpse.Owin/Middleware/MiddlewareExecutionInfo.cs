@@ -37,22 +37,31 @@ namespace Glimpse.Owin.Middleware
 
         public Type Type { get; set; }
 
-        public TimeSpan Duration 
+        public TimeSpan? Duration 
         {
-            get { return stopwatch.Elapsed; }
+            get
+            {
+                if (stopwatch == null)
+                    return null;
+
+                return stopwatch.Elapsed;
+            }
         }
 
-        public TimeSpan ChildlessDuration 
+        public TimeSpan? ChildlessDuration 
         {
             get
             {
                 if (childlessDuration.HasValue)
                     return childlessDuration.Value;
 
-                var duration = Duration;
+                if (!Duration.HasValue)
+                    return null;
+
+                var duration = Duration.Value;
                 foreach (var child in Children)
                 {
-                    duration -= child.ChildlessDuration;
+                    duration -= child.ChildlessDuration.HasValue ? child.ChildlessDuration.Value : TimeSpan.Zero;
                 }
 
                 childlessDuration = duration;
