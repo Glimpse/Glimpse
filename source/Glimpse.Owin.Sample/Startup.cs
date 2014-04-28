@@ -10,6 +10,8 @@ namespace Glimpse.Owin.Sample
             app = app.WithGlimpse();
 
             app.UseWelcomePage();
+
+            app.UseErrorPage();
         }
     }
 }
