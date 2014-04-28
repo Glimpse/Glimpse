@@ -4,7 +4,7 @@ using Glimpse.Owin.Middleware;
 
 namespace Glimpse.Owin.Tab
 {
-    public class Middleware : TabBase
+    public class Middleware : TabBase, IKey
     {
         public override string Name
         {
@@ -18,6 +18,11 @@ namespace Glimpse.Owin.Tab
             var tracker = environment["glimpse.MiddlewareTracker"] as MiddlewareTracker;
 
             return tracker.Graph;
+        }
+
+        public string Key 
+        {
+            get { return "glimpse_middleware"; }
         }
     }
 }
