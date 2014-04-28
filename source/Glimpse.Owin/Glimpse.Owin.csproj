@@ -50,9 +50,13 @@
     <Compile Include="Katana\AppBuilder.cs" />
     <Compile Include="Katana\IAppBuilderExtensions.cs" />
     <Compile Include="Middleware\GlimpseMiddleware.cs" />
+    <Compile Include="Middleware\HeadMiddleware.cs" />
+    <Compile Include="Middleware\MiddlewareExecutionInfo.cs" />
+    <Compile Include="Middleware\MiddlewareManager.cs" />
     <Compile Include="Middleware\OwinRequestResponseAdapter.cs" />
     <Compile Include="Middleware\RequestMetadata.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tab\Middleware.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

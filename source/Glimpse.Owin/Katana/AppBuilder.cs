@@ -8,10 +8,14 @@ namespace Glimpse.Owin.Katana
     public class AppBuilder : IAppBuilder
     {
         private readonly IAppBuilder innerApp;
+        private readonly MiddlewareManager manager;
+        private readonly Guid builderId;
 
         public AppBuilder(IAppBuilder app)
         {
             innerApp = app;
+            manager = MiddlewareManager.Instance;
+            builderId = Guid.NewGuid();
             innerApp.Use<GlimpseMiddleware>(Properties); // This is the earliest we can add middleware
         }
 
@@ -22,7 +26,12 @@ namespace Glimpse.Owin.Katana
 
         public IAppBuilder Use(object middleware, params object[] args)
         {
+            var middlewareType = middleware is Type ? middleware as Type : middleware.GetType();
+            manager.Register(builderId, middlewareType);
+
+            innerApp.Use<HeadMiddleware>(middlewareType, builderId);
             innerApp.Use(middleware, args);
+            
             return this;
         }
 
