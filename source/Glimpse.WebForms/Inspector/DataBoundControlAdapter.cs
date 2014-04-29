@@ -73,13 +73,13 @@ namespace Glimpse.WebForms.Inspector
 
         protected override void OnInit(EventArgs e)
         {
-			if (GlimpseConfiguration.GetConfiguredTimerStrategy()() != null)
-			{
+            if (GlimpseConfiguration.GetConfiguredTimerStrategy()() != null)
+            {
 #if NET45Plus
-				DataBoundControl.CallingDataMethods += DataBoundControl_CallingDataMethods;
+                DataBoundControl.CallingDataMethods += DataBoundControl_CallingDataMethods;
 #endif
-				DataBoundControl.DataBinding += DataBoundControl_DataBinding;
-			}
+                DataBoundControl.DataBinding += DataBoundControl_DataBinding;
+            }
             base.OnInit(e);
         }
 
@@ -160,8 +160,8 @@ namespace Glimpse.WebForms.Inspector
 
         private bool AdapterStateCopied { get; set; }
 
-		private static readonly MethodInfo BeginRenderInfo = typeof(ControlAdapter).GetMethod("BeginRender", BindingFlags.Instance | BindingFlags.NonPublic);
-        
+        private static readonly MethodInfo BeginRenderInfo = typeof(ControlAdapter).GetMethod("BeginRender", BindingFlags.Instance | BindingFlags.NonPublic);
+
         protected override void BeginRender(HtmlTextWriter writer)
         {
             CopyAccessState();
@@ -169,7 +169,7 @@ namespace Glimpse.WebForms.Inspector
         }
 
         private static readonly MethodInfo CreateChildControlsInfo = typeof(ControlAdapter).GetMethod("CreateChildControls", BindingFlags.Instance | BindingFlags.NonPublic);
-        
+
         protected override void CreateChildControls()
         {
             CopyAccessState();
@@ -177,7 +177,7 @@ namespace Glimpse.WebForms.Inspector
         }
 
         private static readonly MethodInfo EndRenderInfo = typeof(ControlAdapter).GetMethod("EndRender", BindingFlags.Instance | BindingFlags.NonPublic);
-        
+
         protected override void EndRender(HtmlTextWriter writer)
         {
             CopyAccessState();
@@ -185,7 +185,7 @@ namespace Glimpse.WebForms.Inspector
         }
 
         private static readonly MethodInfo LoadAdapterControlStateInfo = typeof(ControlAdapter).GetMethod("LoadAdapterControlState", BindingFlags.Instance | BindingFlags.NonPublic);
-        
+
         protected override void LoadAdapterControlState(object state)
         {
             CopyAccessState();
@@ -193,29 +193,29 @@ namespace Glimpse.WebForms.Inspector
         }
 
         private static readonly MethodInfo LoadAdapterViewStateInfo = typeof(ControlAdapter).GetMethod("LoadAdapterViewState", BindingFlags.Instance | BindingFlags.NonPublic);
-        
+
         protected override void LoadAdapterViewState(object state)
         {
             LoadAdapterViewStateInfo.Invoke(InnerAdapter, new object[] { state });
         }
 
         private static readonly MethodInfo OnInitInfo = typeof(ControlAdapter).GetMethod("OnInit", BindingFlags.Instance | BindingFlags.NonPublic);
-        
+
         protected override void OnInit(EventArgs e)
         {
             CopyAccessState();
-			if (GlimpseConfiguration.GetConfiguredTimerStrategy()() != null)
-			{
+            if (GlimpseConfiguration.GetConfiguredTimerStrategy()() != null)
+            {
 #if NET45Plus
-				DataBoundControl.CallingDataMethods += DataBoundControl_CallingDataMethods;
+                DataBoundControl.CallingDataMethods += DataBoundControl_CallingDataMethods;
 #endif
-				DataBoundControl.DataBinding += DataBoundControl_DataBinding;
-			}
+                DataBoundControl.DataBinding += DataBoundControl_DataBinding;
+            }
             OnInitInfo.Invoke(InnerAdapter, new object[] { e });
         }
 
         private static readonly MethodInfo OnLoadInfo = typeof(ControlAdapter).GetMethod("OnLoad", BindingFlags.Instance | BindingFlags.NonPublic);
-        
+
         protected override void OnLoad(EventArgs e)
         {
             CopyAccessState();
@@ -223,7 +223,7 @@ namespace Glimpse.WebForms.Inspector
         }
 
         private static readonly MethodInfo OnPreRenderInfo = typeof(ControlAdapter).GetMethod("OnPreRender", BindingFlags.Instance | BindingFlags.NonPublic);
-        
+
         protected override void OnPreRender(EventArgs e)
         {
             CopyAccessState();
@@ -231,7 +231,7 @@ namespace Glimpse.WebForms.Inspector
         }
 
         private static readonly MethodInfo OnUnloadInfo = typeof(ControlAdapter).GetMethod("OnUnload", BindingFlags.Instance | BindingFlags.NonPublic);
-        
+
         protected override void OnUnload(EventArgs e)
         {
             CopyAccessState();
@@ -239,7 +239,7 @@ namespace Glimpse.WebForms.Inspector
         }
 
         private static readonly MethodInfo RenderInfo = typeof(ControlAdapter).GetMethod("Render", BindingFlags.Instance | BindingFlags.NonPublic);
-        
+
         protected override void Render(HtmlTextWriter writer)
         {
             CopyAccessState();
@@ -247,7 +247,7 @@ namespace Glimpse.WebForms.Inspector
         }
 
         private static readonly MethodInfo RenderChildrenInfo = typeof(ControlAdapter).GetMethod("RenderChildren", BindingFlags.Instance | BindingFlags.NonPublic);
-        
+
         protected override void RenderChildren(HtmlTextWriter writer)
         {
             CopyAccessState();
@@ -255,7 +255,7 @@ namespace Glimpse.WebForms.Inspector
         }
 
         private static readonly MethodInfo SaveAdapterControlStateInfo = typeof(ControlAdapter).GetMethod("SaveAdapterControlState", BindingFlags.Instance | BindingFlags.NonPublic);
-        
+
         protected override object SaveAdapterControlState()
         {
             CopyAccessState();
@@ -263,7 +263,7 @@ namespace Glimpse.WebForms.Inspector
         }
 
         private static readonly MethodInfo SaveAdapterViewStateInfo = typeof(ControlAdapter).GetMethod("SaveAdapterViewState", BindingFlags.Instance | BindingFlags.NonPublic);
-        
+
         protected override object SaveAdapterViewState()
         {
             CopyAccessState();
