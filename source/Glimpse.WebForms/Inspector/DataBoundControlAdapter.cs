@@ -73,10 +73,13 @@ namespace Glimpse.WebForms.Inspector
 
         protected override void OnInit(EventArgs e)
         {
+            if (GlimpseConfiguration.GetConfiguredTimerStrategy()() != null)
+            {
 #if NET45Plus
-            DataBoundControl.CallingDataMethods += DataBoundControl_CallingDataMethods;
+                DataBoundControl.CallingDataMethods += DataBoundControl_CallingDataMethods;
 #endif
-            DataBoundControl.DataBinding += DataBoundControl_DataBinding;
+                DataBoundControl.DataBinding += DataBoundControl_DataBinding;
+            }
             base.OnInit(e);
         }
 
@@ -157,107 +160,110 @@ namespace Glimpse.WebForms.Inspector
 
         private bool AdapterStateCopied { get; set; }
 
-        private static readonly MethodInfo BeginRenderInfo = typeof(System.Web.UI.Adapters.PageAdapter).GetMethod("BeginRender", BindingFlags.Instance | BindingFlags.NonPublic);
-        
+        private static readonly MethodInfo BeginRenderInfo = typeof(ControlAdapter).GetMethod("BeginRender", BindingFlags.Instance | BindingFlags.NonPublic);
+
         protected override void BeginRender(HtmlTextWriter writer)
         {
             CopyAccessState();
             BeginRenderInfo.Invoke(InnerAdapter, new object[] { writer });
         }
 
-        private static readonly MethodInfo CreateChildControlsInfo = typeof(System.Web.UI.Adapters.PageAdapter).GetMethod("CreateChildControls", BindingFlags.Instance | BindingFlags.NonPublic);
-        
+        private static readonly MethodInfo CreateChildControlsInfo = typeof(ControlAdapter).GetMethod("CreateChildControls", BindingFlags.Instance | BindingFlags.NonPublic);
+
         protected override void CreateChildControls()
         {
             CopyAccessState();
             CreateChildControlsInfo.Invoke(InnerAdapter, null);
         }
 
-        private static readonly MethodInfo EndRenderInfo = typeof(System.Web.UI.Adapters.PageAdapter).GetMethod("EndRender", BindingFlags.Instance | BindingFlags.NonPublic);
-        
+        private static readonly MethodInfo EndRenderInfo = typeof(ControlAdapter).GetMethod("EndRender", BindingFlags.Instance | BindingFlags.NonPublic);
+
         protected override void EndRender(HtmlTextWriter writer)
         {
             CopyAccessState();
             EndRenderInfo.Invoke(InnerAdapter, new object[] { writer });
         }
 
-        private static readonly MethodInfo LoadAdapterControlStateInfo = typeof(System.Web.UI.Adapters.PageAdapter).GetMethod("LoadAdapterControlState", BindingFlags.Instance | BindingFlags.NonPublic);
-        
+        private static readonly MethodInfo LoadAdapterControlStateInfo = typeof(ControlAdapter).GetMethod("LoadAdapterControlState", BindingFlags.Instance | BindingFlags.NonPublic);
+
         protected override void LoadAdapterControlState(object state)
         {
             CopyAccessState();
             LoadAdapterControlStateInfo.Invoke(InnerAdapter, new object[] { state });
         }
 
-        private static readonly MethodInfo LoadAdapterViewStateInfo = typeof(System.Web.UI.Adapters.PageAdapter).GetMethod("LoadAdapterViewState", BindingFlags.Instance | BindingFlags.NonPublic);
-        
+        private static readonly MethodInfo LoadAdapterViewStateInfo = typeof(ControlAdapter).GetMethod("LoadAdapterViewState", BindingFlags.Instance | BindingFlags.NonPublic);
+
         protected override void LoadAdapterViewState(object state)
         {
             LoadAdapterViewStateInfo.Invoke(InnerAdapter, new object[] { state });
         }
 
-        private static readonly MethodInfo OnInitInfo = typeof(System.Web.UI.Adapters.PageAdapter).GetMethod("OnInit", BindingFlags.Instance | BindingFlags.NonPublic);
-        
+        private static readonly MethodInfo OnInitInfo = typeof(ControlAdapter).GetMethod("OnInit", BindingFlags.Instance | BindingFlags.NonPublic);
+
         protected override void OnInit(EventArgs e)
         {
             CopyAccessState();
+            if (GlimpseConfiguration.GetConfiguredTimerStrategy()() != null)
+            {
 #if NET45Plus
-            DataBoundControl.CallingDataMethods += DataBoundControl_CallingDataMethods;
+                DataBoundControl.CallingDataMethods += DataBoundControl_CallingDataMethods;
 #endif
-            DataBoundControl.DataBinding += DataBoundControl_DataBinding;
+                DataBoundControl.DataBinding += DataBoundControl_DataBinding;
+            }
             OnInitInfo.Invoke(InnerAdapter, new object[] { e });
         }
 
-        private static readonly MethodInfo OnLoadInfo = typeof(System.Web.UI.Adapters.PageAdapter).GetMethod("OnLoad", BindingFlags.Instance | BindingFlags.NonPublic);
-        
+        private static readonly MethodInfo OnLoadInfo = typeof(ControlAdapter).GetMethod("OnLoad", BindingFlags.Instance | BindingFlags.NonPublic);
+
         protected override void OnLoad(EventArgs e)
         {
             CopyAccessState();
             OnLoadInfo.Invoke(InnerAdapter, new object[] { e });
         }
 
-        private static readonly MethodInfo OnPreRenderInfo = typeof(System.Web.UI.Adapters.PageAdapter).GetMethod("OnPreRender", BindingFlags.Instance | BindingFlags.NonPublic);
-        
+        private static readonly MethodInfo OnPreRenderInfo = typeof(ControlAdapter).GetMethod("OnPreRender", BindingFlags.Instance | BindingFlags.NonPublic);
+
         protected override void OnPreRender(EventArgs e)
         {
             CopyAccessState();
             OnPreRenderInfo.Invoke(InnerAdapter, new object[] { e });
         }
 
-        private static readonly MethodInfo OnUnloadInfo = typeof(System.Web.UI.Adapters.PageAdapter).GetMethod("OnUnload", BindingFlags.Instance | BindingFlags.NonPublic);
-        
+        private static readonly MethodInfo OnUnloadInfo = typeof(ControlAdapter).GetMethod("OnUnload", BindingFlags.Instance | BindingFlags.NonPublic);
+
         protected override void OnUnload(EventArgs e)
         {
             CopyAccessState();
             OnUnloadInfo.Invoke(InnerAdapter, new object[] { e });
         }
 
-        private static readonly MethodInfo RenderInfo = typeof(System.Web.UI.Adapters.PageAdapter).GetMethod("Render", BindingFlags.Instance | BindingFlags.NonPublic);
-        
+        private static readonly MethodInfo RenderInfo = typeof(ControlAdapter).GetMethod("Render", BindingFlags.Instance | BindingFlags.NonPublic);
+
         protected override void Render(HtmlTextWriter writer)
         {
             CopyAccessState();
             RenderInfo.Invoke(InnerAdapter, new object[] { writer });
         }
 
-        private static readonly MethodInfo RenderChildrenInfo = typeof(System.Web.UI.Adapters.PageAdapter).GetMethod("RenderChildren", BindingFlags.Instance | BindingFlags.NonPublic);
-        
+        private static readonly MethodInfo RenderChildrenInfo = typeof(ControlAdapter).GetMethod("RenderChildren", BindingFlags.Instance | BindingFlags.NonPublic);
+
         protected override void RenderChildren(HtmlTextWriter writer)
         {
             CopyAccessState();
             RenderChildrenInfo.Invoke(InnerAdapter, new object[] { writer });
         }
 
-        private static readonly MethodInfo SaveAdapterControlStateInfo = typeof(System.Web.UI.Adapters.PageAdapter).GetMethod("SaveAdapterControlState", BindingFlags.Instance | BindingFlags.NonPublic);
-        
+        private static readonly MethodInfo SaveAdapterControlStateInfo = typeof(ControlAdapter).GetMethod("SaveAdapterControlState", BindingFlags.Instance | BindingFlags.NonPublic);
+
         protected override object SaveAdapterControlState()
         {
             CopyAccessState();
             return SaveAdapterControlStateInfo.Invoke(InnerAdapter, null);
         }
 
-        private static readonly MethodInfo SaveAdapterViewStateInfo = typeof(System.Web.UI.Adapters.PageAdapter).GetMethod("SaveAdapterViewState", BindingFlags.Instance | BindingFlags.NonPublic);
-        
+        private static readonly MethodInfo SaveAdapterViewStateInfo = typeof(ControlAdapter).GetMethod("SaveAdapterViewState", BindingFlags.Instance | BindingFlags.NonPublic);
+
         protected override object SaveAdapterViewState()
         {
             CopyAccessState();
