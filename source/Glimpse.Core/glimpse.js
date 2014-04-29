@@ -3489,9 +3489,12 @@ glimpse.tab = (function($, pubsub, data) {
         renderArrow = function(side, color) {
             return '<div class="glimpse-arrow-holder-' + side + '"><div class="glimpse-arrow-bar" style="background-color:' + color + ';"></div><div class="glimpse-arrow-head-back"></div><div class="glimpse-arrow-head" style="border-' + (side == 'left' ? 'right' : 'left') + '-color:' + color + '"></div></div>';
         }, 
+        renderTerminator = function(color) {
+            return '<div class="glimpse-terminator-holder"><div class="glimpse-terminator-head" style="background-color:' + color + ';"></div><div class="glimpse-terminator-bar" style="background-color:' + color + ';"></div></div>'
+        },
         renderMiddlewareItem = function(item, previousColor) {
-            var nextColor = item.color || generateColor(),
-                html = '<table class="glimpse-middleware-holder' + (!item.children ? ' glimpse-middleware-holder-childless' : '') + (item.childlessDuration ? ' glimpse-middleware-holder-important' : '') + '"><tr>';
+            var nextColor = item.color || (!item.duration ? '#7A7A7A' : generateColor()),
+                html = '<div class="glimpse-middleware-holder-outer"><table class="glimpse-middleware-holder' + (!item.children ? ' glimpse-middleware-holder-childless' : '') + (item.duration ? ' glimpse-middleware-holder-important' : '') + (!item.duration ? ' glimpse-middleware-holder-none' : '') + '"><tr>';
 
             // item 
             html += '<td style="background-color:' + nextColor + ';">';
@@ -3501,6 +3504,9 @@ glimpse.tab = (function($, pubsub, data) {
                     html += renderArrow('right', previousColor);
                     html += renderArrow('left', nextColor);
                 }
+                else
+                    html += renderTerminator(previousColor);
+
                 // content
                 html += '<div class="glimpse-middleware-content">';
                     html += '<div class="glimpse-middleware-title" title="' + item.type + '">' + item.title + '</div>'; 
@@ -3521,12 +3527,12 @@ glimpse.tab = (function($, pubsub, data) {
                 html += '</td>';
             }
 
-            return html + '</tr></table>';
+            return html + '</tr></table></div>';
         },
         renderMiddleware = function(item) { 
             var html = '<div class="glimpse-header">Execution Pipline</div>';
-            html += '<table class="glimpse-middleware-holder"><tr><td class="glimpse-middleware-holder-main"><div class="glimpse-middleware-main-title">Host</div></td><td>'
-            html += renderMiddlewareItem(item, '#d6d6d6'); //' + renderArrow('right', '#d6d6d6') + '
+            html += '<table class="glimpse-middleware-holder"><tr><td class="glimpse-middleware-holder-root"><div class="glimpse-middleware-root-title">Host</div></td><td>'
+            html += renderMiddlewareItem(item, '#d6d6d6');
             html += '</td></tr></table>'
 
             return html;
@@ -3540,7 +3546,7 @@ glimpse.tab = (function($, pubsub, data) {
             args.scope.html(html);
         },
         modify = function(options) {
-            options.templates.css += '.glimpse-arrow-holder-left, .glimpse-arrow-holder-right {position: absolute;z-index: 1;}.glimpse-arrow-holder-left {bottom: 33px;left: -19px;}.glimpse-arrow-holder-right {top: 3px;left: -10px;}.glimpse-arrow-head, .glimpse-arrow-head-back {width: 0;height: 0;position: absolute;}.glimpse-arrow-head {border-top: 15px solid transparent;border-bottom: 15px solid transparent;}.glimpse-arrow-head-back {border-top: 17px solid transparent;border-bottom: 17px solid transparent;top: -2px;}.glimpse-arrow-bar {position: absolute;width: 5px;height: 14px;top: 8px;}.glimpse-arrow-holder-right .glimpse-arrow-head {border-left: 14px solid;left: 5px;}.glimpse-arrow-holder-right .glimpse-arrow-head-back { border-left: 16px solid white;left: 5px;} .glimpse-arrow-holder-left .glimpse-arrow-head {border-right: 14px solid; }.glimpse-arrow-holder-left .glimpse-arrow-head-back {border-right: 16px solid white;left: -2px;}.glimpse-arrow-holder-left .glimpse-arrow-bar {left: 14px;}.glimpse .glimpse-middleware-holder {margin: 10px;width: inherit;}.glimpse .glimpse-middleware-holder-main {background: #d6d6d6;}.glimpse .glimpse-middleware-holder-childless {margin-right: 0;}.glimpse .glimpse-middleware-holder-important {min-height: 70px;}.glimpse .glimpse-middleware-holder td {padding:0px;position:relative;}.glimpse .glimpse-middleware-content {color: white;}.glimpse .glimpse-middleware-title, .glimpse .glimpse-middleware-main-title {font-size: 140%;font-weight: bold;font-family: "Segoe UI Light", "Segoe UI Web Regular", "Segoe UI", "Helvetica Neue", Helvetica, Arial;}.glimpse .glimpse-middleware-title {margin: 10px 15px;}.glimpse .glimpse-middleware-main-title {-webkit-transform-origin: bottom center;-moz-transform-origin: bottom center;-ms-transform-origin: bottom center;-o-transform-origin: bottom center;-webkit-transform: rotate(-90deg);-moz-transform: rotate(-90deg);-ms-transform: rotate(-90deg);-o-transform: rotate(-90deg);padding: 6px 6px 2px 0;}.glimpse .glimpse-middleware-duration {font-size: 3.5em;line-height: 1em;opacity: 0.8;position: absolute;bottom: -11px;font-family: "Segoe UI Light", "Segoe UI Web Regular", "Segoe UI", "Helvetica Neue", Helvetica, Arial;}.glimpse .glimpse-middleware-duration span {font-size: 0.5em;}';
+            options.templates.css += '.glimpse-arrow-holder-left, .glimpse-arrow-holder-right, .glimpse .glimpse-terminator-holder {position: absolute;z-index: 1;}.glimpse-arrow-holder-left {bottom: 33px;left: -9px;}.glimpse-arrow-holder-right {top: 3px;left: 0px;}.glimpse-arrow-head, .glimpse-arrow-head-back {width: 0;height: 0;position: absolute;}.glimpse-arrow-head {border-top: 15px solid transparent;border-bottom: 15px solid transparent;}.glimpse-arrow-head-back {border-top: 17px solid transparent;border-bottom: 17px solid transparent;top: -2px;}.glimpse-arrow-bar {position: absolute;width: 5px;height: 14px;top: 8px;}.glimpse-arrow-holder-right .glimpse-arrow-head {border-left: 14px solid;left: 5px;}.glimpse-arrow-holder-right .glimpse-arrow-head-back { border-left: 16px solid white;left: 5px;} .glimpse-arrow-holder-left .glimpse-arrow-head {border-right: 14px solid; }.glimpse-arrow-holder-left .glimpse-arrow-head-back {border-right: 16px solid white;left: -2px;}.glimpse-arrow-holder-left .glimpse-arrow-bar {left: 14px;}.glimpse .glimpse-middleware-holder {margin: 10px;width: inherit;}.glimpse .glimpse-middleware-holder-root {background: #d6d6d6;}.glimpse .glimpse-middleware-holder-childless {margin-right: 0;}.glimpse .glimpse-middleware-holder-important {height: 70px;}.glimpse .glimpse-middleware-holder-none > tbody > tr > td {background-color: #7A7A7A;background-image: -webkit-gradient(linear, 0 100%, 100% 0, color-stop(.25, rgba(255, 255, 255, .4)), color-stop(.25, transparent), color-stop(.5, transparent), color-stop(.5, rgba(255, 255, 255, .4)), color-stop(.75, rgba(255, 255, 255, .4)), color-stop(.75, transparent), to(transparent));background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, .4) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .4) 50%, rgba(255, 255, 255, .4) 75%, transparent 75%, transparent);background-image: -moz-linear-gradient(45deg, rgba(255, 255, 255, .4) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .4) 50%, rgba(255, 255, 255, .4) 75%, transparent 75%, transparent);background-image: -ms-linear-gradient(45deg, rgba(255, 255, 255, .4) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .4) 50%, rgba(255, 255, 255, .4) 75%, transparent 75%, transparent);background-image: -o-linear-gradient(45deg, rgba(255, 255, 255, .4) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .4) 50%, rgba(255, 255, 255, .4) 75%, transparent 75%, transparent);background-image: linear-gradient(45deg, rgba(255, 255, 255, .4) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .4) 50%, rgba(255, 255, 255, .4) 75%, transparent 75%, transparent);-webkit-background-size: 50px 50px;-moz-background-size: 50px 50px;background-size: 50px 50px;}.glimpse .glimpse-middleware-holder td{padding:0px; }.glimpse .glimpse-middleware-holder-outer {position:relative;}.glimpse .glimpse-middleware-content {color: white;}.glimpse .glimpse-middleware-title, .glimpse .glimpse-middleware-root-title {font-size: 140%;font-weight: bold;font-family: "Segoe UI Light", "Segoe UI Web Regular", "Segoe UI", "Helvetica Neue", Helvetica, Arial;}.glimpse .glimpse-middleware-title {margin: 10px 15px;}.glimpse .glimpse-middleware-root-title {-webkit-transform-origin: bottom center;-moz-transform-origin: bottom center;-ms-transform-origin: bottom center;-o-transform-origin: bottom center;-webkit-transform: rotate(-90deg);-moz-transform: rotate(-90deg);-ms-transform: rotate(-90deg);-o-transform: rotate(-90deg);padding: 6px 6px 2px 0;}.glimpse .glimpse-middleware-duration {font-size: 3.5em;line-height: 1em;opacity: 0.8;position: absolute;bottom: -11px;font-family: "Segoe UI Light", "Segoe UI Web Regular", "Segoe UI", "Helvetica Neue", Helvetica, Arial;}.glimpse .glimpse-middleware-duration span {font-size: 0.5em;}.glimpse .glimpse-terminator-head {position: absolute;width: 15px;height: 15px;padding-bottom: 50%;-moz-border-radius: 50%;-webkit-border-radius: 50%;border-radius: 50%;border: 2px solid #fff;top: 7px;left: -10px;}.glimpse .glimpse-terminator-bar {position: absolute;width: 10px;height: 10px;top: 12px;left: -10px;}';
         },
         prerender = function(args) {
             args.pluginData._data = args.pluginData.data;
