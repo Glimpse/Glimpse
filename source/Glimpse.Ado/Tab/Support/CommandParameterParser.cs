@@ -4,8 +4,8 @@ namespace Glimpse.Ado.Tab.Support
 {
     internal class CommandParameterParser : ICommandParameterParser
     {
-        private const string QuotedFormat = "'{0}' /* {1} */";
-        private const string UnquotedFormat = "{0} /* {1} */";
+        internal const string QuotedFormat = "'{0}' /* {1} */";
+        internal const string UnquotedFormat = "{0} /* {1} */";
 
         public CommandParameterParser(bool useQuotes)
         { 
