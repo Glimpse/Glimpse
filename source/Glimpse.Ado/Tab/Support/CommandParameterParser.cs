@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using Glimpse.Ado.Extensibility;
 
 namespace Glimpse.Ado.Tab.Support
@@ -21,9 +22,12 @@ namespace Glimpse.Ado.Tab.Support
                 return command;
             }
 
-            var fomatter = UseQuotes ? QuotedFormat : UnquotedFormat;
+            var formatter = UseQuotes ? QuotedFormat : UnquotedFormat;
 
-            return command.Replace(parameterName, string.Format(fomatter, parameterValue, parameterName));
+            var regex = new Regex(parameterName + "(?<delimiter>[^a-zA-Z0-9]|$)");
+            var ret = regex.Replace(command, string.Format(formatter, parameterValue, parameterName) + "${delimiter}");
+
+            return ret;
         }
     }
 }
