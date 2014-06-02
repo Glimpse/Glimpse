@@ -1,9 +1,13 @@
+using System.Text.RegularExpressions;
 using Glimpse.Ado.Extensibility;
 
 namespace Glimpse.Ado.Tab.Support
 {
     internal class CommandParameterParser : ICommandParameterParser
     {
+        private const string RegexFormat = "(?<preDelimiter>[^@]){0}(?<postDelimiter>[^a-zA-Z0-9]|$)";
+        private const string ReplacementFormat = "${{preDelimiter}}{0}${{postDelimiter}}";
+
         internal const string QuotedFormat = "'{0}' /* {1} */";
         internal const string UnquotedFormat = "{0} /* {1} */";
 
@@ -21,9 +25,11 @@ namespace Glimpse.Ado.Tab.Support
                 return command;
             }
 
-            var fomatter = UseQuotes ? QuotedFormat : UnquotedFormat;
+            var formatter = UseQuotes ? QuotedFormat : UnquotedFormat;
 
-            return command.Replace(parameterName, string.Format(fomatter, parameterValue, parameterName));
+            var regex = new Regex(string.Format(RegexFormat, Regex.Escape(parameterName)));
+
+            return regex.Replace(command, string.Format(ReplacementFormat, string.Format(formatter, parameterValue, parameterName)));
         }
     }
 }
