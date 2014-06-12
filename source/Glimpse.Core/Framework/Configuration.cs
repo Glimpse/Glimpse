@@ -69,7 +69,12 @@ namespace Glimpse.Core.Framework
 
             if (xmlConfigurationSection == null)
             {
-                throw new ArgumentNullException("xmlConfigurationSection");
+                // REMOVE HACK!!! Need to get around K returning null here
+                //throw new ArgumentNullException("xmlConfigurationSection");
+
+                xmlConfigurationSection = new Section();
+                xmlConfigurationSection.DefaultRuntimePolicy = RuntimePolicy.On;
+                xmlConfigurationSection.EndpointBaseUri = "/Glimpse.axd";
             }
 
             ResourceEndpoint = endpointConfiguration;

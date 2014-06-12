@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{FA63A8AC-48D1-40CB-8A1C-334E135CF0BF}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Glimpse.ProjectK.Sample</RootNamespace>
+    <AssemblyName>Glimpse.ProjectK.Sample</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.AspNet.Abstractions">
+      <HintPath>..\..\packages\Microsoft.AspNet.Abstractions.0.1-alpha-307\lib\net45\Microsoft.AspNet.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Diagnostics">
+      <HintPath>..\..\packages\Microsoft.AspNet.Diagnostics.0.1-alpha-192\lib\net45\Microsoft.AspNet.Diagnostics.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Hosting">
+      <HintPath>..\..\packages\Microsoft.AspNet.Hosting.0.1-alpha-300\lib\net45\Microsoft.AspNet.Hosting.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Server.WebListener">
+      <HintPath>..\..\packages\Microsoft.AspNet.Server.WebListener.0.1-alpha-245\lib\net45\Microsoft.AspNet.Server.WebListener.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.StaticFiles">
+      <HintPath>..\..\packages\Microsoft.AspNet.StaticFiles.0.1-alpha-223\lib\net45\Microsoft.AspNet.StaticFiles.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="image.jpg" />
+    <Compile Include="project.json" />
+    <Compile Include="Startup.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Glimpse.Core\Glimpse.Core.csproj">
+      <Project>{c1289ce8-3259-41d9-893e-7a4e6f772d30}</Project>
+      <Name>Glimpse.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Glimpse.ProjectK\Glimpse.ProjectK.csproj">
+      <Project>{6a99983e-130e-43b0-85f5-59ca4aa7e54e}</Project>
+      <Name>Glimpse.ProjectK</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

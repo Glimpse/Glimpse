@@ -52,17 +52,9 @@
       <Project>{dd576747-cd93-43f0-8648-6cdc5cd9c555}</Project>
       <Name>Glimpse.WebForms.Net45</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Glimpse.WindowsAzure.Caching\Glimpse.WindowsAzure.Caching.csproj">
-      <Project>{C58BDD08-9093-43AC-9AEE-0DE2CF15DBEF}</Project>
-      <Name>Glimpse.WindowsAzure.Caching</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Glimpse.WindowsAzure.Net40\Glimpse.WindowsAzure.Net40.csproj">
       <Project>{c0a9a534-5dc9-4a26-952b-71d43160b597}</Project>
       <Name>Glimpse.WindowsAzure.Net40</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Glimpse.WindowsAzure.Storage\Glimpse.WindowsAzure.Storage.csproj">
-      <Project>{2E11865D-5484-4C3C-9C4B-940D8FCE043A}</Project>
-      <Name>Glimpse.WindowsAzure.Storage</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

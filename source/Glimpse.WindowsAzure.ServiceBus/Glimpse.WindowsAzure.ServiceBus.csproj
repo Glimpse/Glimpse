@@ -80,10 +80,6 @@
       <Project>{dd93b23c-e2d7-4283-9f3f-88f87271018b}</Project>
       <Name>Glimpse.Core.Net40</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Glimpse.WindowsAzure\Glimpse.WindowsAzure.csproj">
-      <Project>{310d2fea-6b20-4d2e-869d-ec3b578ff552}</Project>
-      <Name>Glimpse.WindowsAzure</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

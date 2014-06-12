@@ -5,7 +5,7 @@ properties {
     $tools_dir = "$base_dir\tools"
     $package_dir = "$base_dir\packages"
     $framework_dir =  (Get-ProgramFiles) + "\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0"
-    $config = "release"
+    $config = "debug"
     $preReleaseVersion = $null
 }
 
@@ -184,73 +184,73 @@ task merge -depends test {
     cd $package_dir\ilmerge.*\
 
     "   Glimpse.Core.Net45"
-    exec { & .\ilmerge.exe /targetplatform:"v4,$framework_dir" /log /out:"$source_dir\Glimpse.Core.Net45\nuspec\lib\net45\Glimpse.Core.dll" /internalize:$base_dir\ILMergeInternalize.txt "$source_dir\Glimpse.Core.Net45\bin\Release\Glimpse.Core.dll" "$source_dir\Glimpse.Core.Net45\bin\Release\Newtonsoft.Json.dll" "$source_dir\Glimpse.Core.Net45\bin\Release\Castle.Core.dll" "$source_dir\Glimpse.Core.Net45\bin\Release\NLog.dll" "$source_dir\Glimpse.Core.Net45\bin\Release\AntiXssLibrary.dll" "$source_dir\Glimpse.Core.Net45\bin\Release\Tavis.UriTemplates.dll" "$source_dir\Glimpse.Core.Net45\bin\Release\Antlr4.StringTemplate.dll"}
+    exec { & .\ilmerge.exe /targetplatform:"v4,$framework_dir" /log /out:"$source_dir\Glimpse.Core.Net45\nuspec\lib\net45\Glimpse.Core.dll" /internalize:$base_dir\ILMergeInternalize.txt "$source_dir\Glimpse.Core.Net45\bin\Debug\Glimpse.Core.dll" "$source_dir\Glimpse.Core.Net45\bin\Debug\Newtonsoft.Json.dll" "$source_dir\Glimpse.Core.Net45\bin\Debug\Castle.Core.dll" "$source_dir\Glimpse.Core.Net45\bin\Debug\NLog.dll" "$source_dir\Glimpse.Core.Net45\bin\Debug\AntiXssLibrary.dll" "$source_dir\Glimpse.Core.Net45\bin\Debug\Tavis.UriTemplates.dll" "$source_dir\Glimpse.Core.Net45\bin\Debug\Antlr4.StringTemplate.dll"}
     
     "   Glimpse.Core.Net40"
-    exec { & .\ilmerge.exe /targetplatform:"v4,$framework_dir" /log /out:"$source_dir\Glimpse.Core.Net45\nuspec\lib\net40\Glimpse.Core.dll" /internalize:$base_dir\ILMergeInternalize.txt "$source_dir\Glimpse.Core.Net40\bin\Release\Glimpse.Core.dll" "$source_dir\Glimpse.Core.Net40\bin\Release\Newtonsoft.Json.dll" "$source_dir\Glimpse.Core.Net40\bin\Release\Castle.Core.dll" "$source_dir\Glimpse.Core.Net40\bin\Release\NLog.dll" "$source_dir\Glimpse.Core.Net40\bin\Release\AntiXssLibrary.dll" "$source_dir\Glimpse.Core.Net40\bin\Release\Tavis.UriTemplates.dll" "$source_dir\Glimpse.Core.Net45\bin\Release\Antlr4.StringTemplate.dll"}
+    exec { & .\ilmerge.exe /targetplatform:"v4,$framework_dir" /log /out:"$source_dir\Glimpse.Core.Net45\nuspec\lib\net40\Glimpse.Core.dll" /internalize:$base_dir\ILMergeInternalize.txt "$source_dir\Glimpse.Core.Net40\bin\Debug\Glimpse.Core.dll" "$source_dir\Glimpse.Core.Net40\bin\Debug\Newtonsoft.Json.dll" "$source_dir\Glimpse.Core.Net40\bin\Debug\Castle.Core.dll" "$source_dir\Glimpse.Core.Net40\bin\Debug\NLog.dll" "$source_dir\Glimpse.Core.Net40\bin\Debug\AntiXssLibrary.dll" "$source_dir\Glimpse.Core.Net40\bin\Debug\Tavis.UriTemplates.dll" "$source_dir\Glimpse.Core.Net45\bin\Debug\Antlr4.StringTemplate.dll"}
     
     "   Glimpse.Core.Net35"
-    exec { & .\ilmerge.exe /log /out:"$source_dir\Glimpse.Core.Net45\nuspec\lib\net35\Glimpse.Core.dll" /internalize:$base_dir\ILMergeInternalize.txt "$source_dir\Glimpse.Core.Net35\bin\Release\Glimpse.Core.dll" "$source_dir\Glimpse.Core.Net35\bin\Release\Newtonsoft.Json.dll" "$source_dir\Glimpse.Core.Net35\bin\Release\Castle.Core.dll" "$source_dir\Glimpse.Core.Net35\bin\Release\NLog.dll" "$source_dir\Glimpse.Core.Net35\bin\Release\AntiXssLibrary.dll"  "$source_dir\Glimpse.Core.Net35\bin\Release\Tavis.UriTemplates.dll" "$source_dir\Glimpse.Core.Net45\bin\Release\Antlr4.StringTemplate.dll"}
+    exec { & .\ilmerge.exe /log /out:"$source_dir\Glimpse.Core.Net45\nuspec\lib\net35\Glimpse.Core.dll" /internalize:$base_dir\ILMergeInternalize.txt "$source_dir\Glimpse.Core.Net35\bin\Debug\Glimpse.Core.dll" "$source_dir\Glimpse.Core.Net35\bin\Debug\Newtonsoft.Json.dll" "$source_dir\Glimpse.Core.Net35\bin\Debug\Castle.Core.dll" "$source_dir\Glimpse.Core.Net35\bin\Debug\NLog.dll" "$source_dir\Glimpse.Core.Net35\bin\Debug\AntiXssLibrary.dll"  "$source_dir\Glimpse.Core.Net35\bin\Debug\Tavis.UriTemplates.dll" "$source_dir\Glimpse.Core.Net45\bin\Debug\Antlr4.StringTemplate.dll"}
     
     "   Glimpse.AspNet.Net45"
-    copy $source_dir\Glimpse.AspNet.Net45\bin\Release\Glimpse.AspNet.* $source_dir\Glimpse.AspNet.Net45\nuspec\lib\net45\
+    copy $source_dir\Glimpse.AspNet.Net45\bin\Debug\Glimpse.AspNet.* $source_dir\Glimpse.AspNet.Net45\nuspec\lib\net45\
     
     "   Glimpse.AspNet.Net40"
-    copy $source_dir\Glimpse.AspNet.Net40\bin\Release\Glimpse.AspNet.* $source_dir\Glimpse.AspNet.Net45\nuspec\lib\net40\   
+    copy $source_dir\Glimpse.AspNet.Net40\bin\Debug\Glimpse.AspNet.* $source_dir\Glimpse.AspNet.Net45\nuspec\lib\net40\   
     
     "   Glimpse.AspNet.Net35"
-    copy $source_dir\Glimpse.AspNet.Net35\bin\Release\Glimpse.AspNet.* $source_dir\Glimpse.AspNet.Net45\nuspec\lib\net35\
+    copy $source_dir\Glimpse.AspNet.Net35\bin\Debug\Glimpse.AspNet.* $source_dir\Glimpse.AspNet.Net45\nuspec\lib\net35\
     
     "   Glimpse.Ado.Net45"
-    copy $source_dir\Glimpse.Ado.Net45\bin\Release\Glimpse.Ado.* $source_dir\Glimpse.Ado.Net45\nuspec\lib\net45\
+    copy $source_dir\Glimpse.Ado.Net45\bin\Debug\Glimpse.Ado.* $source_dir\Glimpse.Ado.Net45\nuspec\lib\net45\
     
     "   Glimpse.Ado.Net40"
-    copy $source_dir\Glimpse.Ado.Net40\bin\Release\Glimpse.Ado.* $source_dir\Glimpse.Ado.Net45\nuspec\lib\net40\   
+    copy $source_dir\Glimpse.Ado.Net40\bin\Debug\Glimpse.Ado.* $source_dir\Glimpse.Ado.Net45\nuspec\lib\net40\   
     
     "   Glimpse.Ado.Net35"
-    copy $source_dir\Glimpse.Ado.Net35\bin\Release\Glimpse.Ado.* $source_dir\Glimpse.Ado.Net45\nuspec\lib\net35\
+    copy $source_dir\Glimpse.Ado.Net35\bin\Debug\Glimpse.Ado.* $source_dir\Glimpse.Ado.Net45\nuspec\lib\net35\
 
     "   Glimpse.Mvc2"
-    copy $source_dir\Glimpse.Mvc2\bin\Release\Glimpse.Mvc2.* $source_dir\Glimpse.Mvc2\nuspec\lib\net35\
+    copy $source_dir\Glimpse.Mvc2\bin\Debug\Glimpse.Mvc2.* $source_dir\Glimpse.Mvc2\nuspec\lib\net35\
     
     "   Glimpse.Mvc3"
-    copy $source_dir\Glimpse.Mvc3\bin\Release\Glimpse.Mvc3.* $source_dir\Glimpse.Mvc3\nuspec\lib\net40\
+    copy $source_dir\Glimpse.Mvc3\bin\Debug\Glimpse.Mvc3.* $source_dir\Glimpse.Mvc3\nuspec\lib\net40\
 
     "   Glimpse.Mvc4"
-    copy $source_dir\Glimpse.Mvc4\bin\Release\Glimpse.Mvc4.* $source_dir\Glimpse.Mvc4\nuspec\lib\net40\
+    copy $source_dir\Glimpse.Mvc4\bin\Debug\Glimpse.Mvc4.* $source_dir\Glimpse.Mvc4\nuspec\lib\net40\
 
     "   Glimpse.Mvc5"
-    copy $source_dir\Glimpse.Mvc5\bin\Release\Glimpse.Mvc5.* $source_dir\Glimpse.Mvc5\nuspec\lib\net45\
+    copy $source_dir\Glimpse.Mvc5\bin\Debug\Glimpse.Mvc5.* $source_dir\Glimpse.Mvc5\nuspec\lib\net45\
     
     "   Glimpse.EF43.Net40"
-    copy $source_dir\Glimpse.EF43.Net40\bin\Release\Glimpse.EF43.* $source_dir\Glimpse.EF43.Net40\nuspec\lib\net40\   
+    copy $source_dir\Glimpse.EF43.Net40\bin\Debug\Glimpse.EF43.* $source_dir\Glimpse.EF43.Net40\nuspec\lib\net40\   
     
     "   Glimpse.EF5.Net45"
-    copy $source_dir\Glimpse.EF5.Net45\bin\Release\Glimpse.EF5.* $source_dir\Glimpse.EF5.Net45\nuspec\lib\net45\
+    copy $source_dir\Glimpse.EF5.Net45\bin\Debug\Glimpse.EF5.* $source_dir\Glimpse.EF5.Net45\nuspec\lib\net45\
     
     "   Glimpse.EF5.Net40"
-    copy $source_dir\Glimpse.EF5.Net40\bin\Release\Glimpse.EF5.* $source_dir\Glimpse.EF5.Net45\nuspec\lib\net40\   
+    copy $source_dir\Glimpse.EF5.Net40\bin\Debug\Glimpse.EF5.* $source_dir\Glimpse.EF5.Net45\nuspec\lib\net40\   
 
     "   Glimpse.EF6.Net45"
-    copy $source_dir\Glimpse.EF6.Net45\bin\Release\Glimpse.EF6.* $source_dir\Glimpse.EF6.Net45\nuspec\lib\net45\
+    copy $source_dir\Glimpse.EF6.Net45\bin\Debug\Glimpse.EF6.* $source_dir\Glimpse.EF6.Net45\nuspec\lib\net45\
     
     "   Glimpse.EF6.Net40"
-    copy $source_dir\Glimpse.EF6.Net40\bin\Release\Glimpse.EF6.* $source_dir\Glimpse.EF6.Net45\nuspec\lib\net40\ 
+    copy $source_dir\Glimpse.EF6.Net40\bin\Debug\Glimpse.EF6.* $source_dir\Glimpse.EF6.Net45\nuspec\lib\net40\ 
 	 
     "   Glimpse.WebForms.Net45"
-    copy $source_dir\Glimpse.WebForms.Net45\bin\Release\Glimpse.WebForms.* $source_dir\Glimpse.WebForms.Net45\nuspec\lib\net45\
+    copy $source_dir\Glimpse.WebForms.Net45\bin\Debug\Glimpse.WebForms.* $source_dir\Glimpse.WebForms.Net45\nuspec\lib\net45\
     
     "   Glimpse.WebForms.Net40"
-    copy $source_dir\Glimpse.WebForms.Net40\bin\Release\Glimpse.WebForms.* $source_dir\Glimpse.WebForms.Net45\nuspec\lib\net40\   
+    copy $source_dir\Glimpse.WebForms.Net40\bin\Debug\Glimpse.WebForms.* $source_dir\Glimpse.WebForms.Net45\nuspec\lib\net40\   
     
     "   Glimpse.WebForms.Net35"
-    copy $source_dir\Glimpse.WebForms.Net35\bin\Release\Glimpse.WebForms.* $source_dir\Glimpse.WebForms.Net45\nuspec\lib\net35\
+    copy $source_dir\Glimpse.WebForms.Net35\bin\Debug\Glimpse.WebForms.* $source_dir\Glimpse.WebForms.Net45\nuspec\lib\net35\
 	
 	"   Glimpse.WindowsAzure.Net40"
-    copy $source_dir\Glimpse.WindowsAzure.Net40\bin\Release\Glimpse.WindowsAzure.* $source_dir\Glimpse.WindowsAzure.Net40\nuspec\lib\net40\
+    copy $source_dir\Glimpse.WindowsAzure.Net40\bin\Debug\Glimpse.WindowsAzure.* $source_dir\Glimpse.WindowsAzure.Net40\nuspec\lib\net40\
 	
 	"   Glimpse.WindowsAzure.Storage.Net40"
-    copy $source_dir\Glimpse.WindowsAzure.Storage.Net40\bin\Release\Glimpse.WindowsAzure.Storage.* $source_dir\Glimpse.WindowsAzure.Storage.Net40\nuspec\lib\net40\
+    copy $source_dir\Glimpse.WindowsAzure.Storage.Net40\bin\Debug\Glimpse.WindowsAzure.Storage.* $source_dir\Glimpse.WindowsAzure.Storage.Net40\nuspec\lib\net40\
 }
 
 task pack -depends merge {
