@@ -9,7 +9,7 @@ namespace Glimpse.Ado.Tab.Support
         public CommandSanitizer()
         {
             Parsers = new Dictionary<string, ICommandParameterParser>();
-            PopuplateParsers();
+            PopulateParsers();
         }
 
         private IDictionary<string, ICommandParameterParser> Parsers { get; set; }
@@ -32,7 +32,7 @@ namespace Glimpse.Ado.Tab.Support
             return command;
         }
 
-        private void PopuplateParsers()
+        private void PopulateParsers()
         {
             var quoted = new CommandParameterParser(true);
             var unquoted = new CommandParameterParser(false);
