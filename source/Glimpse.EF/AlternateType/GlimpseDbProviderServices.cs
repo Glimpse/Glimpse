@@ -42,7 +42,7 @@ namespace Glimpse.EF.AlternateType
 
         protected override DbCommandDefinition CreateDbCommandDefinition(DbProviderManifest providerManifest, DbCommandTree commandTree)
         {
-            return new GlimpseDbCommandDefinition(InnerProviderServices.CreateCommandDefinition(commandTree));
+            return new GlimpseDbCommandDefinition(InnerProviderServices.CreateCommandDefinition(providerManifest, commandTree));
         }
 
         protected override void DbCreateDatabase(DbConnection connection, int? commandTimeout, StoreItemCollection storeItemCollection)
