@@ -61,11 +61,6 @@ namespace Glimpse.Owin.Middleware
             response.Cookies.Append(name, value);
         }
 
-        public void InjectHttpResponseBody(string htmlSnippet)
-        {
-            // Hack: doing nothing because this has been temporarily moved to HeadMiddlewear
-        }
-
         public void WriteHttpResponse(byte[] content)
         {
             response.Write(content);

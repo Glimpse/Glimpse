@@ -159,7 +159,7 @@ namespace Glimpse.Test.Core
         {
             using (var memoryStream = new MemoryStream())
             {
-                var preBodyTagFilter = new PreBodyTagInjectionStream(htmlSnippet, memoryStream, Encoding.UTF8, requestUrl, LoggerMock.Object);
+                var preBodyTagFilter = new PreBodyTagInjectionStream(() => htmlSnippet, memoryStream, () => Encoding.UTF8, () => requestUrl, LoggerMock.Object);
 
                 string[] inputsToProcess = { inputToProcess };
                 if (chunkLastNumberOfCharacters.HasValue)

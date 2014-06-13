@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Web;
-using Glimpse.Core;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
 
@@ -76,19 +75,6 @@ namespace Glimpse.AspNet
             catch (Exception exception)
             {
                 Logger.Error("Exception setting cookie '{0}' with value '{1}'.", exception, name, value);
-            }
-        }
-
-        public void InjectHttpResponseBody(string htmlSnippet)
-        {
-            try
-            {
-                var response = Context.Response;
-                response.Filter = new PreBodyTagInjectionStream(htmlSnippet, response.Filter, response.ContentEncoding, Context.Request != null ? Context.Request.RawUrl : null, Logger);
-            }
-            catch (Exception exception)
-            {
-                Logger.Error("Exception injecting Http response body with Html snippet '{0}'.", exception, htmlSnippet);
             }
         }
 

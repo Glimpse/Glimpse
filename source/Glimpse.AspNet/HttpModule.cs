@@ -2,6 +2,7 @@
 using System.Web;
 using System.Web.Compilation;
 using System.Web.Hosting;
+using Glimpse.Core;
 using Glimpse.Core.Configuration;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
@@ -91,6 +92,15 @@ namespace Glimpse.AspNet
                 // If for some reason EndRequest would not be called for this request, then the Items collection will still be cleaned up by the ASP.NET
                 // runtime and the glimpseRequestContextHandle will then loose its last reference and will eventually be finalized, which will dispose the handle anyway.
                 httpContext.Items.Add(Constants.GlimpseRequestContextHandle, glimpseRequestContextHandle);
+
+                httpContext.Response.Filter =
+                    new PreBodyTagInjectionStream(
+                        () => GlimpseRuntime.Instance.GenerateScriptTags(glimpseRequestContextHandle), 
+                        httpContext.Response.Filter, 
+                        () => httpContext.Response.ContentEncoding,
+                        () => httpContext.Request != null ? httpContext.Request.RawUrl : null,
+                        GlimpseRuntime.Instance.Configuration.Logger);
+            
             }
         }
 

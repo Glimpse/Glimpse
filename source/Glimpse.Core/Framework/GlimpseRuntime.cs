@@ -125,13 +125,13 @@ namespace Glimpse.Core.Framework
         }
 
         private ActiveGlimpseRequestContexts ActiveGlimpseRequestContexts { get; set; }
-        
+
         private RuntimePolicyDeterminator RuntimePolicyDeterminator { get; set; }
-        
+
         private MetadataProvider MetadataProvider { get; set; }
-        
+
         private TabProvider TabProvider { get; set; }
-        
+
         private DisplayProvider DisplayProvider { get; set; }
 
         /// <summary>
@@ -230,13 +230,6 @@ namespace Glimpse.Core.Framework
                     {
                         requestResponseAdapter.SetCookie(Constants.ClientIdCookieName, requestMetadata.ClientId);
                     }
-                }
-
-                if (runtimePolicy.HasFlag(RuntimePolicy.DisplayGlimpseClient))
-                {
-                    var html = GenerateScriptTags(glimpseRequestContext);
-
-                    requestResponseAdapter.InjectHttpResponseBody(html);
                 }
             }
             finally
@@ -417,14 +410,16 @@ namespace Glimpse.Core.Framework
                 throw new GlimpseException("No corresponding GlimpseRequestContext found for GlimpseRequestId '" + glimpseRequestContextHandle.GlimpseRequestId + "'.");
             }
 
+            return ContinueProcessingRequest(glimpseRequestContext, runtimeEvent);
+        }
+
+        private bool ContinueProcessingRequest(IGlimpseRequestContext glimpseRequestContext, RuntimeEvent runtimeEvent)
+        {
             glimpseRequestContext.CurrentRuntimePolicy = RuntimePolicyDeterminator.DetermineRuntimePolicy(runtimeEvent, glimpseRequestContext.CurrentRuntimePolicy, glimpseRequestContext.RequestResponseAdapter);
 
             return glimpseRequestContext.CurrentRuntimePolicy != RuntimePolicy.Off;
         }
 
-        // TODO this should not be public! This was changed to hack in OWIN support
-        // TODO do we need both GenerateScriptTags methods
-#warning this should not be public! but we need to have some way to get to generate script tags conditionally so that they are only generated once (like glimpse injects it before </body> and at the same time a user has added the GlimpseClient control)
         public string GenerateScriptTags(GlimpseRequestContextHandle glimpseRequestContextHandle)
         {
             if (glimpseRequestContextHandle == null)
@@ -446,8 +441,6 @@ namespace Glimpse.Core.Framework
             return GenerateScriptTags(glimpseRequestContext);
         }
 
-        // TODO do we need both GenerateScriptTags methods
-#warning this should not be public! but we need to have some way to get to generate script tags conditionally so that they are only generated once (like glimpse injects it before </body> and at the same time a user has added the GlimpseClient control)
         public string GenerateScriptTags(IGlimpseRequestContext glimpseRequestContext)
         {
             if (glimpseRequestContext.CurrentRuntimePolicy == RuntimePolicy.Off)
@@ -468,10 +461,20 @@ namespace Glimpse.Core.Framework
                 return string.Empty;
             }
 
-            var glimpseScriptTags = GlimpseScriptTagsGenerator.Generate(glimpseRequestContext.GlimpseRequestId, Configuration);
+            try
+            {
+                // should be another new event, like BeginFlush
+                if (!ContinueProcessingRequest(glimpseRequestContext, RuntimeEvent.EndRequest) || !glimpseRequestContext.CurrentRuntimePolicy.HasFlag(RuntimePolicy.DisplayGlimpseClient))
+                {
+                    return string.Empty;
+                }
 
-            requestStore.Set(Constants.ScriptsHaveRenderedKey, true);
-            return glimpseScriptTags;
+                return GlimpseScriptTagsGenerator.Generate(glimpseRequestContext.GlimpseRequestId, Configuration);
+            }
+            finally
+            {
+                requestStore.Set(Constants.ScriptsHaveRenderedKey, true);
+            }
         }
 
         public void Dispose()

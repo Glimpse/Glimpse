@@ -58,15 +58,6 @@ namespace Glimpse.Core.Framework
         void SetCookie(string name, string value);
 
         /// <summary>
-        /// Injects the Http response body.
-        /// </summary>
-        /// <param name="htmlSnippet">The HTML snippet.</param>
-        /// <remarks>
-        /// Inserts the given html snippet into the html document just before the end <c>&lt;/body&gt;</c> tag.
-        /// </remarks>
-        void InjectHttpResponseBody(string htmlSnippet);
-
-        /// <summary>
         /// Writes the Http response.
         /// </summary>
         /// <param name="content">The content.</param>

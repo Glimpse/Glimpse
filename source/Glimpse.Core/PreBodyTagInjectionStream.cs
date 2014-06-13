@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -16,26 +17,33 @@ namespace Glimpse.Core
         private const string TroubleshootingDocsUri = "http://getglimpse.com/Help/Troubleshooting";
 
         private ILogger Logger { get; set; }
-        
-        private string HtmlSnippet { get; set; }
+
+        private Func<string> GenerateHtmlSnippet { get; set; }
         
         private Stream OutputStream { get; set; }
         
-        private Encoding ContentEncoding { get; set; }
+        private Func<Encoding> ContentEncodingResolver { get; set; }
         
         private Regex BodyEndRegex { get; set; }
-        
-        private string CurrentRequestRawUrl { get; set; }
+
+        private Func<string> CurrentRequestRawUrlResolver { get; set; }
         
         private string UnwrittenCharactersFromPreviousCall { get; set; }
 
-        public PreBodyTagInjectionStream(string htmlSnippet, Stream outputStream, Encoding contentEncoding, string currentRequestRawUrl, ILogger logger)
+        private Encoding contentEncoding;
+
+        private Encoding ContentEncoding
         {
-            HtmlSnippet = htmlSnippet + BodyClosingTag;
+            get { return contentEncoding ?? (contentEncoding = ContentEncodingResolver()); }
+        }
+
+        public PreBodyTagInjectionStream(Func<string> generateHtmlSnippet, Stream outputStream, Func<Encoding> contentEncodingResolver, Func<string> currentRequestRawUrlResolver, ILogger logger)
+        {
+            GenerateHtmlSnippet = generateHtmlSnippet;
             OutputStream = outputStream;
-            ContentEncoding = contentEncoding;
+            ContentEncodingResolver = contentEncodingResolver;
             BodyEndRegex = new Regex(BodyClosingTag, RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.IgnoreCase | RegexOptions.RightToLeft);
-            CurrentRequestRawUrl = currentRequestRawUrl ?? "unknown";
+            CurrentRequestRawUrlResolver = currentRequestRawUrlResolver;
             Logger = logger;
         }
 
@@ -153,6 +161,8 @@ namespace Glimpse.Core
 
         public override void Flush()
         {
+            var htmlSnippet = GenerateHtmlSnippet() + BodyClosingTag;
+
             if (!string.IsNullOrEmpty(UnwrittenCharactersFromPreviousCall))
             {
                 string finalContentToWrite = UnwrittenCharactersFromPreviousCall;
@@ -160,12 +170,12 @@ namespace Glimpse.Core
                 if (BodyEndRegex.IsMatch(UnwrittenCharactersFromPreviousCall))
                 {
                     // apparently we did seem to match a </body> tag, which means we can replace the last match with our HTML snippet
-                    finalContentToWrite = BodyEndRegex.Replace(UnwrittenCharactersFromPreviousCall, HtmlSnippet, 1);
+                    finalContentToWrite = BodyEndRegex.Replace(UnwrittenCharactersFromPreviousCall, htmlSnippet, 1);
                 }
                 else
                 {
                     // there was no </body> tag found, so we write down a warning to the log
-                    Logger.Warn("Unable to locate '</body>' with content encoding '{0}' for request '{1}'. The response may be compressed or the markup may actually be missing a '</body>' tag. See {2} for information on troubleshooting this issue.", ContentEncoding.EncodingName, CurrentRequestRawUrl, TroubleshootingDocsUri);
+                    Logger.Warn("Unable to locate '</body>' with content encoding '{0}' for request '{1}'. The response may be compressed or the markup may actually be missing a '</body>' tag. See {2} for information on troubleshooting this issue.", ContentEncoding.EncodingName, CurrentRequestRawUrlResolver() ?? "unknown", TroubleshootingDocsUri);
                 }
 
                 // either way, if a replacement has been done or a warning has been written to the logs, the remaining unwritten characters must be written to the output stream
