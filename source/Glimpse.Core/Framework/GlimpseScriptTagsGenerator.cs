@@ -10,21 +10,32 @@ namespace Glimpse.Core.Framework
     /// <summary>
     /// Generator of Glimpse script tags
     /// </summary>
-    public static class GlimpseScriptTagsGenerator
+    public class GlimpseScriptTagsGenerator : IGlimpseScriptTagsGenerator
     {
+        private IReadonlyConfiguration Configuration { get; set; }
+
         /// <summary>
-        /// 
+        /// Initializes a new instance of the <see cref="GlimpseScriptTagsGenerator" />
         /// </summary>
-        /// <param name="glimpseRequestId">The Glimpse request Id for the request for which script tags must be generated</param>
-        /// <param name="configuration">A <see cref="IConfiguration"/></param>
-        /// <returns>The generated script tags</returns>
-        public static string Generate(Guid glimpseRequestId, IReadonlyConfiguration configuration)
+        /// <param name="configuration">A <see cref="IReadonlyConfiguration"/></param>
+        public GlimpseScriptTagsGenerator(IReadonlyConfiguration configuration)
         {
-            var encoder = configuration.HtmlEncoder;
-            var resourceEndpoint = configuration.ResourceEndpoint;
-            var clientScripts = configuration.ClientScripts;
-            var logger = configuration.Logger;
-            var resources = configuration.Resources;
+            Guard.ArgumentNotNull("configuration", configuration);
+            Configuration = configuration;
+        }
+
+        /// <summary>
+        /// Generates Glimpse script tags for the given Glimpse request id
+        /// </summary>
+        /// <param name="glimpseRequestId">The Glimpse request Id of the request for which script tags must be generated</param>
+        /// <returns>The generated script tags</returns>
+        public string Generate(Guid glimpseRequestId)
+        {
+            var encoder = Configuration.HtmlEncoder;
+            var resourceEndpoint = Configuration.ResourceEndpoint;
+            var clientScripts = Configuration.ClientScripts;
+            var logger = Configuration.Logger;
+            var resources = Configuration.Resources;
 
             var stringBuilder = new StringBuilder();
 
@@ -38,8 +49,8 @@ namespace Glimpse.Core.Framework
                         var requestTokenValues = new Dictionary<string, string>
                                          {
                                              { ResourceParameter.RequestId.Name, glimpseRequestId.ToString() },
-                                             { ResourceParameter.VersionNumber.Name, configuration.Version },
-                                             { ResourceParameter.Hash.Name, configuration.Hash }
+                                             { ResourceParameter.VersionNumber.Name, Configuration.Version },
+                                             { ResourceParameter.Hash.Name, Configuration.Hash }
                                          };
 
                         var resourceName = dynamicScript.GetResourceName();
@@ -51,7 +62,7 @@ namespace Glimpse.Core.Framework
                             continue;
                         }
 
-                        var uriTemplate = resourceEndpoint.GenerateUriTemplate(resource, configuration.EndpointBaseUri, logger);
+                        var uriTemplate = resourceEndpoint.GenerateUriTemplate(resource, Configuration.EndpointBaseUri, logger);
 
                         var resourceParameterProvider = dynamicScript as IParameterValueProvider;
 
@@ -81,7 +92,7 @@ namespace Glimpse.Core.Framework
                 {
                     try
                     {
-                        var uri = encoder.HtmlAttributeEncode(staticScript.GetUri(configuration.Version));
+                        var uri = encoder.HtmlAttributeEncode(staticScript.GetUri(Configuration.Version));
 
                         if (!string.IsNullOrEmpty(uri))
                         {

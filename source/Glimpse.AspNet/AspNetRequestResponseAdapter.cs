@@ -1,5 +1,8 @@
 ﻿using System;
+using System.IO;
+using System.Text;
 using System.Web;
+using Glimpse.Core;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
 
@@ -16,6 +19,25 @@ namespace Glimpse.AspNet
         public object RuntimeContext
         {
             get { return Context; }
+        }
+
+        public Stream OutputStream
+        {
+            get
+            {
+                return Context.Response.Filter;
+            }
+
+            set
+            {
+                Guard.ArgumentNotNull("value", value);
+                Context.Response.Filter = value;
+            }
+        }
+
+        public Encoding ResponseEncoding
+        {
+            get { return Context.Response.ContentEncoding; }
         }
 
         public IRequestMetadata RequestMetadata

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
 using Glimpse.Test.Core.Tester;
+using Moq;
 using Xunit;
 
 namespace Glimpse.Test.Core.Framework
@@ -99,7 +100,10 @@ namespace Glimpse.Test.Core.Framework
                 RequestResponseAdapterTester.Create(requestUri).RequestResponseAdapterMock.Object,
                 RuntimePolicy.On,
                 ResourceEndpointConfigurationTester.Create(requestUri, false).ResourceEndpointConfigurationMock.Object,
-                "/glimpse.axd");
+                "/glimpse.axd",
+                new RuntimePolicyDeterminator(new Mock<IReadonlyConfiguration>().Object),
+                new Mock<IGlimpseScriptTagsGenerator>().Object,
+                new Mock<ILogger>().Object);
         }
 
         private static void AssertExistenceOfGlimpseRequestContext(ActiveGlimpseRequestContexts activeGlimpseRequestContexts, IGlimpseRequestContext expectedGlimpseRequestContext)

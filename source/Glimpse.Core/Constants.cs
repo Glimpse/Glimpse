@@ -50,11 +50,6 @@
         internal const string UserAgentHeaderName = "User-Agent";
 
         /// <summary>
-        /// The key Glimpse server uses to track if script tags have been injected into an Http response.
-        /// </summary>
-        internal const string ScriptsHaveRenderedKey = "__GlimpseScriptHasRendered";
-
-        /// <summary>
         /// The key Glimpse server uses to store the client scripts strategy.
         /// </summary>
         internal const string ClientScriptsStrategy = "__GlimpseClientScriptsStrategy";

@@ -37,6 +37,13 @@ namespace Glimpse.Core
             get { return contentEncoding ?? (contentEncoding = ContentEncodingResolver()); }
         }
 
+        private string htmlSnippet;
+
+        private string HtmlSnippet
+        {
+            get { return htmlSnippet ?? (htmlSnippet = GenerateHtmlSnippet()); }
+        }
+
         public PreBodyTagInjectionStream(Func<string> generateHtmlSnippet, Stream outputStream, Func<Encoding> contentEncodingResolver, Func<string> currentRequestRawUrlResolver, ILogger logger)
         {
             GenerateHtmlSnippet = generateHtmlSnippet;
@@ -95,6 +102,12 @@ namespace Glimpse.Core
 
         public override void Write(byte[] buffer, int offset, int count)
         {
+            if (string.IsNullOrEmpty(HtmlSnippet))
+            {
+                OutputStream.Write(buffer, offset, count);
+                return;
+            }
+
             // There are different cases we need to deal with
             // Normally you would expect the contentInBuffer to contain the complete HTML code to return, but this is not always true because it is possible that 
             // the content that will be send back is larger than the buffer foreseen by ASP.NET (currently the buffer seems to be a little bit less than 16K)
@@ -161,7 +174,11 @@ namespace Glimpse.Core
 
         public override void Flush()
         {
-            var htmlSnippet = GenerateHtmlSnippet() + BodyClosingTag;
+            if (string.IsNullOrEmpty(HtmlSnippet))
+            {
+                OutputStream.Flush();
+                return;
+            }
 
             if (!string.IsNullOrEmpty(UnwrittenCharactersFromPreviousCall))
             {
@@ -170,7 +187,7 @@ namespace Glimpse.Core
                 if (BodyEndRegex.IsMatch(UnwrittenCharactersFromPreviousCall))
                 {
                     // apparently we did seem to match a </body> tag, which means we can replace the last match with our HTML snippet
-                    finalContentToWrite = BodyEndRegex.Replace(UnwrittenCharactersFromPreviousCall, htmlSnippet, 1);
+                    finalContentToWrite = BodyEndRegex.Replace(UnwrittenCharactersFromPreviousCall, HtmlSnippet + BodyClosingTag, 1);
                 }
                 else
                 {

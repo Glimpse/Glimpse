@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Glimpse.Core.Extensibility;
+#if NET35
+using Glimpse.Core.Backport;
+#endif
 
 namespace Glimpse.Core.Framework
 {
@@ -10,6 +13,8 @@ namespace Glimpse.Core.Framework
     /// </summary>
     internal sealed class GlimpseRequestContext : IGlimpseRequestContext
     {
+        private RuntimePolicyDeterminator RuntimePolicyDeterminator { get; set; }
+
         private RuntimePolicy currentRuntimePolicy;
         private IExecutionTimer activeExecutionTimer;
 
@@ -23,17 +28,23 @@ namespace Glimpse.Core.Framework
         /// <param name="initialRuntimePolicy">The initial <see cref="RuntimePolicy "/> for this request.</param>
         /// <param name="resourceEndpointConfiguration">The <see cref="IResourceEndpointConfiguration"/>.</param>
         /// <param name="endpointBaseUri">The endpoint base URI.</param>
+        /// <param name="runtimePolicyDeterminator">The runtime policy determinator</param>
+        /// <param name="glimpseScriptTagsGenerator">The Glimpse script tags generator</param>
+        /// <param name="logger">The logger</param>
         public GlimpseRequestContext(
             Guid glimpseRequestId,
             IRequestResponseAdapter requestResponseAdapter,
             RuntimePolicy initialRuntimePolicy,
             IResourceEndpointConfiguration resourceEndpointConfiguration,
-            string endpointBaseUri)
+            string endpointBaseUri,
+            RuntimePolicyDeterminator runtimePolicyDeterminator,
+            IGlimpseScriptTagsGenerator glimpseScriptTagsGenerator,
+            ILogger logger)
         {
-            if (requestResponseAdapter == null)
-            {
-                throw new ArgumentNullException("requestResponseAdapter");
-            }
+            Guard.ArgumentNotNull("requestResponseAdapter", requestResponseAdapter);
+            Guard.ArgumentNotNull("resourceEndpointConfiguration", resourceEndpointConfiguration);
+            Guard.ArgumentNotNull("runtimePolicyDeterminator", runtimePolicyDeterminator);
+            Guard.ArgumentNotNull("glimpseScriptTagsGenerator", glimpseScriptTagsGenerator);
 
             if (string.IsNullOrEmpty(endpointBaseUri))
             {
@@ -42,6 +53,11 @@ namespace Glimpse.Core.Framework
 
             GlimpseRequestId = glimpseRequestId;
             RequestResponseAdapter = requestResponseAdapter;
+            RuntimePolicyDeterminator = runtimePolicyDeterminator;
+
+#warning CGI - maybe a factory would be cleaner instead of needing to accept passthrough parameters
+            ScriptTagsProvider = new GlimpseScriptTagsProvider(GlimpseRequestId, glimpseScriptTagsGenerator, logger, IsAllowedToProvideScriptTags);
+
             RequestHandlingMode = resourceEndpointConfiguration.IsResourceRequest(requestResponseAdapter.RequestMetadata.RequestUri, endpointBaseUri)
                                     ? RequestHandlingMode.ResourceRequest
                                     : RequestHandlingMode.RegularRequest;
@@ -92,6 +108,11 @@ namespace Glimpse.Core.Framework
         public RequestHandlingMode RequestHandlingMode { get; private set; }
 
         /// <summary>
+        /// Gets the <see cref="GlimpseScriptTagsProvider"/> for the referenced request
+        /// </summary>
+        public IGlimpseScriptTagsProvider ScriptTagsProvider { get; private set; }
+
+        /// <summary>
         /// Gets the <see cref="IExecutionTimer"/> for the referenced request
         /// </summary>
         public IExecutionTimer CurrentExecutionTimer
@@ -134,6 +155,13 @@ namespace Glimpse.Core.Framework
         {
             GlobalStopwatch.Stop();
             return GlobalStopwatch.Elapsed;
+        }
+
+        private bool IsAllowedToProvideScriptTags()
+        {
+            // we reuse the same runtime event but were are not causing side effects as the result is not stored in the current runtime policy
+            var policy = RuntimePolicyDeterminator.DetermineRuntimePolicy(RuntimeEvent.EndRequest, CurrentRuntimePolicy, RequestResponseAdapter);
+            return policy.HasFlag(RuntimePolicy.DisplayGlimpseClient);
         }
     }
 }

@@ -2,6 +2,7 @@
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
 using Glimpse.Test.Core.Tester;
+using Moq;
 using Xunit;
 
 namespace Glimpse.Test.Core.Framework
@@ -21,7 +22,10 @@ namespace Glimpse.Test.Core.Framework
                 requestResponseAdapter,
                 expectedRuntimePolicy,
                 ResourceEndpointConfigurationTester.Create(requestUri, false).ResourceEndpointConfigurationMock.Object,
-                "/glimpse.axd");
+                "/glimpse.axd",
+                new RuntimePolicyDeterminator(new Mock<IReadonlyConfiguration>().Object),
+                new Mock<IGlimpseScriptTagsGenerator>().Object,
+                new Mock<ILogger>().Object);
 
             Assert.Equal(expectedRuntimePolicy, glimpseRequestContext.CurrentRuntimePolicy);
         }
@@ -36,7 +40,10 @@ namespace Glimpse.Test.Core.Framework
                     RequestResponseAdapterTester.Create(regularRequestUri).RequestResponseAdapterMock.Object,
                     RuntimePolicy.On,
                     ResourceEndpointConfigurationTester.Create(regularRequestUri, false).ResourceEndpointConfigurationMock.Object,
-                    "/glimpse.axd");
+                    "/glimpse.axd",
+                    new RuntimePolicyDeterminator(new Mock<IReadonlyConfiguration>().Object),
+                    new Mock<IGlimpseScriptTagsGenerator>().Object,
+                    new Mock<ILogger>().Object);
 
             Assert.Equal(RequestHandlingMode.RegularRequest, glimpseRequestContext.RequestHandlingMode);
         }
@@ -51,7 +58,10 @@ namespace Glimpse.Test.Core.Framework
                     RequestResponseAdapterTester.Create(resourceRequestUri).RequestResponseAdapterMock.Object,
                     RuntimePolicy.On,
                     ResourceEndpointConfigurationTester.Create(resourceRequestUri, true).ResourceEndpointConfigurationMock.Object,
-                   "/glimpse.axd");
+                    "/glimpse.axd",
+                    new RuntimePolicyDeterminator(new Mock<IReadonlyConfiguration>().Object),
+                    new Mock<IGlimpseScriptTagsGenerator>().Object,
+                    new Mock<ILogger>().Object);
 
             Assert.Equal(RequestHandlingMode.ResourceRequest, glimpseRequestContext.RequestHandlingMode);
         }

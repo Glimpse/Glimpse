@@ -69,9 +69,5 @@ namespace Glimpse.Core.Framework
         /// Returns the <see cref="IGlimpseRequestContext"/> corresponding to the current request.
         /// </summary>
         IGlimpseRequestContext CurrentRequestContext { get; }
-
-        string GenerateScriptTags(IGlimpseRequestContext glimpseRequestContext);
-
-        string GenerateScriptTags(GlimpseRequestContextHandle glimpseRequestContextHandle);
     }
 }

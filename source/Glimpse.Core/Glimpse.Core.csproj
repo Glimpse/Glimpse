@@ -121,6 +121,9 @@
     <Compile Include="Framework\DisplayProvider.cs" />
     <Compile Include="Framework\GlimpseRuntimeNotAvailableException.cs" />
     <Compile Include="Framework\GlimpseRuntimeInitializer.cs" />
+    <Compile Include="Framework\GlimpseScriptTagsProvider.cs" />
+    <Compile Include="Framework\IGlimpseScriptTagsGenerator.cs" />
+    <Compile Include="Framework\IGlimpseScriptTagsProvider.cs" />
     <Compile Include="Framework\InspectorProvider.cs" />
     <Compile Include="Framework\IReadonlyConfiguration.cs" />
     <Compile Include="Framework\KeyCreator.cs" />
