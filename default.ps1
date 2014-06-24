@@ -5,7 +5,7 @@ properties {
     $tools_dir = "$base_dir\tools"
     $package_dir = "$base_dir\packages"
     $framework_dir =  (Get-ProgramFiles) + "\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0"
-    $config = "release"
+    $config = "Release"
     $preReleaseVersion = $null
 }
 
@@ -167,7 +167,7 @@ task compile -depends clean {
     "Compiling"
     "   Glimpse.All.sln"
     
-    exec { msbuild $base_dir\Glimpse.All.sln /p:Configuration=$config /nologo /verbosity:minimal }
+    exec { msbuild /toolsversion:"12.0" $base_dir\Glimpse.All.sln /p:Configuration=$config /nologo /verbosity:minimal }
 }
 
 task docs -depends compile {

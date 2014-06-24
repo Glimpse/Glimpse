@@ -33,7 +33,7 @@
                                 <td id="Td2" runat="server">      
                                     <table>        
                                         <tr>          
-                                            <td>&nbsp;</td>          
+                                            <td>&#xa0;</td>          
                                             <td>
                                                 <a href="<%#: GetRouteUrl("ProductByNameRoute", new {productName = Item.ProductName}) %>">
                                                     <image src='/Catalog/Images/Thumbs/<%#:Item.ImagePath%>'

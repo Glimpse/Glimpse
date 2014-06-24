@@ -47,7 +47,7 @@
             </div>
             <div class="float-right">
                 <section id="login">
-                    <a href="/ShoppingCart.aspx"><span ID="cartCount" runat="server"></span>&nbsp;</a>
+                    <a href="/ShoppingCart.aspx"><span ID="cartCount" runat="server"></span>&#xa0;</a>
                     <span class="float-right">
                     <asp:LoginView runat="server" ViewStateMode="Disabled">
                         <AnonymousTemplate>

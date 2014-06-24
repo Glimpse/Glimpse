@@ -98,7 +98,7 @@
             <LayoutTemplate>
                 <h3>Registered external logins</h3>
                 <table>
-                    <thead><tr><th>Service</th><th>User Name</th><th>Last Used</th><th>&nbsp;</th></tr></thead>
+                    <thead><tr><th>Service</th><th>User Name</th><th>Last Used</th><th>&#xa0;</th></tr></thead>
                     <tbody>
                         <tr runat="server" id="itemPlaceholder"></tr>
                     </tbody>
