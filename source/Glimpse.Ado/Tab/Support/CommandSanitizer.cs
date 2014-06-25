@@ -39,6 +39,7 @@ namespace Glimpse.Ado.Tab.Support
 
             DefaultParser = unquoted;
             Parsers.Add("String", quoted);
+            Parsers.Add("AnsiString", quoted);
         }
     }
 }
