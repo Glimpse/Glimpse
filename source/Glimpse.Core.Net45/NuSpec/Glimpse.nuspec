@@ -15,7 +15,8 @@
         <summary>ASP.NET 4.5 web debugging and diagnostics tool.</summary>
         <releaseNotes>
 Featherweight release for Core:
- - Fix where Clients that have a name with quotes in it blows up
+ - Add button which makes it easy to launch glimpse for service only sites
+ - Improve how client renders for thoses using Zurb Foundation
         </releaseNotes>
         <tags>ASP.NET Web WebForms Glimpse diagnostics performance profiling timing</tags>
     </metadata>
