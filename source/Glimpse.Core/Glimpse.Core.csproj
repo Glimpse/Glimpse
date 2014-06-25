@@ -124,6 +124,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Resource\LogosResource.cs" />
+    <Compile Include="Resource\PopupRedirectResource.cs" />
     <Compile Include="SerializationConverter\EnumerableOfITimelineMessageConverter.cs" />
     <Compile Include="Setting\Initializer.cs" />
     <Compile Include="Support\NuGetPackageDiscoverer.cs" />

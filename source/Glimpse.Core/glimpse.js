@@ -1676,6 +1676,9 @@ glimpse.render.engine.util.table = (function($, util) {
 // glimpse.shell.controls.js
 (function($, pubsub, elements, settings) {
     var firstOpen = true,
+        isPopup = function () {
+            return window.location.href.indexOf('n=glimpse_popup') > -1;
+        },
         wireListeners = function () { 
             elements.opener().find('.glimpse-icon').click(function () { pubsub.publish('trigger.shell.open', { isInitial: false }); });
             elements.barHolder().find('.glimpse-minimize').click(function () { pubsub.publish('trigger.shell.minimize'); });
@@ -1697,13 +1700,13 @@ glimpse.render.engine.util.table = (function($, util) {
                 settings.local('panelHeight', height - 52);
                 
                 var heightTargets = $.fn.add.call(elements.holder(), elements.pageSpacer());
-                if (!args.fullScreen) 
+                if (!isPopup() && !args.fullScreen) 
                     heightTargets.height(height);
                 elements.root().removeClass('glimpse-minimized').addClass('glimpse-opened');
                 if (args.isInitial)
                     elements.root().addClass('glimpse-heightset');  
                  
-                if (args.fullScreen) {
+                if (isPopup() || args.fullScreen) {
                     elements.pageSpacer().remove();
                      
                     $(window).resize(function() {
