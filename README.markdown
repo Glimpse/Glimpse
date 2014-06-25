@@ -37,6 +37,11 @@ If you would like to get involved, there are plenty of things that you can do. T
     - [Learn more about how "Jump In" issues work](http://nikcodes.com/2013/05/10/new-contributor-jump-in/)
  - **New Features** - For those looking to get more deeply involved, reach out to find out about our current efforts and how you can help.
     - [Learn more about contributing to Glimpse core](http://getglipse.com/Docs/Contributing)
+ - **Share Glimpse** - If you love Glimpse, tell others about it! Present Glimpse at a company tech talk, your local user group or submit a proposal to a conference about how you are using Glimpse or any extensions you may have written.
+    - [Need inspiration? Watch some of the talks that we have given](http://getglipse.com/Docs/More-information)
+ - **Create an Extension** - Get the best out of Glimpse by writing your own extension to expose diagnostic data that is meaningful for your applications. Creating extensions is easy, check [the docs](http://getglipse.com/Docs/Custom-Tabs) or reference an [open source extension](http://getglipse.com//Extensions) to get started.
+ - **Documentation** - Documentation is a key differentiator between good projects and <em>great</em> ones. Whether you’re a first time OSS contributor or a veteran, documentation is a great stepping stone to learn our contribution process.
+    - Contributing to Glimpse documentation is dead simple. To make it so easy, we're using Glimpse’s [GitHub Wiki](https://github.com/Glimpse/Glimpse/wiki) as the entry point for documentation - each page within the docs section of the site has a link to take you straight to the page where you can make changes directly. GitHub Wikis provide an online WYSIWYG interface for adding and editing the docs, completely in browser, using [Markdown](https://daringfireball.net/projects/markdown/).
 
 For more on getting involved see our [contributor guidelines](https://github.com/Glimpse/Glimpse/blob/master/contributing.md).
 
@@ -45,11 +50,5 @@ For more on getting involved see our [contributor guidelines](https://github.com
  - **Issue List** - Have you found a bug or something misbehaving? Tell us about it on our [GitHub issue list](https://github.com/glimpse/glimpse/issues) and someone will help you as soon as possible.
  - **Stack Overflow** - Got general questions or just need a little support? Anything related to using, configuring or extending Glimpse can be asked at [StackOverflow](http://stackoverflow.com). View [already answered](http://stackoverflow.com/questions/tagged/glimpse) questions for even faster support.
  - **Mailing List** - Got questions about how to extend or work on Glimpse, or just want to discuss a new feature idea? Shoot it through to the [developers mailing list](https://groups.google.com/forum/#!forum/getglimpse-dev).
- - **Share Glimpse** - If you love Glimpse, tell others about it! Present Glimpse at a company tech talk, your local user group or submit a proposal to a conference about how you are using Glimpse or any extensions you may have written.
-    - [Need inspiration? Watch some of the talks that we have given](http://getglipse.com/Docs/More-information)
- - **Create an Extension** - Get the best out of Glimpse by writing your own extension to expose diagnostic data that is meaningful for your applications. Creating extensions is easy, check [the docs](http://getglipse.com/Docs/Custom-Tabs) or reference an [open source extension](http://getglipse.com//Extensions) to get started.
- - **Documentation** - Documentation is a key differentiator between good projects and <em>great</em> ones. Whether you’re a first time OSS contributor or a veteran, documentation is a great stepping stone to learn our contribution process.
-    - Contributing to Glimpse documentation is dead simple. To make it so easy, we're using Glimpse’s [GitHub Wiki](https://github.com/Glimpse/Glimpse/wiki) as the entry point for documentation - each page within the docs section of the site has a link to take you straight to the page where you can make changes directly. GitHub Wikis provide an online WYSIWYG interface for adding and editing the docs, completely in browser, using [Markdown](https://daringfireball.net/projects/markdown/).
-
 
 More information about Glimpse can be found at [getGlimpse.com](http://getGlimpse.com)
