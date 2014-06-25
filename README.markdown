@@ -38,6 +38,8 @@ If you would like to get involved, there are plenty of things that you can do. T
  - **New Features** - For those looking to get more deeply involved, reach out to find out about our current efforts and how you can help.
     - [Learn more about contributing to Glimpse core](http://getglipse.com/Docs/Contributing)
 
+For more on getting involved see our [contributor guidelines](https://github.com/Glimpse/Glimpse/blob/master/contributing.md).
+
 ##Need Help?
 
  - **Issue List** - Have you found a bug or something misbehaving? Tell us about it on our [GitHub issue list](https://github.com/glimpse/glimpse/issues) and someone will help you as soon as possible.
