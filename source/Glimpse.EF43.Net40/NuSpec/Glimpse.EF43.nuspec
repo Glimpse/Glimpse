@@ -15,11 +15,11 @@
         <summary>Glimpse tabs for Entity Framework 4.3.</summary>
         <releaseNotes>
 Featherweight release for EF:
- - Ensure that all parameters in `CreateDbCommandDefinition` are forwarded through
+ - Update to work around bug in EF 6.1.1
         </releaseNotes>
         <tags>ASP.NET Web WebForms Glimpse EF EntityFramework SQL performance profiling timing diagnostics</tags>
         <dependencies> 
-          <dependency id="Glimpse.Ado" version="1.7.2" />
+          <dependency id="Glimpse.Ado" version="1.7.3" />
         </dependencies>
     </metadata>
     <files>

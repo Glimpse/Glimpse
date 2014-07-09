@@ -15,9 +15,7 @@
         <summary>Glimpse tabs for ADO.</summary>
         <releaseNotes>
 Featherweight release for Ado:
- - Ensure ADO inspector does quotes `AnsiString` parameters in query output
- - Ensure that all parameters in `CreateDbCommandDefinition` are forwarded through
- - Prevent command sanitizer from replacing partial matches of parameters
+ - Conduct an additional null check around the StateChange event (fixes bug in EF 6.1.1)
         </releaseNotes>
         <tags>ASP.NET Web WebForms Glimpse ADO ADO.NET SQL performance profiling timing diagnostics</tags>
         <dependencies>
