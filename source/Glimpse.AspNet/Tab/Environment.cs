@@ -160,9 +160,9 @@ namespace Glimpse.AspNet.Tab
                 var versionInfo = GetVersionNumber(assembly);
                 var culture = string.IsNullOrEmpty(assemblyName.CultureInfo.Name) ? "neutral" : assemblyName.CultureInfo.Name; 
                 var fromGac = assembly.GlobalAssemblyCache;
-                var fullTrust = IsFullyTrusted(assembly); 
-
-                var result = new EnvironmentAssemblyModel { Name = name, Version = version, VersionInfo = versionInfo, Culture = culture, FromGac = fromGac, FullTrust = fullTrust };
+                var fullTrust = IsFullyTrusted(assembly);
+                var buildMode = IsAssemblyDebugBuild(assembly) == true ? "Debug" : "Release";
+                var result = new EnvironmentAssemblyModel { Name = name, Version = version, VersionInfo = versionInfo, Culture = culture, FromGac = fromGac, FullTrust = fullTrust, BuildMode=buildMode };
 
                 var isSystem = systemNamspaces.Any(systemNamspace => assembly.FullName.StartsWith(systemNamspace)); 
                 if (isSystem)
@@ -231,6 +231,19 @@ namespace Glimpse.AspNet.Tab
                                             .SingleOrDefault();
 
             return infoVersion != null ? infoVersion.InformationalVersion : null;
+        }
+
+        private bool IsAssemblyDebugBuild(Assembly assembly)
+        {
+            foreach (var attribute in assembly.GetCustomAttributes(false))
+            {
+                var debuggableAttribute = attribute as DebuggableAttribute;
+                if (debuggableAttribute != null)
+                {
+                    return debuggableAttribute.IsJITTrackingEnabled;
+                }
+            }
+            return false;
         }
     }
 }
