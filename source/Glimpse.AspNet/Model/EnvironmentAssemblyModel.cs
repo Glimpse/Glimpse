@@ -13,5 +13,7 @@ namespace Glimpse.AspNet.Model
         public bool FromGac { get; set; }
 
         public bool? FullTrust { get; set; }
+
+        public string BuildMode { get; set; }
     }
 }
