@@ -117,6 +117,29 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="GlimpseRuntimeWrapperAlreadyHandledEvent" xml:space="preserve">
+    <value>Already processed event '{0}' of '{1}' (#{2}), therefore bypassing the event handling</value>
+    <comment>{0} - Name of the event, {1} - GetType() of event source, {2} - GetHashCode() of event source</comment>
+  </data>
+  <data name="GlimpseRuntimeWrapperExecuteDefaultResource" xml:space="preserve">
+    <value>Glimpse.AspNet.GlimpseRuntimeWrapper : Executing default resource</value>
+  </data>
+  <data name="GlimpseRuntimeWrapperExecuteResource" xml:space="preserve">
+    <value>Executing resource '{0}'</value>
+    <comment>{0} - Name of the resource</comment>
+  </data>
+  <data name="GlimpseRuntimeWrapperHandlingEvent" xml:space="preserve">
+    <value>Handling event '{0}' of '{1}' (#{2})</value>
+    <comment>{0} - Name of the event, {1} - GetType() of event source, {2} - GetHashCode() of event source</comment>
+  </data>
+  <data name="HttpModuleInitIsCalled" xml:space="preserve">
+    <value>Glimpse.AspNet.HttpModule : Init called on '{0}' (#{1}) for '{2}' (#{3})</value>
+    <comment>{0} - GetType() of module, {1} - GetHashCode() of module, {2} GetType() of http application, {3} GetHashCode() of http application</comment>
+  </data>
+  <data name="HttpModuleInstantiatedGlimpseRuntimeWrapper" xml:space="preserve">
+    <value>Glimpse.AspNet.HttpModule : '{0}' instantiated and added to '{1}' (#{2})</value>
+    <comment>{0} - GetType() of instantiated runtime, {1} - GetType() of application state, {2} - GetHashCode() of application state</comment>
+  </data>
   <data name="ProcessRequestMissingRuntime" xml:space="preserve">
     <value>Glimpse runtime has not been initialized.</value>
   </data>

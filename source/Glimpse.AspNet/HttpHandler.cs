@@ -18,9 +18,9 @@ namespace Glimpse.AspNet
 
         public void ProcessRequest(HttpContextBase context)
         {
-            var runtime = context.Application.Get(Constants.RuntimeKey) as IGlimpseRuntime;
+            var glimpseRuntimeWrapper = context.Application.Get(Constants.RuntimeKey) as GlimpseRuntimeWrapper;
 
-            if (runtime == null)
+            if (glimpseRuntimeWrapper == null)
             {
                 throw new HttpException(404, Resources.ProcessRequestMissingRuntime);
             }
@@ -31,11 +31,11 @@ namespace Glimpse.AspNet
 
             if (string.IsNullOrEmpty(resourceName))
             {
-                runtime.ExecuteDefaultResource();
+                glimpseRuntimeWrapper.ExecuteDefaultResource();
             }
             else
             {
-                runtime.ExecuteResource(resourceName, new ResourceParameters(queryString.AllKeys.Where(key => key != null).ToDictionary(key => key, key => queryString[key])));
+                glimpseRuntimeWrapper.ExecuteResource(resourceName, new ResourceParameters(queryString.AllKeys.Where(key => key != null).ToDictionary(key => key, key => queryString[key])));
             }
         }
     }
