@@ -71,16 +71,13 @@ namespace Glimpse.AspNet
 
         public void SetHttpResponseHeader(string name, string value)
         {
-            if (!Context.HeadersSent())
+            try
             {
-                try
-                {
-                    Context.Response.AppendHeader(name, value);
-                }
-                catch (Exception exception)
-                {
-                    Logger.Error("Exception setting Http response header '{0}' with value '{1}'.", exception, name, value);
-                }
+                Context.Response.AppendHeader(name, value);
+            }
+            catch (Exception exception)
+            {
+                Logger.Error("Exception setting Http response header '{0}' with value '{1}'.", exception, name, value);
             }
         }
 

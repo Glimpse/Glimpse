@@ -74,7 +74,6 @@ namespace Glimpse.AspNet
                 httpApplication.PostAcquireRequestState += (context, e) => BeginSessionAccess(WithTestable(context));
                 httpApplication.PostRequestHandlerExecute += (context, e) => EndSessionAccess(WithTestable(context));
                 httpApplication.PostReleaseRequestState += (context, e) => EndRequest(WithTestable(context));
-                httpApplication.PreSendRequestHeaders += (context, e) => SendHeaders(WithTestable(context));
             }
         }
 
@@ -113,11 +112,6 @@ namespace Glimpse.AspNet
             var runtime = GetRuntime(httpContext.Application);
 
             runtime.EndRequest();
-        }
-
-        internal void SendHeaders(HttpContextBase httpContext)
-        {
-            httpContext.HeadersSent(true);
         }
 
         private static HttpContextBase WithTestable(object sender)
