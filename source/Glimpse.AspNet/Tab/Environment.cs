@@ -235,7 +235,7 @@ namespace Glimpse.AspNet.Tab
 
         private bool IsAssemblyDebugBuild(Assembly assembly)
         {
-            foreach (var attribute in assembly.GetCustomAttributes(false))
+            foreach (var attribute in assembly.GetCustomAttributes(typeof(DebuggableAttribute),false))
             {
                 var debuggableAttribute = attribute as DebuggableAttribute;
                 if (debuggableAttribute != null)
