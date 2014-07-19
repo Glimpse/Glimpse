@@ -1,57 +1,31 @@
-using System;
 using System.IO;
-using System.Text;
 using System.Text.RegularExpressions;
-using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Core
 {
     /// <summary>
-    /// This class will inject some html snippet (most likely the Glimpse Client script tags, but it can be anything) in the resulting HTML output.
+    /// This class will inject the Glimpse script tags in the resulting HTML output.
     /// It will look for the last occurrence of the &lt;/body&gt; tag and inject the snippet right before that tag.
-    /// An instance of this class should be assigned as a filter to the outgoing response so that the injection can be done once all the rendering is completed.
     /// </summary>
     public class GlimpseScriptsInjectionStream : Stream
     {
         private const string BodyClosingTag = "</body>";
         private const string TroubleshootingDocsUri = "http://getglimpse.com/Help/Troubleshooting";
 
-        private ILogger Logger { get; set; }
-
-        private Func<string> GenerateHtmlSnippet { get; set; }
-        
         private Stream OutputStream { get; set; }
-        
-        private Func<Encoding> ContentEncodingResolver { get; set; }
-        
-        private Regex BodyEndRegex { get; set; }
+        private GlimpseScriptsInjectionOptions Options { get; set; }
 
-        private Func<string> CurrentRequestRawUrlResolver { get; set; }
-        
+        private Regex BodyEndRegex { get; set; }
         private string UnwrittenCharactersFromPreviousCall { get; set; }
 
-        private Encoding contentEncoding;
-
-        private Encoding ContentEncoding
+        public GlimpseScriptsInjectionStream(Stream outputStream, GlimpseScriptsInjectionOptions options)
         {
-            get { return contentEncoding ?? (contentEncoding = ContentEncodingResolver()); }
-        }
+            Guard.ArgumentNotNull("outputStream", outputStream);
+            Guard.ArgumentNotNull("options", options);
 
-        private string htmlSnippet;
-
-        private string HtmlSnippet
-        {
-            get { return htmlSnippet ?? (htmlSnippet = GenerateHtmlSnippet()); }
-        }
-
-        public GlimpseScriptsInjectionStream(Func<string> generateHtmlSnippet, Stream outputStream, Func<Encoding> contentEncodingResolver, Func<string> currentRequestRawUrlResolver, ILogger logger)
-        {
-            GenerateHtmlSnippet = generateHtmlSnippet;
             OutputStream = outputStream;
-            ContentEncodingResolver = contentEncodingResolver;
+            Options = options;
             BodyEndRegex = new Regex(BodyClosingTag, RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.IgnoreCase | RegexOptions.RightToLeft);
-            CurrentRequestRawUrlResolver = currentRequestRawUrlResolver;
-            Logger = logger;
         }
 
         public override bool CanRead
@@ -102,7 +76,7 @@ namespace Glimpse.Core
 
         public override void Write(byte[] buffer, int offset, int count)
         {
-            if (string.IsNullOrEmpty(HtmlSnippet))
+            if (!Options.InjectionRequired)
             {
                 OutputStream.Write(buffer, offset, count);
                 return;
@@ -134,7 +108,7 @@ namespace Glimpse.Core
             // - in case there was a </body> tag found, the replacement will be done
             // - in case there was no </body> tag found, then the warning will be written to the log, indicating something went wrong
             // either way, the remaining unwritten characters will be sent down the output stream.
-            string contentInBuffer = ContentEncoding.GetString(buffer, offset, count);
+            string contentInBuffer = Options.ContentEncoding.GetString(buffer, offset, count);
 
             // Prepend remaining characters from the previous call, if any
             if (!string.IsNullOrEmpty(UnwrittenCharactersFromPreviousCall))
@@ -174,7 +148,7 @@ namespace Glimpse.Core
 
         public override void Flush()
         {
-            if (string.IsNullOrEmpty(HtmlSnippet))
+            if (!Options.InjectionRequired)
             {
                 OutputStream.Flush();
                 return;
@@ -187,12 +161,15 @@ namespace Glimpse.Core
                 if (BodyEndRegex.IsMatch(UnwrittenCharactersFromPreviousCall))
                 {
                     // apparently we did seem to match a </body> tag, which means we can replace the last match with our HTML snippet
-                    finalContentToWrite = BodyEndRegex.Replace(UnwrittenCharactersFromPreviousCall, HtmlSnippet + BodyClosingTag, 1);
+                    finalContentToWrite = BodyEndRegex.Replace(UnwrittenCharactersFromPreviousCall, Options.ScriptTags + BodyClosingTag, 1);
                 }
                 else
                 {
-                    // there was no </body> tag found, so we write down a warning to the log
-                    Logger.Warn("Unable to locate '</body>' with content encoding '{0}' for request '{1}'. The response may be compressed or the markup may actually be missing a '</body>' tag. See {2} for information on troubleshooting this issue.", ContentEncoding.EncodingName, CurrentRequestRawUrlResolver() ?? "unknown", TroubleshootingDocsUri);
+                    // there was no </body> tag found, so we notify the requestor
+                    Options.NotifyInjectionFailure(string.Format(
+                        "Unable to locate '</body>' with content encoding '{0}'. The response may be compressed or the markup may actually be missing a '</body>' tag. See {1} for information on troubleshooting this issue.",
+                        Options.ContentEncoding.EncodingName,
+                        TroubleshootingDocsUri));
                 }
 
                 // either way, if a replacement has been done or a warning has been written to the logs, the remaining unwritten characters must be written to the output stream
@@ -204,7 +181,7 @@ namespace Glimpse.Core
 
         private void WriteToOutputStream(string content)
         {
-            byte[] outputBuffer = ContentEncoding.GetBytes(content);
+            byte[] outputBuffer = Options.ContentEncoding.GetBytes(content);
             OutputStream.Write(outputBuffer, 0, outputBuffer.Length);
         }
     }

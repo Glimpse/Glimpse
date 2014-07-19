@@ -186,6 +186,16 @@ namespace Glimpse.Core.Framework
 
         private class GlimpseScriptTagsProviderStub : IGlimpseScriptTagsProvider
         {
+            public bool ScriptTagsAllowedToBeProvided
+            {
+                get { return false; }
+            }
+
+            public bool ScriptTagsAlreadyProvided
+            {
+                get { return true; }
+            }
+
             public string GetScriptTags()
             {
                 return string.Empty;

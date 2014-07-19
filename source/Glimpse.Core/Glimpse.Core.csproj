@@ -142,7 +142,9 @@
     <Compile Include="Framework\Support\ExecutionBlockBase.cs" />
     <Compile Include="Framework\Support\IExecutionTask.cs" />
     <Compile Include="Framework\UriTemplateResourceEndpointConfiguration.cs" />
+    <Compile Include="GlimpseScriptsInjectionOptions.cs" />
     <Compile Include="Guard.cs" />
+    <Compile Include="GlimpseScriptsInjectionFailedEventArgs.cs" />
     <Compile Include="Message\RuntimeMessage.cs" />
     <Compile Include="Metadata\CorrelationInstanceMetadata.cs" />
     <Compile Include="Metadata\DocumentationTabMetadata.cs" />

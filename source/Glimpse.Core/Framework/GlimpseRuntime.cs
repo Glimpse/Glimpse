@@ -170,12 +170,15 @@ namespace Glimpse.Core.Framework
                     return glimpseRequestContextHandle;
                 }
 
-                requestResponseAdapter.OutputStream = new GlimpseScriptsInjectionStream(
-                        glimpseRequestContext.ScriptTagsProvider.GetScriptTags,
-                        requestResponseAdapter.OutputStream,
-                        () => requestResponseAdapter.ResponseEncoding,
-                        () => requestResponseAdapter.RequestMetadata.RequestUri.AbsoluteUri,
-                        Configuration.Logger);
+                var options = new GlimpseScriptsInjectionOptions(
+                    glimpseRequestContext.ScriptTagsProvider,
+                    () => requestResponseAdapter.ResponseEncoding,
+                    (sender, args) => Configuration.Logger.Warn(
+                        "Failed to inject the Glimpse script tags for request '{0}' : {1}",
+                        requestResponseAdapter.RequestMetadata.RequestUri.AbsoluteUri,
+                        args.FailureMessage));
+
+                requestResponseAdapter.OutputStream = new GlimpseScriptsInjectionStream(requestResponseAdapter.OutputStream, options);
 
                 TabProvider.Execute(glimpseRequestContext, RuntimeEvent.BeginRequest);
 
