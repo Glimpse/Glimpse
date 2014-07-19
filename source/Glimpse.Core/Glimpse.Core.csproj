@@ -156,7 +156,7 @@
     <Compile Include="Metadata\ResourceMetadata.cs" />
     <Compile Include="Metadata\TabMetadata.cs" />
     <Compile Include="Metadata\VersionMetadata.cs" />
-    <Compile Include="PreBodyTagInjectionStream.cs" />
+    <Compile Include="GlimpseScriptsInjectionStream.cs" />
     <Compile Include="Policy\AddRemoveClearItemsConfigurator.cs" />
     <Compile Include="Policy\ContentTypePolicyConfigurator.cs" />
     <Compile Include="Extensibility\IContentTypePolicyConfigurator.cs" />

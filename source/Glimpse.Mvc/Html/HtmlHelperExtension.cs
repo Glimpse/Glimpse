@@ -10,7 +10,7 @@ namespace Glimpse.Mvc.Html
         public static string GlimpseClient(this HtmlHelper helper)
         {
             return GlimpseRuntime.IsAvailable
-                ? GlimpseRuntime.Instance.CurrentRequestContext.ScriptTagsProvider.DetermineScriptTags()
+                ? GlimpseRuntime.Instance.CurrentRequestContext.ScriptTagsProvider.GetScriptTags()
                 : string.Empty;
         }
 #else
@@ -18,7 +18,7 @@ namespace Glimpse.Mvc.Html
         {
             return helper.Raw( 
                 GlimpseRuntime.IsAvailable 
-                    ? GlimpseRuntime.Instance.CurrentRequestContext.ScriptTagsProvider.DetermineScriptTags() 
+                    ? GlimpseRuntime.Instance.CurrentRequestContext.ScriptTagsProvider.GetScriptTags() 
                     : string.Empty);
         }
 #endif

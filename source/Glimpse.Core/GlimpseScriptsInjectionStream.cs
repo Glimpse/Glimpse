@@ -11,7 +11,7 @@ namespace Glimpse.Core
     /// It will look for the last occurrence of the &lt;/body&gt; tag and inject the snippet right before that tag.
     /// An instance of this class should be assigned as a filter to the outgoing response so that the injection can be done once all the rendering is completed.
     /// </summary>
-    public class PreBodyTagInjectionStream : Stream
+    public class GlimpseScriptsInjectionStream : Stream
     {
         private const string BodyClosingTag = "</body>";
         private const string TroubleshootingDocsUri = "http://getglimpse.com/Help/Troubleshooting";
@@ -44,7 +44,7 @@ namespace Glimpse.Core
             get { return htmlSnippet ?? (htmlSnippet = GenerateHtmlSnippet()); }
         }
 
-        public PreBodyTagInjectionStream(Func<string> generateHtmlSnippet, Stream outputStream, Func<Encoding> contentEncodingResolver, Func<string> currentRequestRawUrlResolver, ILogger logger)
+        public GlimpseScriptsInjectionStream(Func<string> generateHtmlSnippet, Stream outputStream, Func<Encoding> contentEncodingResolver, Func<string> currentRequestRawUrlResolver, ILogger logger)
         {
             GenerateHtmlSnippet = generateHtmlSnippet;
             OutputStream = outputStream;

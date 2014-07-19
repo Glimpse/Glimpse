@@ -2,6 +2,6 @@
 {
     public interface IGlimpseScriptTagsProvider
     {
-        string DetermineScriptTags();
+        string GetScriptTags();
     }
 }

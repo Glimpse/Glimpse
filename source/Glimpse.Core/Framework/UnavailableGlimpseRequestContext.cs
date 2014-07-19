@@ -186,7 +186,7 @@ namespace Glimpse.Core.Framework
 
         private class GlimpseScriptTagsProviderStub : IGlimpseScriptTagsProvider
         {
-            public string DetermineScriptTags()
+            public string GetScriptTags()
             {
                 return string.Empty;
             }

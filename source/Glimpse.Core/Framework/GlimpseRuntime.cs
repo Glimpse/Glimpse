@@ -170,8 +170,8 @@ namespace Glimpse.Core.Framework
                     return glimpseRequestContextHandle;
                 }
 
-                requestResponseAdapter.OutputStream = new PreBodyTagInjectionStream(
-                        glimpseRequestContext.ScriptTagsProvider.DetermineScriptTags,
+                requestResponseAdapter.OutputStream = new GlimpseScriptsInjectionStream(
+                        glimpseRequestContext.ScriptTagsProvider.GetScriptTags,
                         requestResponseAdapter.OutputStream,
                         () => requestResponseAdapter.ResponseEncoding,
                         () => requestResponseAdapter.RequestMetadata.RequestUri.AbsoluteUri,

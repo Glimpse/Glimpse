@@ -8,8 +8,10 @@ namespace Glimpse.Core.Framework
         private Guid GlimpseRequestId { get; set; }
         private IGlimpseScriptTagsGenerator GlimpseScriptTagsGenerator { get; set; }
         private ILogger Logger { get; set; }
-        private bool ScriptTagsAlreadyProvided { get; set; }
+
         private Func<bool> IsAllowedToProvideScriptTags { get; set; }
+
+        private bool? _scriptTagsAllowedToBeProvided;
 
         public GlimpseScriptTagsProvider(
             Guid glimpseRequestId,
@@ -27,11 +29,18 @@ namespace Glimpse.Core.Framework
             IsAllowedToProvideScriptTags = isAllowedToProvideScriptTags;
         }
 
-        public string DetermineScriptTags()
+        public bool ScriptTagsAllowedToBeProvided
+        {
+            get { return (_scriptTagsAllowedToBeProvided ?? (_scriptTagsAllowedToBeProvided = DetermineIfScriptTagsAreAllowedToBeProvided())).Value; }
+        }
+
+        public bool ScriptTagsAlreadyProvided { get; private set; }
+
+        public string GetScriptTags()
         {
             try
             {
-                return ScriptTagsAlreadyProvided ? string.Empty : GenerateScriptTags();
+                return ScriptTagsAlreadyProvided ? string.Empty : ProvideScriptTags();
             }
             finally
             {
@@ -39,9 +48,9 @@ namespace Glimpse.Core.Framework
             }
         }
 
-        private string GenerateScriptTags()
+        private string ProvideScriptTags()
         {
-            if (CanScriptTagsBeProvided())
+            if (ScriptTagsAllowedToBeProvided)
             {
                 try
                 {
@@ -57,7 +66,7 @@ namespace Glimpse.Core.Framework
             return string.Empty;
         }
 
-        private bool CanScriptTagsBeProvided()
+        private bool DetermineIfScriptTagsAreAllowedToBeProvided()
         {
             try
             {
