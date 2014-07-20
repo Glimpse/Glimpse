@@ -1,10 +1,9 @@
 using System;
 using System.Text;
-using Glimpse.Core.Framework;
 
-namespace Glimpse.Core
+namespace Glimpse.Core.Framework
 {
-    public class GlimpseScriptsInjectionOptions
+    public class ScriptTagsInjectionOptions
     {
         private IScriptTagsProvider ScriptTagsProvider { get; set; }
         private Func<Encoding> ContentEncodingProvider { get; set; }
@@ -13,12 +12,12 @@ namespace Glimpse.Core
         private Encoding _contentEncoding;
         private string _scriptTags;
 
-        public event EventHandler<GlimpseScriptsInjectionFailedEventArgs> InjectionFailed = delegate { };
+        public event EventHandler<ScriptTagsInjectionFailedEventArgs> InjectionFailed = delegate { };
 
-        public GlimpseScriptsInjectionOptions(
+        public ScriptTagsInjectionOptions(
             IScriptTagsProvider scriptTagsProvider,
             Func<Encoding> contentEncodingProvider,
-            EventHandler<GlimpseScriptsInjectionFailedEventArgs> onInjectionFailed = null)
+            EventHandler<ScriptTagsInjectionFailedEventArgs> onInjectionFailed = null)
         {
             Guard.ArgumentNotNull("scriptTagsProvider", scriptTagsProvider);
             Guard.ArgumentNotNull("contentEncodingProvider", contentEncodingProvider);
@@ -49,7 +48,7 @@ namespace Glimpse.Core
 
         public void NotifyInjectionFailure(string failureMessage)
         {
-            InjectionFailed(this, new GlimpseScriptsInjectionFailedEventArgs(failureMessage));
+            InjectionFailed(this, new ScriptTagsInjectionFailedEventArgs(failureMessage));
         }
     }
 }

@@ -1,14 +1,13 @@
 ﻿using System;
 using System.IO;
 using System.Text;
-using Glimpse.Core;
 using Glimpse.Core.Framework;
 using Moq;
 using Xunit;
 
 namespace Glimpse.Test.Core
 {
-    public class GlimpseScriptsInjectionStreamShould
+    public class ScriptTagsInjectionStreamShould
     {
         [Fact]
         public void HaveReplacedTheClosingBodyTag()
@@ -27,7 +26,7 @@ namespace Glimpse.Test.Core
             const string htmlSnippet = "MY HTML SNIPPET";
             const string inputToProcess = "<html><body><span>some content</span></body></html>";
             const string expectedResult = "<html><body><span>some content</span>" + htmlSnippet + "</body></html>";
-            string result = ProcessInputByPreBodyTagFilter(inputToProcess, htmlSnippet, chunkLastNumberOfCharacters);
+            string result = ProcessInputByScriptTagsInjectionStream(inputToProcess, htmlSnippet, chunkLastNumberOfCharacters);
             Assert.Equal(expectedResult, result);
         }
 
@@ -48,7 +47,7 @@ namespace Glimpse.Test.Core
             const string htmlSnippet = "MY HTML SNIPPET";
             const string inputToProcess = "<html><body><span>some content</span></BoDy></html>";
             const string expectedResult = "<html><body><span>some content</span>" + htmlSnippet + "</body></html>";
-            string result = ProcessInputByPreBodyTagFilter(inputToProcess, htmlSnippet, chunkLastNumberOfCharacters);
+            string result = ProcessInputByScriptTagsInjectionStream(inputToProcess, htmlSnippet, chunkLastNumberOfCharacters);
             Assert.Equal(expectedResult, result);
         }
 
@@ -69,7 +68,7 @@ namespace Glimpse.Test.Core
             const string inputToProcess = "<html><body>some content</html>";
             string failureMessage = null;
 
-            string result = ProcessInputByPreBodyTagFilter(inputToProcess, "HTML SNIPPET", chunkLastNumberOfCharacters, (sender, args) => failureMessage = args.FailureMessage);
+            string result = ProcessInputByScriptTagsInjectionStream(inputToProcess, "HTML SNIPPET", chunkLastNumberOfCharacters, (sender, args) => failureMessage = args.FailureMessage);
 
             Assert.Equal(inputToProcess, result);
             Assert.Equal(
@@ -94,7 +93,7 @@ namespace Glimpse.Test.Core
             const string htmlSnippet = "MY HTML SNIPPET";
             const string inputToProcess = "<html><body><span>some content</span></body><p>some more content</p></body></html>";
             const string expectedResult = "<html><body><span>some content</span></body><p>some more content</p>" + htmlSnippet + "</body></html>";
-            string result = ProcessInputByPreBodyTagFilter(inputToProcess, htmlSnippet, chunkLastNumberOfCharacters);
+            string result = ProcessInputByScriptTagsInjectionStream(inputToProcess, htmlSnippet, chunkLastNumberOfCharacters);
             Assert.Equal(expectedResult, result);
         }
 
@@ -113,23 +112,23 @@ namespace Glimpse.Test.Core
         private void DoHaveReplacedTheLastClosingBodyTagWithOnlyAnotherClosingBodyTagWhenTheHtmlSnippetIsNullOrEmpty(int? chunkLastNumberOfCharacters = null)
         {
             const string inputToProcess = "<html><body><span>some content</span></body><p>some more content</p></body></html>";
-            string result = ProcessInputByPreBodyTagFilter(inputToProcess, null, chunkLastNumberOfCharacters);
+            string result = ProcessInputByScriptTagsInjectionStream(inputToProcess, null, chunkLastNumberOfCharacters);
             Assert.Equal(inputToProcess, result);
 
-            result = ProcessInputByPreBodyTagFilter(inputToProcess, string.Empty, chunkLastNumberOfCharacters);
+            result = ProcessInputByScriptTagsInjectionStream(inputToProcess, string.Empty, chunkLastNumberOfCharacters);
             Assert.Equal(inputToProcess, result);
         }
 
-        private static string ProcessInputByPreBodyTagFilter(string inputToProcess, string htmlSnippet, int? chunkLastNumberOfCharacters, EventHandler<GlimpseScriptsInjectionFailedEventArgs> onInjectionFailed = null)
+        private static string ProcessInputByScriptTagsInjectionStream(string inputToProcess, string htmlSnippet, int? chunkLastNumberOfCharacters, EventHandler<ScriptTagsInjectionFailedEventArgs> onInjectionFailed = null)
         {
             using (var memoryStream = new MemoryStream())
             {
                 var scriptTagsProviderMock = new Mock<IScriptTagsProvider>();
                 scriptTagsProviderMock.Setup(scriptTagsProvider => scriptTagsProvider.ScriptTagsAllowedToBeProvided).Returns(true);
                 scriptTagsProviderMock.Setup(scriptTagsProvider => scriptTagsProvider.GetScriptTags()).Returns(htmlSnippet);
-                var options = new GlimpseScriptsInjectionOptions(scriptTagsProviderMock.Object, () => Encoding.UTF8, onInjectionFailed);
+                var options = new ScriptTagsInjectionOptions(scriptTagsProviderMock.Object, () => Encoding.UTF8, onInjectionFailed);
 
-                var preBodyTagFilter = new GlimpseScriptsInjectionStream(memoryStream, options);
+                var scriptTagsInjectionStream = new ScriptTagsInjectionStream(memoryStream, options);
 
                 string[] inputsToProcess = { inputToProcess };
                 if (chunkLastNumberOfCharacters.HasValue)
@@ -140,11 +139,11 @@ namespace Glimpse.Test.Core
                 foreach (string inputToProcessChunk in inputsToProcess)
                 {
                     byte[] buffer = Encoding.UTF8.GetBytes(inputToProcessChunk);
-                    preBodyTagFilter.Write(buffer, 0, buffer.Length);
+                    scriptTagsInjectionStream.Write(buffer, 0, buffer.Length);
                 }
 
-                preBodyTagFilter.Flush();
-                preBodyTagFilter.Position = 0;
+                scriptTagsInjectionStream.Flush();
+                scriptTagsInjectionStream.Position = 0;
 
                 return Encoding.UTF8.GetString(memoryStream.ToArray());
             }

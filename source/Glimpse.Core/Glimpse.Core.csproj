@@ -142,9 +142,9 @@
     <Compile Include="Framework\Support\ExecutionBlockBase.cs" />
     <Compile Include="Framework\Support\IExecutionTask.cs" />
     <Compile Include="Framework\UriTemplateResourceEndpointConfiguration.cs" />
-    <Compile Include="GlimpseScriptsInjectionOptions.cs" />
+    <Compile Include="Framework\ScriptTagsInjectionOptions.cs" />
     <Compile Include="Guard.cs" />
-    <Compile Include="GlimpseScriptsInjectionFailedEventArgs.cs" />
+    <Compile Include="Framework\ScriptTagsInjectionFailedEventArgs.cs" />
     <Compile Include="Message\RuntimeMessage.cs" />
     <Compile Include="Metadata\CorrelationInstanceMetadata.cs" />
     <Compile Include="Metadata\DocumentationTabMetadata.cs" />
@@ -158,7 +158,7 @@
     <Compile Include="Metadata\ResourceMetadata.cs" />
     <Compile Include="Metadata\TabMetadata.cs" />
     <Compile Include="Metadata\VersionMetadata.cs" />
-    <Compile Include="GlimpseScriptsInjectionStream.cs" />
+    <Compile Include="Framework\ScriptTagsInjectionStream.cs" />
     <Compile Include="Policy\AddRemoveClearItemsConfigurator.cs" />
     <Compile Include="Policy\ContentTypePolicyConfigurator.cs" />
     <Compile Include="Extensibility\IContentTypePolicyConfigurator.cs" />

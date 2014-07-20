@@ -1,24 +1,24 @@
 using System.IO;
 using System.Text.RegularExpressions;
 
-namespace Glimpse.Core
+namespace Glimpse.Core.Framework
 {
     /// <summary>
     /// This class will inject the Glimpse script tags in the resulting HTML output.
     /// It will look for the last occurrence of the &lt;/body&gt; tag and inject the snippet right before that tag.
     /// </summary>
-    public class GlimpseScriptsInjectionStream : Stream
+    public class ScriptTagsInjectionStream : Stream
     {
         private const string BodyClosingTag = "</body>";
         private const string TroubleshootingDocsUri = "http://getglimpse.com/Help/Troubleshooting";
 
         private Stream OutputStream { get; set; }
-        private GlimpseScriptsInjectionOptions Options { get; set; }
+        private ScriptTagsInjectionOptions Options { get; set; }
 
         private Regex BodyEndRegex { get; set; }
         private string UnwrittenCharactersFromPreviousCall { get; set; }
 
-        public GlimpseScriptsInjectionStream(Stream outputStream, GlimpseScriptsInjectionOptions options)
+        public ScriptTagsInjectionStream(Stream outputStream, ScriptTagsInjectionOptions options)
         {
             Guard.ArgumentNotNull("outputStream", outputStream);
             Guard.ArgumentNotNull("options", options);

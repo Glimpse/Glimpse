@@ -169,7 +169,7 @@ namespace Glimpse.Core.Framework
                     return glimpseRequestContextHandle;
                 }
 
-                var options = new GlimpseScriptsInjectionOptions(
+                var options = new ScriptTagsInjectionOptions(
                     glimpseRequestContext.ScriptTagsProvider,
                     () => requestResponseAdapter.ResponseEncoding,
                     (sender, args) => Configuration.Logger.Warn(
@@ -177,7 +177,7 @@ namespace Glimpse.Core.Framework
                         requestResponseAdapter.RequestMetadata.RequestUri.AbsoluteUri,
                         args.FailureMessage));
 
-                requestResponseAdapter.OutputStream = new GlimpseScriptsInjectionStream(requestResponseAdapter.OutputStream, options);
+                requestResponseAdapter.OutputStream = new ScriptTagsInjectionStream(requestResponseAdapter.OutputStream, options);
 
                 TabProvider.Execute(glimpseRequestContext, RuntimeEvent.BeginRequest);
 

@@ -142,7 +142,7 @@
     <Compile Include="Policy\GlimpseResourcePolicyShould.cs" />
     <Compile Include="Policy\StatusCodePolicyShould.cs" />
     <Compile Include="Policy\UriPolicyShould.cs" />
-    <Compile Include="GlimpseScriptsInjectionStreamShould.cs" />
+    <Compile Include="ScriptTagsInjectionStreamShould.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResourceResult\CacheControlDecoratorShould.cs" />
     <Compile Include="ResourceResult\RedirectResourceResultShould.cs" />
