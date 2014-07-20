@@ -18,14 +18,12 @@ namespace Glimpse.Test.Core.Framework
             var requestResponseAdapter = RequestResponseAdapterTester.Create(requestUri).RequestResponseAdapterMock.Object;
 
             var glimpseRequestContext = new GlimpseRequestContext(
-                Guid.NewGuid(),
                 requestResponseAdapter,
                 expectedRuntimePolicy,
                 ResourceEndpointConfigurationTester.Create(requestUri, false).ResourceEndpointConfigurationMock.Object,
                 "/glimpse.axd",
                 new RuntimePolicyDeterminator(new Mock<IReadonlyConfiguration>().Object),
-                new Mock<IGlimpseScriptTagsGenerator>().Object,
-                new Mock<ILogger>().Object);
+                new Mock<IGlimpseScriptTagsGenerator>().Object);
 
             Assert.Equal(expectedRuntimePolicy, glimpseRequestContext.CurrentRuntimePolicy);
         }
@@ -36,14 +34,12 @@ namespace Glimpse.Test.Core.Framework
             var regularRequestUri = new Uri("http://localhost/test");
 
             var glimpseRequestContext = new GlimpseRequestContext(
-                    Guid.NewGuid(),
                     RequestResponseAdapterTester.Create(regularRequestUri).RequestResponseAdapterMock.Object,
                     RuntimePolicy.On,
                     ResourceEndpointConfigurationTester.Create(regularRequestUri, false).ResourceEndpointConfigurationMock.Object,
                     "/glimpse.axd",
                     new RuntimePolicyDeterminator(new Mock<IReadonlyConfiguration>().Object),
-                    new Mock<IGlimpseScriptTagsGenerator>().Object,
-                    new Mock<ILogger>().Object);
+                    new Mock<IGlimpseScriptTagsGenerator>().Object);
 
             Assert.Equal(RequestHandlingMode.RegularRequest, glimpseRequestContext.RequestHandlingMode);
         }
@@ -54,14 +50,12 @@ namespace Glimpse.Test.Core.Framework
             var resourceRequestUri = new Uri("http://localhost/glimpse.axd?n=something");
 
             var glimpseRequestContext = new GlimpseRequestContext(
-                    Guid.NewGuid(),
                     RequestResponseAdapterTester.Create(resourceRequestUri).RequestResponseAdapterMock.Object,
                     RuntimePolicy.On,
                     ResourceEndpointConfigurationTester.Create(resourceRequestUri, true).ResourceEndpointConfigurationMock.Object,
                     "/glimpse.axd",
                     new RuntimePolicyDeterminator(new Mock<IReadonlyConfiguration>().Object),
-                    new Mock<IGlimpseScriptTagsGenerator>().Object,
-                    new Mock<ILogger>().Object);
+                    new Mock<IGlimpseScriptTagsGenerator>().Object);
 
             Assert.Equal(RequestHandlingMode.ResourceRequest, glimpseRequestContext.RequestHandlingMode);
         }

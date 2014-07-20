@@ -96,14 +96,12 @@ namespace Glimpse.Test.Core.Framework
             var requestUri = new Uri("http://localhost/");
 
             return new GlimpseRequestContext(
-                Guid.NewGuid(),
                 RequestResponseAdapterTester.Create(requestUri).RequestResponseAdapterMock.Object,
                 RuntimePolicy.On,
                 ResourceEndpointConfigurationTester.Create(requestUri, false).ResourceEndpointConfigurationMock.Object,
                 "/glimpse.axd",
                 new RuntimePolicyDeterminator(new Mock<IReadonlyConfiguration>().Object),
-                new Mock<IGlimpseScriptTagsGenerator>().Object,
-                new Mock<ILogger>().Object);
+                new Mock<IGlimpseScriptTagsGenerator>().Object);
         }
 
         private static void AssertExistenceOfGlimpseRequestContext(ActiveGlimpseRequestContexts activeGlimpseRequestContexts, IGlimpseRequestContext expectedGlimpseRequestContext)

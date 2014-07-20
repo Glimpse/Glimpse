@@ -23,40 +23,36 @@ namespace Glimpse.Core.Framework
         /// <summary>
         /// Initializes a new instance of the <see cref="GlimpseRequestContext" />
         /// </summary>
-        /// <param name="glimpseRequestId">The Id assigned to the request by Glimpse.</param>
         /// <param name="requestResponseAdapter">The <see cref="IRequestResponseAdapter "/> of this request.</param>
         /// <param name="initialRuntimePolicy">The initial <see cref="RuntimePolicy "/> for this request.</param>
         /// <param name="resourceEndpointConfiguration">The <see cref="IResourceEndpointConfiguration"/>.</param>
         /// <param name="endpointBaseUri">The endpoint base URI.</param>
         /// <param name="runtimePolicyDeterminator">The runtime policy determinator</param>
-        /// <param name="glimpseScriptTagsGenerator">The Glimpse script tags generator</param>
-        /// <param name="logger">The logger</param>
+        /// <param name="scriptTagsGenerator">The script tags generator</param>
+        /// <param name="onScriptTagGenerationExceptionCallback">The callback used by the <paramref name="scriptTagsGenerator"/> in case an exception occurs.</param>
         public GlimpseRequestContext(
-            Guid glimpseRequestId,
             IRequestResponseAdapter requestResponseAdapter,
             RuntimePolicy initialRuntimePolicy,
             IResourceEndpointConfiguration resourceEndpointConfiguration,
             string endpointBaseUri,
             RuntimePolicyDeterminator runtimePolicyDeterminator,
-            IGlimpseScriptTagsGenerator glimpseScriptTagsGenerator,
-            ILogger logger)
+            IGlimpseScriptTagsGenerator scriptTagsGenerator,
+            Action<string,Exception> onScriptTagGenerationExceptionCallback = null)
         {
             Guard.ArgumentNotNull("requestResponseAdapter", requestResponseAdapter);
             Guard.ArgumentNotNull("resourceEndpointConfiguration", resourceEndpointConfiguration);
             Guard.ArgumentNotNull("runtimePolicyDeterminator", runtimePolicyDeterminator);
-            Guard.ArgumentNotNull("glimpseScriptTagsGenerator", glimpseScriptTagsGenerator);
 
             if (string.IsNullOrEmpty(endpointBaseUri))
             {
                 throw new ArgumentException("endpointBaseUri is null or empty");
             }
 
-            GlimpseRequestId = glimpseRequestId;
+            GlimpseRequestId = Guid.NewGuid();
             RequestResponseAdapter = requestResponseAdapter;
             RuntimePolicyDeterminator = runtimePolicyDeterminator;
 
-#warning CGI - maybe a factory would be cleaner instead of needing to accept passthrough parameters
-            ScriptTagsProvider = new GlimpseScriptTagsProvider(GlimpseRequestId, glimpseScriptTagsGenerator, logger, IsAllowedToProvideScriptTags);
+            ScriptTagsProvider = new GlimpseScriptTagsProvider(GlimpseRequestId, scriptTagsGenerator, IsAllowedToProvideScriptTags, onScriptTagGenerationExceptionCallback);
 
             RequestHandlingMode = resourceEndpointConfiguration.IsResourceRequest(requestResponseAdapter.RequestMetadata.RequestUri, endpointBaseUri)
                                     ? RequestHandlingMode.ResourceRequest

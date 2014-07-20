@@ -140,14 +140,13 @@ namespace Glimpse.Core.Framework
         public GlimpseRequestContextHandle BeginRequest(IRequestResponseAdapter requestResponseAdapter)
         {
             var glimpseRequestContext = new GlimpseRequestContext(
-                Guid.NewGuid(),
                 requestResponseAdapter,
                 Configuration.DefaultRuntimePolicy,
                 Configuration.ResourceEndpoint,
                 Configuration.EndpointBaseUri,
                 RuntimePolicyDeterminator,
                 new GlimpseScriptTagsGenerator(Configuration),
-                Configuration.Logger);
+                Configuration.Logger.Error);
 
             var runtimePolicy = RuntimePolicyDeterminator.DetermineRuntimePolicy(RuntimeEvent.BeginRequest, glimpseRequestContext.CurrentRuntimePolicy, glimpseRequestContext.RequestResponseAdapter);
             if (runtimePolicy == RuntimePolicy.Off)

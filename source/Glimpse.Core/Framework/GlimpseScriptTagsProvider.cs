@@ -1,13 +1,12 @@
 ﻿using System;
-using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Core.Framework
 {
     public class GlimpseScriptTagsProvider : IGlimpseScriptTagsProvider
     {
         private Guid GlimpseRequestId { get; set; }
-        private IGlimpseScriptTagsGenerator GlimpseScriptTagsGenerator { get; set; }
-        private ILogger Logger { get; set; }
+        private IGlimpseScriptTagsGenerator ScriptTagsGenerator { get; set; }
+        private Action<string, Exception> OnExceptionCallback { get; set; }
 
         private Func<bool> IsAllowedToProvideScriptTags { get; set; }
 
@@ -15,17 +14,16 @@ namespace Glimpse.Core.Framework
 
         public GlimpseScriptTagsProvider(
             Guid glimpseRequestId,
-            IGlimpseScriptTagsGenerator glimpseScriptTagsGenerator,
-            ILogger logger,
-            Func<bool> isAllowedToProvideScriptTags)
+            IGlimpseScriptTagsGenerator scriptTagsGenerator,
+            Func<bool> isAllowedToProvideScriptTags,
+            Action<string, Exception> onExceptionCallback = null)
         {
-            Guard.ArgumentNotNull("glimpseScriptTagsGenerator", glimpseScriptTagsGenerator);
-            Guard.ArgumentNotNull("logger", logger);
+            Guard.ArgumentNotNull("scriptTagsGenerator", scriptTagsGenerator);
             Guard.ArgumentNotNull("isAllowedToProvideScriptTags", isAllowedToProvideScriptTags);
 
             GlimpseRequestId = glimpseRequestId;
-            GlimpseScriptTagsGenerator = glimpseScriptTagsGenerator;
-            Logger = logger;
+            ScriptTagsGenerator = scriptTagsGenerator;
+            OnExceptionCallback = onExceptionCallback ?? delegate { };
             IsAllowedToProvideScriptTags = isAllowedToProvideScriptTags;
         }
 
@@ -54,11 +52,11 @@ namespace Glimpse.Core.Framework
             {
                 try
                 {
-                    return GlimpseScriptTagsGenerator.Generate(GlimpseRequestId);
+                    return ScriptTagsGenerator.Generate(GlimpseRequestId);
                 }
                 catch (Exception exception)
                 {
-                    Logger.Error("Failed to generate script tags", exception);
+                    OnExceptionCallback("Failed to generate script tags", exception);
                     return string.Empty;
                 }
             }
@@ -74,7 +72,7 @@ namespace Glimpse.Core.Framework
             }
             catch (Exception exception)
             {
-                Logger.Error("Failed to determine whether script tags are allowed to be provided.", exception);
+                OnExceptionCallback("Failed to determine whether script tags are allowed to be provided.", exception);
                 return false;
             }
         }
