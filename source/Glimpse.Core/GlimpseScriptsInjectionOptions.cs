@@ -6,7 +6,7 @@ namespace Glimpse.Core
 {
     public class GlimpseScriptsInjectionOptions
     {
-        private IGlimpseScriptTagsProvider ScriptTagsProvider { get; set; }
+        private IScriptTagsProvider ScriptTagsProvider { get; set; }
         private Func<Encoding> ContentEncodingProvider { get; set; }
 
         private bool? _injectionRequired;
@@ -16,7 +16,7 @@ namespace Glimpse.Core
         public event EventHandler<GlimpseScriptsInjectionFailedEventArgs> InjectionFailed = delegate { };
 
         public GlimpseScriptsInjectionOptions(
-            IGlimpseScriptTagsProvider scriptTagsProvider,
+            IScriptTagsProvider scriptTagsProvider,
             Func<Encoding> contentEncodingProvider,
             EventHandler<GlimpseScriptsInjectionFailedEventArgs> onInjectionFailed = null)
         {

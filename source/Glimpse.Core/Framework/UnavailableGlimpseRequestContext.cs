@@ -28,7 +28,7 @@ namespace Glimpse.Core.Framework
             GlimpseRequestId = new Guid();
             RequestStore = new DataStoreStub();
             CurrentExecutionTimer = new ExecutionTimerStub();
-            ScriptTagsProvider = new GlimpseScriptTagsProviderStub();
+            ScriptTagsProvider = new ScriptTagsProviderStub();
         }
 
         /// <summary>
@@ -85,9 +85,9 @@ namespace Glimpse.Core.Framework
         }
 
         /// <summary>
-        /// Gets the <see cref="GlimpseScriptTagsProvider"/> for the referenced request
+        /// Gets the <see cref="IScriptTagsProvider"/> for the referenced request
         /// </summary>
-        public IGlimpseScriptTagsProvider ScriptTagsProvider { get; private set; }
+        public IScriptTagsProvider ScriptTagsProvider { get; private set; }
 
         /// <summary>
         /// Gets the <see cref="IExecutionTimer"/> for the referenced request
@@ -184,7 +184,7 @@ namespace Glimpse.Core.Framework
             }
         }
 
-        private class GlimpseScriptTagsProviderStub : IGlimpseScriptTagsProvider
+        private class ScriptTagsProviderStub : IScriptTagsProvider
         {
             public bool ScriptTagsAllowedToBeProvided
             {

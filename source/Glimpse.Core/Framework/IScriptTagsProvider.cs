@@ -1,6 +1,6 @@
 ﻿namespace Glimpse.Core.Framework
 {
-    public interface IGlimpseScriptTagsProvider
+    public interface IScriptTagsProvider
     {
         bool ScriptTagsAllowedToBeProvided { get; }
         bool ScriptTagsAlreadyProvided { get; }

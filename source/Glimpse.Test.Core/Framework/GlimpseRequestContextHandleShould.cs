@@ -101,7 +101,7 @@ namespace Glimpse.Test.Core.Framework
                 ResourceEndpointConfigurationTester.Create(requestUri, false).ResourceEndpointConfigurationMock.Object,
                 "/glimpse.axd",
                 new RuntimePolicyDeterminator(new Mock<IReadonlyConfiguration>().Object),
-                new Mock<IGlimpseScriptTagsGenerator>().Object);
+                new Mock<IScriptTagsGenerator>().Object);
         }
 
         private static void AssertExistenceOfGlimpseRequestContext(ActiveGlimpseRequestContexts activeGlimpseRequestContexts, IGlimpseRequestContext expectedGlimpseRequestContext)

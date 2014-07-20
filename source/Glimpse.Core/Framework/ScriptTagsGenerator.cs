@@ -10,15 +10,15 @@ namespace Glimpse.Core.Framework
     /// <summary>
     /// Generator of Glimpse script tags
     /// </summary>
-    public class GlimpseScriptTagsGenerator : IGlimpseScriptTagsGenerator
+    public class ScriptTagsGenerator : IScriptTagsGenerator
     {
         private IReadonlyConfiguration Configuration { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="GlimpseScriptTagsGenerator" />
+        /// Initializes a new instance of the <see cref="ScriptTagsGenerator" />
         /// </summary>
         /// <param name="configuration">A <see cref="IReadonlyConfiguration"/></param>
-        public GlimpseScriptTagsGenerator(IReadonlyConfiguration configuration)
+        public ScriptTagsGenerator(IReadonlyConfiguration configuration)
         {
             Guard.ArgumentNotNull("configuration", configuration);
             Configuration = configuration;

@@ -2,7 +2,7 @@ using System;
 
 namespace Glimpse.Core.Framework
 {
-    public interface IGlimpseScriptTagsGenerator
+    public interface IScriptTagsGenerator
     {
         /// <summary>
         /// Generates Glimpse script tags for the given Glimpse request id

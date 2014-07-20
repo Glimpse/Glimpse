@@ -36,7 +36,7 @@ namespace Glimpse.Core.Framework
             IResourceEndpointConfiguration resourceEndpointConfiguration,
             string endpointBaseUri,
             RuntimePolicyDeterminator runtimePolicyDeterminator,
-            IGlimpseScriptTagsGenerator scriptTagsGenerator,
+            IScriptTagsGenerator scriptTagsGenerator,
             Action<string,Exception> onScriptTagGenerationExceptionCallback = null)
         {
             Guard.ArgumentNotNull("requestResponseAdapter", requestResponseAdapter);
@@ -52,7 +52,7 @@ namespace Glimpse.Core.Framework
             RequestResponseAdapter = requestResponseAdapter;
             RuntimePolicyDeterminator = runtimePolicyDeterminator;
 
-            ScriptTagsProvider = new GlimpseScriptTagsProvider(GlimpseRequestId, scriptTagsGenerator, IsAllowedToProvideScriptTags, onScriptTagGenerationExceptionCallback);
+            ScriptTagsProvider = new ScriptTagsProvider(GlimpseRequestId, scriptTagsGenerator, IsAllowedToProvideScriptTags, onScriptTagGenerationExceptionCallback);
 
             RequestHandlingMode = resourceEndpointConfiguration.IsResourceRequest(requestResponseAdapter.RequestMetadata.RequestUri, endpointBaseUri)
                                     ? RequestHandlingMode.ResourceRequest
@@ -104,9 +104,9 @@ namespace Glimpse.Core.Framework
         public RequestHandlingMode RequestHandlingMode { get; private set; }
 
         /// <summary>
-        /// Gets the <see cref="GlimpseScriptTagsProvider"/> for the referenced request
+        /// Gets the <see cref="Framework.ScriptTagsProvider"/> for the referenced request
         /// </summary>
-        public IGlimpseScriptTagsProvider ScriptTagsProvider { get; private set; }
+        public IScriptTagsProvider ScriptTagsProvider { get; private set; }
 
         /// <summary>
         /// Gets the <see cref="IExecutionTimer"/> for the referenced request

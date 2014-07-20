@@ -34,9 +34,9 @@ namespace Glimpse.Core.Framework
         RequestHandlingMode RequestHandlingMode { get; }
 
         /// <summary>
-        /// Gets the <see cref="GlimpseScriptTagsProvider"/> for the referenced request
+        /// Gets the <see cref="IScriptTagsProvider"/> for the referenced request
         /// </summary>
-        IGlimpseScriptTagsProvider ScriptTagsProvider { get; }
+        IScriptTagsProvider ScriptTagsProvider { get; }
 
         /// <summary>
         /// Starts timing the execution of the referenced request

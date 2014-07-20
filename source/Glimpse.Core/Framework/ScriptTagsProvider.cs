@@ -2,19 +2,19 @@
 
 namespace Glimpse.Core.Framework
 {
-    public class GlimpseScriptTagsProvider : IGlimpseScriptTagsProvider
+    public class ScriptTagsProvider : IScriptTagsProvider
     {
         private Guid GlimpseRequestId { get; set; }
-        private IGlimpseScriptTagsGenerator ScriptTagsGenerator { get; set; }
+        private IScriptTagsGenerator ScriptTagsGenerator { get; set; }
         private Action<string, Exception> OnExceptionCallback { get; set; }
 
         private Func<bool> IsAllowedToProvideScriptTags { get; set; }
 
         private bool? _scriptTagsAllowedToBeProvided;
 
-        public GlimpseScriptTagsProvider(
+        public ScriptTagsProvider(
             Guid glimpseRequestId,
-            IGlimpseScriptTagsGenerator scriptTagsGenerator,
+            IScriptTagsGenerator scriptTagsGenerator,
             Func<bool> isAllowedToProvideScriptTags,
             Action<string, Exception> onExceptionCallback = null)
         {

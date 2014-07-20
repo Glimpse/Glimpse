@@ -145,7 +145,7 @@ namespace Glimpse.Core.Framework
                 Configuration.ResourceEndpoint,
                 Configuration.EndpointBaseUri,
                 RuntimePolicyDeterminator,
-                new GlimpseScriptTagsGenerator(Configuration),
+                new ScriptTagsGenerator(Configuration),
                 Configuration.Logger.Error);
 
             var runtimePolicy = RuntimePolicyDeterminator.DetermineRuntimePolicy(RuntimeEvent.BeginRequest, glimpseRequestContext.CurrentRuntimePolicy, glimpseRequestContext.RequestResponseAdapter);

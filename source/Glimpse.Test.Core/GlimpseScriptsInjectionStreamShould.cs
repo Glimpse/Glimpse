@@ -124,7 +124,7 @@ namespace Glimpse.Test.Core
         {
             using (var memoryStream = new MemoryStream())
             {
-                var scriptTagsProviderMock = new Mock<IGlimpseScriptTagsProvider>();
+                var scriptTagsProviderMock = new Mock<IScriptTagsProvider>();
                 scriptTagsProviderMock.Setup(scriptTagsProvider => scriptTagsProvider.ScriptTagsAllowedToBeProvided).Returns(true);
                 scriptTagsProviderMock.Setup(scriptTagsProvider => scriptTagsProvider.GetScriptTags()).Returns(htmlSnippet);
                 var options = new GlimpseScriptsInjectionOptions(scriptTagsProviderMock.Object, () => Encoding.UTF8, onInjectionFailed);
