@@ -18,6 +18,8 @@ namespace Glimpse.Core.Framework
         private Regex BodyEndRegex { get; set; }
         private string UnwrittenCharactersFromPreviousCall { get; set; }
 
+        private bool InjectionDone { get; set; }
+
         public ScriptTagsInjectionStream(Stream outputStream, ScriptTagsInjectionOptions options)
         {
             Guard.ArgumentNotNull("outputStream", outputStream);
@@ -56,6 +58,14 @@ namespace Glimpse.Core.Framework
 
         public override void Close()
         {
+            if (Options.InjectionRequired && !InjectionDone)
+            {
+                Options.NotifyInjectionFailure(string.Format(
+                    "Unable to locate '</body>' with content encoding '{0}'. The response may be compressed or the markup may actually be missing a '</body>' tag. See {1} for information on troubleshooting this issue.",
+                    Options.ContentEncoding.EncodingName,
+                    TroubleshootingDocsUri));
+            }
+
             OutputStream.Close();
         }
 
@@ -162,18 +172,12 @@ namespace Glimpse.Core.Framework
                 {
                     // apparently we did seem to match a </body> tag, which means we can replace the last match with our HTML snippet
                     finalContentToWrite = BodyEndRegex.Replace(UnwrittenCharactersFromPreviousCall, Options.ScriptTags + BodyClosingTag, 1);
-                }
-                else
-                {
-                    // there was no </body> tag found, so we notify the requestor
-                    Options.NotifyInjectionFailure(string.Format(
-                        "Unable to locate '</body>' with content encoding '{0}'. The response may be compressed or the markup may actually be missing a '</body>' tag. See {1} for information on troubleshooting this issue.",
-                        Options.ContentEncoding.EncodingName,
-                        TroubleshootingDocsUri));
+                    InjectionDone = true;
                 }
 
                 // either way, if a replacement has been done or a warning has been written to the logs, the remaining unwritten characters must be written to the output stream
                 WriteToOutputStream(finalContentToWrite);
+                UnwrittenCharactersFromPreviousCall = null;
             }
 
             OutputStream.Flush();

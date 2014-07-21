@@ -128,22 +128,23 @@ namespace Glimpse.Test.Core
                 scriptTagsProviderMock.Setup(scriptTagsProvider => scriptTagsProvider.GetScriptTags()).Returns(htmlSnippet);
                 var options = new ScriptTagsInjectionOptions(scriptTagsProviderMock.Object, () => Encoding.UTF8, onInjectionFailed);
 
-                var scriptTagsInjectionStream = new ScriptTagsInjectionStream(memoryStream, options);
-
-                string[] inputsToProcess = { inputToProcess };
-                if (chunkLastNumberOfCharacters.HasValue)
+                using (var scriptTagsInjectionStream = new ScriptTagsInjectionStream(memoryStream, options))
                 {
-                    inputsToProcess = new[] { inputToProcess.Substring(0, inputToProcess.Length - chunkLastNumberOfCharacters.Value), inputToProcess.Substring(inputToProcess.Length - chunkLastNumberOfCharacters.Value) };
-                }
+                    string[] inputsToProcess = { inputToProcess };
+                    if (chunkLastNumberOfCharacters.HasValue)
+                    {
+                        inputsToProcess = new[] { inputToProcess.Substring(0, inputToProcess.Length - chunkLastNumberOfCharacters.Value), inputToProcess.Substring(inputToProcess.Length - chunkLastNumberOfCharacters.Value) };
+                    }
 
-                foreach (string inputToProcessChunk in inputsToProcess)
-                {
-                    byte[] buffer = Encoding.UTF8.GetBytes(inputToProcessChunk);
-                    scriptTagsInjectionStream.Write(buffer, 0, buffer.Length);
-                }
+                    foreach (string inputToProcessChunk in inputsToProcess)
+                    {
+                        byte[] buffer = Encoding.UTF8.GetBytes(inputToProcessChunk);
+                        scriptTagsInjectionStream.Write(buffer, 0, buffer.Length);
+                    }
 
-                scriptTagsInjectionStream.Flush();
-                scriptTagsInjectionStream.Position = 0;
+                    scriptTagsInjectionStream.Flush();
+                    scriptTagsInjectionStream.Position = 0;
+                }
 
                 return Encoding.UTF8.GetString(memoryStream.ToArray());
             }
