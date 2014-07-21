@@ -171,7 +171,7 @@ namespace Glimpse.Core.Framework
                 if (BodyEndRegex.IsMatch(UnwrittenCharactersFromPreviousCall))
                 {
                     // apparently we did seem to match a </body> tag, which means we can replace the last match with our HTML snippet
-                    finalContentToWrite = BodyEndRegex.Replace(UnwrittenCharactersFromPreviousCall, Options.ScriptTags + BodyClosingTag, 1);
+                    finalContentToWrite = BodyEndRegex.Replace(UnwrittenCharactersFromPreviousCall, Options.GetScriptTagsToInject() + BodyClosingTag, 1);
                     InjectionDone = true;
                 }
 

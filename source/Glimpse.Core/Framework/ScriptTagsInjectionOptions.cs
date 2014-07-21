@@ -10,7 +10,6 @@ namespace Glimpse.Core.Framework
 
         private bool? _injectionRequired;
         private Encoding _contentEncoding;
-        private string _scriptTags;
 
         public event EventHandler<ScriptTagsInjectionFailedEventArgs> InjectionFailed = delegate { };
 
@@ -36,9 +35,9 @@ namespace Glimpse.Core.Framework
             get { return (_injectionRequired ?? (_injectionRequired = ScriptTagsProvider.ScriptTagsAllowedToBeProvided)).Value; }
         }
 
-        public string ScriptTags
+        public string GetScriptTagsToInject()
         {
-            get { return _scriptTags ?? (_scriptTags = ScriptTagsProvider.GetScriptTags()); }
+            return ScriptTagsProvider.GetScriptTags();
         }
 
         public Encoding ContentEncoding
