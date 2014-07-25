@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Abstractions;
+using Microsoft.AspNet.Http;
+using Microsoft.AspNet.Builder;
 
 namespace Glimpse.ProjectK.Middleware
 {
@@ -8,10 +9,10 @@ namespace Glimpse.ProjectK.Middleware
     {
         private readonly RequestDelegate next;
         private readonly MiddlewareManager manager;
-        private readonly Type middlewareType;
+        private readonly Func<RequestDelegate, RequestDelegate> middlewareType;
         private readonly Guid builderId;
 
-        public HeadMiddleware(RequestDelegate next, Type middlewareType, Guid builderId)
+        public HeadMiddleware(RequestDelegate next, Func<RequestDelegate, RequestDelegate> middlewareType, Guid builderId)
         {
             this.next = next;
             this.manager = MiddlewareManager.Instance;

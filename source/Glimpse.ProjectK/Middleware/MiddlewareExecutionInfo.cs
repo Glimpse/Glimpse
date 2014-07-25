@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Microsoft.AspNet.Builder;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
+using System.Reflection;
 
 namespace Glimpse.ProjectK.Middleware
 {
@@ -11,12 +13,12 @@ namespace Glimpse.ProjectK.Middleware
         private Stopwatch stopwatch;
         private TimeSpan? childlessDuration;
 
-        public static MiddlewareExecutionInfo Unrun(Type type)
+        public static MiddlewareExecutionInfo Unrun(Func<RequestDelegate, RequestDelegate> type)
         {
             return new MiddlewareExecutionInfo {Type = type};
         }
 
-        public static MiddlewareExecutionInfo Running(Type type)
+        public static MiddlewareExecutionInfo Running(Func<RequestDelegate, RequestDelegate> type)
         {
             return new MiddlewareExecutionInfo
             {
@@ -35,7 +37,7 @@ namespace Glimpse.ProjectK.Middleware
             stopwatch.Stop();
         }
 
-        public Type Type { get; set; }
+        public Func<RequestDelegate, RequestDelegate> Type { get; set; }
 
         public TimeSpan? Duration 
         {
@@ -73,7 +75,8 @@ namespace Glimpse.ProjectK.Middleware
         {
             get
             {
-                return title ?? (title = Regex.Replace(Type.Name, "(?<=[a-z])([A-Z])", " $1")
+                // This is the only remotely relevant piece of information I could find left in Type
+                return title ?? (title = Regex.Replace(Type.Method.Module.Name, "(?<=[a-z])([A-Z])", " $1")
                     .Replace(" Middleware", string.Empty));
             }
         }

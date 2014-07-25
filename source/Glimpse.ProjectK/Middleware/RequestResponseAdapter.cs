@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
-using Microsoft.AspNet.Abstractions;
+using Microsoft.AspNet.Http;
 
 namespace Glimpse.ProjectK.Middleware
 {

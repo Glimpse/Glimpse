@@ -2,7 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using Microsoft.AspNet.Abstractions;
+using Microsoft.AspNet.Http;
+using Microsoft.AspNet.Builder;
 
 namespace Glimpse.ProjectK.Middleware
 {
@@ -10,11 +11,11 @@ namespace Glimpse.ProjectK.Middleware
     {
         private const string trackerKey = "glimpse.MiddlewareTracker";
         private static MiddlewareManager instance;
-        private readonly IDictionary<Guid, List<Type>> registeredMiddleware; 
+        private readonly IDictionary<Guid, List<Func<RequestDelegate, RequestDelegate>>> registeredMiddleware; 
 
         private MiddlewareManager()
         {
-            registeredMiddleware = new Dictionary<Guid, List<Type>>();
+            registeredMiddleware = new Dictionary<Guid, List<Func<RequestDelegate, RequestDelegate>>>();
         }
 
         public static MiddlewareManager Instance 
@@ -22,29 +23,29 @@ namespace Glimpse.ProjectK.Middleware
             get { return instance ?? (instance = new MiddlewareManager()); }
         }
 
-        public void Register(Guid builderId, Type middlewareType)
+        public void Register(Guid builderId, Func<RequestDelegate, RequestDelegate> middlewareType)
         {
-            List<Type> chain;
+            List<Func<RequestDelegate, RequestDelegate>> chain;
             if (registeredMiddleware.ContainsKey(builderId))
             {
                 chain = registeredMiddleware[builderId];
             }
             else
             {
-                registeredMiddleware[builderId] = chain = new List<Type>();
+                registeredMiddleware[builderId] = chain = new List<Func<RequestDelegate, RequestDelegate>>();
             }
 
             chain.Add(middlewareType);
         }
 
-        public void Start(HttpContext context, Type middlewareType, Guid builderId)
+        public void Start(HttpContext context, Func<RequestDelegate, RequestDelegate> middlewareType, Guid builderId)
         {
             var tracker = GetTracker(context);
 
             tracker.Push(MiddlewareExecutionInfo.Running(middlewareType));
         }
 
-        public void End(HttpContext context, Type middlewareType, Guid builderId)
+        public void End(HttpContext context, Func<RequestDelegate, RequestDelegate> middlewareType, Guid builderId)
         {
             var tracker = GetTracker(context);
             var middleware = tracker.Pop();

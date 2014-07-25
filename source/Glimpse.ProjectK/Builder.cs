@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Glimpse.ProjectK.Middleware;
-using Microsoft.AspNet.Abstractions;
+using Microsoft.AspNet.Builder;
 
 namespace Glimpse.ProjectK
 {
@@ -22,11 +22,9 @@ namespace Glimpse.ProjectK
          
         public IBuilder Use(Func<RequestDelegate, RequestDelegate> middleware)
         {
-            var middlewareType = middleware is Type ? middleware as Type : middleware.GetType();
+            manager.Register(builderId, middleware);
 
-            manager.Register(builderId, middlewareType);
-
-            innerBuilder.Use(next => new HeadMiddleware(next, middlewareType, builderId).Invoke);
+            innerBuilder.Use(next => new HeadMiddleware(next, middleware, builderId).Invoke);
 
             innerBuilder.Use(middleware);
             return this;

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Glimpse.Core.Extensibility;
 using Glimpse.ProjectK.Middleware;
+using Microsoft.AspNet.Http;
 
 namespace Glimpse.Owin.Tab
 {
@@ -13,9 +14,9 @@ namespace Glimpse.Owin.Tab
 
         public override object GetData(ITabContext context)
         {
-            var environment = context.GetRequestContext<IDictionary<string, object>>();
+            var httpContext = context.GetRequestContext<HttpContext>();
 
-            var tracker = environment["glimpse.MiddlewareTracker"] as MiddlewareTracker;
+            var tracker = httpContext.Items["glimpse.MiddlewareTracker"] as MiddlewareTracker;
 
             return tracker.Graph;
         }

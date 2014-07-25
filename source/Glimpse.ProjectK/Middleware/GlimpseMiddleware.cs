@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 using Glimpse.Core;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
-using Microsoft.AspNet.Abstractions;
+using Microsoft.AspNet.Http;
+using Microsoft.AspNet.Builder;
 
 namespace Glimpse.ProjectK.Middleware
 {

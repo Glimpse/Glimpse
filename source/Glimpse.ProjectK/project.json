@@ -1,6 +1,6 @@
 {
 	"dependencies": {
 		"Glimpse": "2.0.0-alpha",
-		"Microsoft.AspNet.Abstractions": "0.1-alpha-*"
+		"Microsoft.AspNet.Http": "1.0.0-*"
 	}
 }
