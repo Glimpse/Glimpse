@@ -72,7 +72,9 @@ namespace Glimpse.EF.AlternateType
 
         protected override string GetDbProviderManifestToken(DbConnection connection)
         {
-            return InnerProviderServices.GetProviderManifestToken(((GlimpseDbConnection)connection).InnerConnection);
+            var glimpseConnection = connection as GlimpseDbConnection;
+            DbConnection rawConnection = glimpseConnection == null ? connection : glimpseConnection.InnerConnection;
+            return InnerProviderServices.GetProviderManifestToken(rawConnection);
         }
 
 #if (EF5 && NET45) || EF6Plus
