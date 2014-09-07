@@ -1,4 +1,6 @@
 ﻿using System.IO;
+using System.IO.Compression;
+using System.Linq;
 using System.Text;
 using Glimpse.AspNet;
 using Glimpse.Core.Extensibility;
@@ -177,6 +179,64 @@ namespace Glimpse.Test.AspNet
                 preBodyTagFilter.Position = 0;
 
                 return Encoding.UTF8.GetString(memoryStream.ToArray());
+            }
+        }
+
+        [Fact]
+        public void HaveLeftCompressedContentUntouched()
+        {
+            var html =
+                "<!DOCTYPE html>\r\n<html xmlns=\"http://www.w3.org/1999/xhtml\">\r\n<head>\r\n    <title>Hello</title>\r\n</head>\r\n<body>\r\n    <h1>Hello</h1>\r\n</body>\r\n</html>\r\n";
+            DoHaveLeftCompressedContentUntouched(html, 1024);
+        }
+
+        private void DoHaveLeftCompressedContentUntouched(string html, int bufferLength)
+        {
+            using (var htmlStream = new MemoryStream(Encoding.UTF8.GetBytes(html)))
+            using (var compressedHtmlStream = new MemoryStream())
+            using (var outputStream = new MemoryStream())
+            {
+                using (var compresser = new GZipStream(compressedHtmlStream, CompressionMode.Compress, true))
+                {
+                    htmlStream.CopyTo(compresser);
+                }
+
+                compressedHtmlStream.Position = 0;
+                
+                var preBodyTagFilter = new PreBodyTagFilter("HTML SNIPPET", outputStream, Encoding.UTF8, "REQUEST URL", LoggerMock.Object);
+
+                compressedHtmlStream.Position = 0;
+                compressedHtmlStream.CopyTo(preBodyTagFilter, bufferLength);
+
+                preBodyTagFilter.Flush();
+                preBodyTagFilter.Position = 0;
+                
+                //Assert.True(StreamEquals(compressedHtmlStream, outputStream));
+            }
+        }
+
+        static bool StreamEquals(Stream stream1, Stream stream2)
+        {
+            stream1.Position = 0;
+            stream2.Position = 0;
+
+            const int bufferSize = 2048;
+            byte[] buffer1 = new byte[bufferSize]; //buffer size
+            byte[] buffer2 = new byte[bufferSize];
+            while (true)
+            {
+                int count1 = stream1.Read(buffer1, 0, bufferSize);
+                int count2 = stream2.Read(buffer2, 0, bufferSize);
+
+                if (count1 != count2)
+                    return false;
+
+                if (count1 == 0)
+                    return true;
+
+                // You might replace the following with an efficient "memcmp"
+                if (!buffer1.Take(count1).SequenceEqual(buffer2.Take(count2)))
+                    return false;
             }
         }
     }
