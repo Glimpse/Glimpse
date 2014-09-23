@@ -28,7 +28,10 @@ namespace Glimpse.Core.Configuration
         /// <returns>The <see cref="CollectionSettings" /> based on the given <paramref name="xmlConfiguration"/></returns>
         public CollectionSettings Create(XmlElement xmlConfiguration)
         {
-            Guard.ArgumentNotNull(xmlConfiguration, "xmlConfiguration");
+            if (xmlConfiguration == null)
+            {
+                return new CollectionSettings(new Type[0], new CustomConfiguration[0]);
+            }
 
             bool autoDiscover = true;
             string discoveryLocation = null;
@@ -66,13 +69,8 @@ namespace Glimpse.Core.Configuration
                     {
                         if (typeElement.Name.ToLower() == "add")
                         {
-                            var typeAttribute = typeElement.Attributes != null ? typeElement.Attributes["type"] : null;
-                            if (typeAttribute == null)
-                            {
-                                throw new GlimpseException("type attribute missing on element that adds a type to ignore.");
-                            }
-
-                            typesToIgnore.Add(Type.GetType(typeAttribute.Value, true, true));
+                            typesToIgnore.Add(
+                                typeElement.GetTypeFromTypeAttribute(true, "type attribute missing on element that adds a type to ignore."));
                         }
                         else
                         {
@@ -84,15 +82,7 @@ namespace Glimpse.Core.Configuration
                 {
                     string key = element.Name;
                     string configurationContent = element.OuterXml;
-                    Type explicitType = null;
-
-                    XmlAttribute typeAttribute = element.Attributes != null ? element.Attributes["type"] : null;
-                    if (typeAttribute != null)
-                    {
-                        explicitType = Type.GetType(typeAttribute.Value, true, true);
-                    }
-
-                    customConfigurations.Add(new CustomConfiguration(key, configurationContent, explicitType));
+                    customConfigurations.Add(new CustomConfiguration(key, configurationContent, element.GetTypeFromTypeAttribute(false)));
                 }
             }
 

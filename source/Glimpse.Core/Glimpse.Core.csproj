@@ -73,6 +73,7 @@
     <Compile Include="ClientScript\Client.cs" />
     <Compile Include="ClientScript\Data.cs" />
     <Compile Include="ClientScript\Metadata.cs" />
+    <Compile Include="Configuration\XmlNodeExtensions.cs" />
     <Compile Include="LoggingSettings.cs" />
     <Compile Include="Configuration\ConfigurationSettings.cs" />
     <Compile Include="Configuration\ConfigurationSettingsXmlProvider.cs" />

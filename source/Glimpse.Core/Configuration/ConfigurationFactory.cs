@@ -1,4 +1,7 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
+using System.IO;
+using System.Xml;
 using Glimpse.Core.Framework;
 
 namespace Glimpse.Core.Configuration
@@ -29,8 +32,40 @@ namespace Glimpse.Core.Configuration
 
         private static IConfigurationSettingsProvider DetermineConfigurationSettingsProvider()
         {
-#warning based on the Section we could allow another IConfigurationSettingsProvider to be set, so that the complete configuration could be loaded from somewhere else... (DB, File, ...)
-            return new ConfigurationSettingsXmlProvider(ConfigurationManager.GetSection("glimpse") as Section);
+            // get the section from config, and if it does not exist use a default section
+            var glimpseSection = ConfigurationManager.GetSection("glimpse") as Section ?? new Section();
+
+            // if that section defines a configuration settings provider, then use that one
+            if (glimpseSection.ConfigurationSettingsProviderType != null)
+            {
+                if (typeof(IConfigurationSettingsProvider).IsAssignableFrom(glimpseSection.ConfigurationSettingsProviderType))
+                {
+                    return (IConfigurationSettingsProvider)Activator.CreateInstance(glimpseSection.ConfigurationSettingsProviderType);
+                }
+                else
+                {
+                    throw new GlimpseException("The configured configuration settings provider '" + glimpseSection.ConfigurationSettingsProviderType.FullName + "' does not implement '" + typeof(IConfigurationSettingsProvider).FullName + "'.");
+                }
+            }
+
+            var configurationDocument = new XmlDocument();
+
+            // since there is no configuration settings provider specified (and we don't allow one in an external configuration file)
+            // we will check whether there is an external configuration file specified, if so that one is used, otherwise the content
+            // specified by the Section (whether it was specified or the default)
+
+            // maybe we need to build in some retry mechanism to read the content of the file
+            if (!string.IsNullOrEmpty(glimpseSection.ExternalConfigurationFile) && File.Exists(glimpseSection.ExternalConfigurationFile))
+            {
+                configurationDocument.Load(glimpseSection.ExternalConfigurationFile);
+            }
+            else
+            {
+                configurationDocument.LoadXml(glimpseSection.XmlContent.OuterXml);
+            }
+
+            // we'll use the built-in xml provider
+            return new ConfigurationSettingsXmlProvider(configurationDocument);
         }
     }
 }
