@@ -10,13 +10,13 @@ namespace Glimpse.Core.Framework
 {
     internal class RuntimePolicyDeterminator
     {
-        private IReadonlyConfiguration Configuration { get; set; }
+        private IReadOnlyConfiguration Configuration { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RuntimePolicyDeterminator" />
         /// </summary>
-        /// <param name="configuration">The <see cref="IReadonlyConfiguration"/> that should be used</param>
-        public RuntimePolicyDeterminator(IReadonlyConfiguration configuration)
+        /// <param name="configuration">The <see cref="IReadOnlyConfiguration"/> that should be used</param>
+        public RuntimePolicyDeterminator(IReadOnlyConfiguration configuration)
         {
             Configuration = configuration;
         }

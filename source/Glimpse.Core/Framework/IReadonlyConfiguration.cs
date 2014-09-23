@@ -4,7 +4,7 @@ using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Core.Framework
 {
-    public interface IReadonlyConfiguration
+    public interface IReadOnlyConfiguration
     {
         /// <summary>
         /// Gets the current requestId tracker.

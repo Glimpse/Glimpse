@@ -94,7 +94,7 @@ namespace Glimpse.Core.Framework
                             initializationMessage.WrittenToLog = true;
                         }
 
-                        var readonlyConfiguration = new ReadonlyConfigurationAdapter(userUpdatedConfig);
+                        var readonlyConfiguration = new ReadOnlyConfigurationAdapter(userUpdatedConfig);
 
                         var activeGlimpseRequestContexts = new ActiveGlimpseRequestContexts(readonlyConfiguration.CurrentGlimpseRequestIdTracker);
 

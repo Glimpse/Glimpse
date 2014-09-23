@@ -5,9 +5,9 @@ namespace Glimpse.Core.Framework
 {
     public class MetadataProvider
     {
-        protected IReadonlyConfiguration Configuration { get; set; }
+        protected IReadOnlyConfiguration Configuration { get; set; }
 
-        public MetadataProvider(IReadonlyConfiguration configuration)
+        public MetadataProvider(IReadOnlyConfiguration configuration)
         {
             Configuration = configuration;
         }

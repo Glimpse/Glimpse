@@ -7,7 +7,7 @@ namespace Glimpse.Core.Framework
 {
     internal class DisplayProvider : BaseDataProvider
     {
-        public DisplayProvider(IReadonlyConfiguration configuration, ActiveGlimpseRequestContexts activeGlimpseRequestContexts)
+        public DisplayProvider(IReadOnlyConfiguration configuration, ActiveGlimpseRequestContexts activeGlimpseRequestContexts)
             : base(configuration, activeGlimpseRequestContexts)
         {
         }

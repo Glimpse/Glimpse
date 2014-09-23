@@ -16,7 +16,7 @@ namespace Glimpse.Core.Metadata
             get { return "correlation"; }
         }
 
-        public object GetInstanceMetadata(IReadonlyConfiguration configuration, IGlimpseRequestContext requestContext)
+        public object GetInstanceMetadata(IReadOnlyConfiguration configuration, IGlimpseRequestContext requestContext)
         {
             var requestResponseAdapter = requestContext.RequestResponseAdapter;
             var requestMetdata = requestResponseAdapter.RequestMetadata;

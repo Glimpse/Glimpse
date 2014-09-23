@@ -86,7 +86,7 @@ namespace Glimpse.Core.Framework
         /// <param name="tabProvider">The tab provider</param>
         /// <param name="displayProvider">The display provider</param>
         internal GlimpseRuntime(
-            IReadonlyConfiguration configuration,
+            IReadOnlyConfiguration configuration,
             ActiveGlimpseRequestContexts activeGlimpseRequestContexts,
             RuntimePolicyDeterminator runtimePolicyDeterminator,
             MetadataProvider metadataProvider,
@@ -114,7 +114,7 @@ namespace Glimpse.Core.Framework
         /// <value>
         /// The configuration.
         /// </value>
-        public IReadonlyConfiguration Configuration { get; private set; }
+        public IReadOnlyConfiguration Configuration { get; private set; }
 
         /// <summary>
         /// Returns the <see cref="IGlimpseRequestContext"/> corresponding to the current request.

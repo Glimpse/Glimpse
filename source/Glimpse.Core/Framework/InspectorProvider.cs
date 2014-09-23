@@ -5,7 +5,7 @@ namespace Glimpse.Core.Framework
 {
     internal class InspectorProvider : BaseProvider
     { 
-        public InspectorProvider(IReadonlyConfiguration configuration, ActiveGlimpseRequestContexts activeGlimpseRequestContexts)
+        public InspectorProvider(IReadOnlyConfiguration configuration, ActiveGlimpseRequestContexts activeGlimpseRequestContexts)
             : base(configuration, activeGlimpseRequestContexts)
         { 
         }

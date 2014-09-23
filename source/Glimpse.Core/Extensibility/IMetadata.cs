@@ -18,6 +18,6 @@ namespace Glimpse.Core.Extensibility
         /// </summary>
         /// <param name="configuration">The configuration.</param>
         /// <returns>The metadata to be used for the given key</returns>
-        object GetMetadata(IReadonlyConfiguration configuration);
+        object GetMetadata(IReadOnlyConfiguration configuration);
     }
 }

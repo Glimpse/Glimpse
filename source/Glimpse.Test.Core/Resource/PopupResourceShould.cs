@@ -51,7 +51,7 @@ namespace Glimpse.Test.Core.Resource
         public void ThrowWithInvalidContextParameter()
         {
             var resource = new PopupResource();
-            var configMock = new Mock<IReadonlyConfiguration>();
+            var configMock = new Mock<IReadOnlyConfiguration>();
             var providerMock = new Mock<IRequestResponseAdapter>().Setup();
 
             Assert.Throws<ArgumentNullException>(() => resource.Execute(null, configMock.Object, providerMock.Object));
@@ -76,7 +76,7 @@ namespace Glimpse.Test.Core.Resource
             var resource = new PopupResource();
             var contextMock = new Mock<IResourceContext>();
             contextMock.Setup(c => c.Parameters.TryGetValue("requestId", out value)).Returns(hasValue);
-            var configMock = new Mock<IReadonlyConfiguration>();
+            var configMock = new Mock<IReadOnlyConfiguration>();
             var providerMock = new Mock<IRequestResponseAdapter>().Setup();
 
             var result = resource.Execute(contextMock.Object, configMock.Object, providerMock.Object);

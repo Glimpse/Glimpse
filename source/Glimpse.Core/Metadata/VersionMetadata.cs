@@ -11,7 +11,7 @@ namespace Glimpse.Core.Metadata
             get { return "version"; }
         }
 
-        public object GetMetadata(IReadonlyConfiguration configuration)
+        public object GetMetadata(IReadOnlyConfiguration configuration)
         {
             return configuration.Version;
         }

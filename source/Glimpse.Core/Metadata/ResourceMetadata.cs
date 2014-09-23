@@ -12,7 +12,7 @@ namespace Glimpse.Core.Metadata
             get { return "resources"; }
         }
 
-        public object GetMetadata(IReadonlyConfiguration configuration)
+        public object GetMetadata(IReadOnlyConfiguration configuration)
         {
             var logger = configuration.Logger;
             var resourceMetadata = new Dictionary<string, string>();

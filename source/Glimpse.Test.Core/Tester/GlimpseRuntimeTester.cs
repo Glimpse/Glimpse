@@ -50,7 +50,7 @@ namespace Glimpse.Test.Core.Tester
                 HtmlEncoder = encoderMock.Object
             };
 
-            var readonlyConfiguration = new ReadonlyConfigurationAdapter(configuration);
+            var readonlyConfiguration = new ReadOnlyConfigurationAdapter(configuration);
 
             var activeGlimpseRequestContexts = new ActiveGlimpseRequestContexts(readonlyConfiguration.CurrentGlimpseRequestIdTracker);
 
