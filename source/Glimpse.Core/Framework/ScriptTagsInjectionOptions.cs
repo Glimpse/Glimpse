@@ -18,8 +18,8 @@ namespace Glimpse.Core.Framework
             Func<Encoding> contentEncodingProvider,
             EventHandler<ScriptTagsInjectionFailedEventArgs> onInjectionFailed = null)
         {
-            Guard.ArgumentNotNull("scriptTagsProvider", scriptTagsProvider);
-            Guard.ArgumentNotNull("contentEncodingProvider", contentEncodingProvider);
+            Guard.ArgumentNotNull(scriptTagsProvider, "scriptTagsProvider");
+            Guard.ArgumentNotNull(contentEncodingProvider, "contentEncodingProvider");
 
             ScriptTagsProvider = scriptTagsProvider;
             ContentEncodingProvider = contentEncodingProvider;

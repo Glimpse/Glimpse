@@ -40,9 +40,9 @@ namespace Glimpse.Core.Framework
             IScriptTagsGenerator scriptTagsGenerator,
             Action<string,Exception> onScriptTagGenerationExceptionCallback = null)
         {
-            Guard.ArgumentNotNull("requestResponseAdapter", requestResponseAdapter);
-            Guard.ArgumentNotNull("resourceEndpointConfiguration", resourceEndpointConfiguration);
-            Guard.ArgumentNotNull("runtimePolicyDeterminator", runtimePolicyDeterminator);
+            Guard.ArgumentNotNull(requestResponseAdapter, "requestResponseAdapter");
+            Guard.ArgumentNotNull(resourceEndpointConfiguration, "resourceEndpointConfiguration");
+            Guard.ArgumentNotNull(runtimePolicyDeterminator, "runtimePolicyDeterminator");
 
             if (string.IsNullOrEmpty(endpointBaseUri))
             {

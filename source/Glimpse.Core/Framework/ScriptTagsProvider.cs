@@ -18,8 +18,8 @@ namespace Glimpse.Core.Framework
             Func<bool> isAllowedToProvideScriptTags,
             Action<string, Exception> onExceptionCallback = null)
         {
-            Guard.ArgumentNotNull("scriptTagsGenerator", scriptTagsGenerator);
-            Guard.ArgumentNotNull("isAllowedToProvideScriptTags", isAllowedToProvideScriptTags);
+            Guard.ArgumentNotNull(scriptTagsGenerator, "scriptTagsGenerator");
+            Guard.ArgumentNotNull(isAllowedToProvideScriptTags, "isAllowedToProvideScriptTags");
 
             GlimpseRequestId = glimpseRequestId;
             ScriptTagsGenerator = scriptTagsGenerator;

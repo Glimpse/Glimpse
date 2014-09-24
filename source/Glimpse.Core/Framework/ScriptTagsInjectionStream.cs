@@ -22,8 +22,8 @@ namespace Glimpse.Core.Framework
 
         public ScriptTagsInjectionStream(Stream outputStream, ScriptTagsInjectionOptions options)
         {
-            Guard.ArgumentNotNull("outputStream", outputStream);
-            Guard.ArgumentNotNull("options", options);
+            Guard.ArgumentNotNull(outputStream, "outputStream");
+            Guard.ArgumentNotNull(options, "options");
 
             OutputStream = outputStream;
             Options = options;

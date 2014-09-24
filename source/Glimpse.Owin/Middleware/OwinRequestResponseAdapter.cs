@@ -21,7 +21,7 @@ namespace Glimpse.Owin.Middleware
             this.response = new OwinResponse(environment);
         }
 
-        public IDataStore HttpRequestStore 
+        public IDataStore HttpRequestStore
         {
 #warning is it needed to store this? Since there will only be one instance of the OwinRequestResponseAdapter that will be created for each request
             get
@@ -39,7 +39,7 @@ namespace Glimpse.Owin.Middleware
             }
         }
 
-        public object RuntimeContext 
+        public object RuntimeContext
         {
             get { return environment; }
         }
@@ -53,7 +53,7 @@ namespace Glimpse.Owin.Middleware
 
             set
             {
-                Guard.ArgumentNotNull("value", value);
+                Guard.ArgumentNotNull(value, "value");
                 response.Body = value;
             }
         }
@@ -64,7 +64,7 @@ namespace Glimpse.Owin.Middleware
             get { return Encoding.UTF8; }
         }
 
-        public IRequestMetadata RequestMetadata 
+        public IRequestMetadata RequestMetadata
         {
             get { return new RequestMetadata(request, response); }
         }

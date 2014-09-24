@@ -30,7 +30,7 @@ namespace Glimpse.AspNet
 
             set
             {
-                Guard.ArgumentNotNull("value", value);
+                Guard.ArgumentNotNull(value, "value");
                 Context.Response.Filter = value;
             }
         }

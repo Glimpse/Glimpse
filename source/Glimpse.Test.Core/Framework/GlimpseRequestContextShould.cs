@@ -1,4 +1,5 @@
 ﻿using System;
+using Glimpse.Core.Configuration;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
 using Glimpse.Test.Core.Tester;
@@ -22,7 +23,7 @@ namespace Glimpse.Test.Core.Framework
                 expectedRuntimePolicy,
                 ResourceEndpointConfigurationTester.Create(requestUri, false).ResourceEndpointConfigurationMock.Object,
                 "/glimpse.axd",
-                new RuntimePolicyDeterminator(new Mock<IReadonlyConfiguration>().Object),
+                new RuntimePolicyDeterminator(new Mock<IConfiguration>().Object),
                 new Mock<IScriptTagsGenerator>().Object);
 
             Assert.Equal(expectedRuntimePolicy, glimpseRequestContext.CurrentRuntimePolicy);
@@ -38,7 +39,7 @@ namespace Glimpse.Test.Core.Framework
                     RuntimePolicy.On,
                     ResourceEndpointConfigurationTester.Create(regularRequestUri, false).ResourceEndpointConfigurationMock.Object,
                     "/glimpse.axd",
-                    new RuntimePolicyDeterminator(new Mock<IReadonlyConfiguration>().Object),
+                    new RuntimePolicyDeterminator(new Mock<IConfiguration>().Object),
                     new Mock<IScriptTagsGenerator>().Object);
 
             Assert.Equal(RequestHandlingMode.RegularRequest, glimpseRequestContext.RequestHandlingMode);
@@ -54,7 +55,7 @@ namespace Glimpse.Test.Core.Framework
                     RuntimePolicy.On,
                     ResourceEndpointConfigurationTester.Create(resourceRequestUri, true).ResourceEndpointConfigurationMock.Object,
                     "/glimpse.axd",
-                    new RuntimePolicyDeterminator(new Mock<IReadonlyConfiguration>().Object),
+                    new RuntimePolicyDeterminator(new Mock<IConfiguration>().Object),
                     new Mock<IScriptTagsGenerator>().Object);
 
             Assert.Equal(RequestHandlingMode.ResourceRequest, glimpseRequestContext.RequestHandlingMode);

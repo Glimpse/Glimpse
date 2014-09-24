@@ -21,7 +21,7 @@ namespace Glimpse.Core.Framework
         /// <param name="configuration">A <see cref="IConfiguration"/></param>
         public ScriptTagsGenerator(IConfiguration configuration)
         {
-            Guard.ArgumentNotNull("configuration", configuration);
+            Guard.ArgumentNotNull(configuration, "configuration");
             Configuration = configuration;
         }
 
@@ -30,7 +30,7 @@ namespace Glimpse.Core.Framework
         /// </summary>
         /// <param name="glimpseRequestId">The Glimpse request Id of the request for which script tags must be generated</param>
         /// <returns>The generated script tags</returns>
-        public static string Generate(Guid glimpseRequestId, IConfiguration configuration)
+        public string Generate(Guid glimpseRequestId)
         {
             var encoder = Configuration.HtmlEncoder;
             var resourceEndpoint = Configuration.ResourceEndpoint;
