@@ -26,7 +26,6 @@ Welterweight release for Ado:
     </metadata>
     <files>
         <file src="tools\*.*" target="tools" />
-        <file src="lib\net35\*.*" target="lib\net35" />
         <file src="lib\net40\*.*" target="lib\net40" />
         <file src="lib\net45\*.*" target="lib\net45" />
         <!--<file src="readme.txt" target="readme.txt" />-->
