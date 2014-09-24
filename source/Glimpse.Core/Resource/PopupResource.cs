@@ -94,7 +94,7 @@ namespace Glimpse.Core.Resource
                 return new StatusCodeResourceResult(404, string.Format("Could not parse RequestId of '{0}' as GUID.", request));
             } 
 
-            var scriptTags = GlimpseScriptTagsGenerator.Generate(requestId, configuration); 
+            var scriptTags = new ScriptTagsGenerator(configuration).Generate(requestId); 
             var html = string.Format("<!DOCTYPE html><html><head><meta charset='utf-8'><title>Glimpse Popup</title></head><body class='glimpse-popup'>{0}</body></html>", scriptTags);
 
             return new HtmlResourceResult(html);

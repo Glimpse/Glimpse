@@ -283,17 +283,6 @@ namespace Glimpse.Test.Core.Framework
         }
 
         [Fact(Skip = "This test is hanging the test runner. Fix later")]
-        public void InjectHttpResponseBodyDuringEndRequest()
-        {
-            var providerMock = new Mock<IRequestResponseAdapter>().Setup();
-
-            Runtime.GlimpseRuntime.BeginRequest(providerMock.Object);
-            Runtime.GlimpseRuntime.EndRequest(CreateGlimpseRequestContextHandle());
-
-            providerMock.Verify(fp => fp.InjectHttpResponseBody(It.IsAny<string>()));
-        }
-
-        [Fact(Skip = "This test is hanging the test runner. Fix later")]
         public void PersistDataDuringEndRequest()
         {
             var providerMock = new Mock<IRequestResponseAdapter>().Setup();

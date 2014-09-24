@@ -1,4 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.IO;
+using System.Text;
+using Glimpse.Core;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
 using Microsoft.Owin;
@@ -7,9 +10,9 @@ namespace Glimpse.Owin.Middleware
 {
     public class OwinRequestResponseAdapter : IRequestResponseAdapter
     {
-        private IDictionary<string, object> environment;
-        private OwinRequest request;
-        private OwinResponse response;
+        private readonly IDictionary<string, object> environment;
+        private readonly OwinRequest request;
+        private readonly OwinResponse response;
 
         public OwinRequestResponseAdapter(IDictionary<string, object> environment)
         {
@@ -41,6 +44,26 @@ namespace Glimpse.Owin.Middleware
             get { return environment; }
         }
 
+        public Stream OutputStream
+        {
+            get
+            {
+                return response.Body;
+            }
+
+            set
+            {
+                Guard.ArgumentNotNull("value", value);
+                response.Body = value;
+            }
+        }
+
+#warning TODO find a better way to "know" what the content encoding is (needed by the wrapping output stream)
+        public Encoding ResponseEncoding
+        {
+            get { return Encoding.UTF8; }
+        }
+
         public IRequestMetadata RequestMetadata 
         {
             get { return new RequestMetadata(request, response); }
@@ -59,11 +82,6 @@ namespace Glimpse.Owin.Middleware
         public void SetCookie(string name, string value)
         {
             response.Cookies.Append(name, value);
-        }
-
-        public void InjectHttpResponseBody(string htmlSnippet)
-        {
-            // Hack: doing nothing because this has been temporarily moved to HeadMiddlewear
         }
 
         public void WriteHttpResponse(byte[] content)

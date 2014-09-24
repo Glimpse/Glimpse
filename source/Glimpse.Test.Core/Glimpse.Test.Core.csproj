@@ -142,7 +142,7 @@
     <Compile Include="Policy\GlimpseResourcePolicyShould.cs" />
     <Compile Include="Policy\StatusCodePolicyShould.cs" />
     <Compile Include="Policy\UriPolicyShould.cs" />
-    <Compile Include="PreBodyTagInjectionStreamShould.cs" />
+    <Compile Include="ScriptTagsInjectionStreamShould.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResourceResult\CacheControlDecoratorShould.cs" />
     <Compile Include="ResourceResult\RedirectResourceResultShould.cs" />
@@ -213,7 +213,6 @@
     <EmbeddedResource Include="Resource\FileResourceTester.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

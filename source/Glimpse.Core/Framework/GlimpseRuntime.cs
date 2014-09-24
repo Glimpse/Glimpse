@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using System.Reflection;
 using Glimpse.Core.Extensibility;
-using Glimpse.Core.Extensions;
 using Glimpse.Core.Message;
 using Glimpse.Core.ResourceResult;
 #if NET35
@@ -125,13 +124,13 @@ namespace Glimpse.Core.Framework
         }
 
         private ActiveGlimpseRequestContexts ActiveGlimpseRequestContexts { get; set; }
-        
+
         private RuntimePolicyDeterminator RuntimePolicyDeterminator { get; set; }
-        
+
         private MetadataProvider MetadataProvider { get; set; }
-        
+
         private TabProvider TabProvider { get; set; }
-        
+
         private DisplayProvider DisplayProvider { get; set; }
 
         /// <summary>
@@ -140,7 +139,14 @@ namespace Glimpse.Core.Framework
         /// <exception cref="Glimpse.Core.Framework.GlimpseException">Throws an exception if <see cref="GlimpseRuntime"/> is not yet initialized.</exception>
         public GlimpseRequestContextHandle BeginRequest(IRequestResponseAdapter requestResponseAdapter)
         {
-            var glimpseRequestContext = new GlimpseRequestContext(Guid.NewGuid(), requestResponseAdapter, Configuration.DefaultRuntimePolicy, Configuration.ResourceEndpoint, Configuration.EndpointBaseUri);
+            var glimpseRequestContext = new GlimpseRequestContext(
+                requestResponseAdapter,
+                Configuration.DefaultRuntimePolicy,
+                Configuration.ResourceEndpoint,
+                Configuration.EndpointBaseUri,
+                RuntimePolicyDeterminator,
+                new ScriptTagsGenerator(Configuration),
+                Configuration.Logger.Error);
 
             var runtimePolicy = RuntimePolicyDeterminator.DetermineRuntimePolicy(RuntimeEvent.BeginRequest, glimpseRequestContext.CurrentRuntimePolicy, glimpseRequestContext.RequestResponseAdapter);
             if (runtimePolicy == RuntimePolicy.Off)
@@ -162,6 +168,16 @@ namespace Glimpse.Core.Framework
                 {
                     return glimpseRequestContextHandle;
                 }
+
+                var options = new ScriptTagsInjectionOptions(
+                    glimpseRequestContext.ScriptTagsProvider,
+                    () => requestResponseAdapter.ResponseEncoding,
+                    (sender, args) => Configuration.Logger.Warn(
+                        "Failed to inject the Glimpse script tags for request '{0}' : {1}",
+                        requestResponseAdapter.RequestMetadata.RequestUri.AbsoluteUri,
+                        args.FailureMessage));
+
+                requestResponseAdapter.OutputStream = new ScriptTagsInjectionStream(requestResponseAdapter.OutputStream, options);
 
                 TabProvider.Execute(glimpseRequestContext, RuntimeEvent.BeginRequest);
 
@@ -230,13 +246,6 @@ namespace Glimpse.Core.Framework
                     {
                         requestResponseAdapter.SetCookie(Constants.ClientIdCookieName, requestMetadata.ClientId);
                     }
-                }
-
-                if (runtimePolicy.HasFlag(RuntimePolicy.DisplayGlimpseClient))
-                {
-                    var html = GenerateScriptTags(glimpseRequestContext);
-
-                    requestResponseAdapter.InjectHttpResponseBody(html);
                 }
             }
             finally
@@ -417,61 +426,14 @@ namespace Glimpse.Core.Framework
                 throw new GlimpseException("No corresponding GlimpseRequestContext found for GlimpseRequestId '" + glimpseRequestContextHandle.GlimpseRequestId + "'.");
             }
 
+            return ContinueProcessingRequest(glimpseRequestContext, runtimeEvent);
+        }
+
+        private bool ContinueProcessingRequest(IGlimpseRequestContext glimpseRequestContext, RuntimeEvent runtimeEvent)
+        {
             glimpseRequestContext.CurrentRuntimePolicy = RuntimePolicyDeterminator.DetermineRuntimePolicy(runtimeEvent, glimpseRequestContext.CurrentRuntimePolicy, glimpseRequestContext.RequestResponseAdapter);
 
             return glimpseRequestContext.CurrentRuntimePolicy != RuntimePolicy.Off;
-        }
-
-        // TODO this should not be public! This was changed to hack in OWIN support
-        // TODO do we need both GenerateScriptTags methods
-#warning this should not be public! but we need to have some way to get to generate script tags conditionally so that they are only generated once (like glimpse injects it before </body> and at the same time a user has added the GlimpseClient control)
-        public string GenerateScriptTags(GlimpseRequestContextHandle glimpseRequestContextHandle)
-        {
-            if (glimpseRequestContextHandle == null)
-            {
-                throw new ArgumentNullException("glimpseRequestContextHandle");
-            }
-
-            if (glimpseRequestContextHandle.RequestHandlingMode != RequestHandlingMode.RegularRequest)
-            {
-                return string.Empty;
-            }
-
-            IGlimpseRequestContext glimpseRequestContext;
-            if (!TryGetRequestContext(glimpseRequestContextHandle.GlimpseRequestId, out glimpseRequestContext))
-            {
-                throw new GlimpseException("No corresponding GlimpseRequestContext found for GlimpseRequestId '" + glimpseRequestContextHandle.GlimpseRequestId + "'.");
-            }
-
-            return GenerateScriptTags(glimpseRequestContext);
-        }
-
-        // TODO do we need both GenerateScriptTags methods
-#warning this should not be public! but we need to have some way to get to generate script tags conditionally so that they are only generated once (like glimpse injects it before </body> and at the same time a user has added the GlimpseClient control)
-        public string GenerateScriptTags(IGlimpseRequestContext glimpseRequestContext)
-        {
-            if (glimpseRequestContext.CurrentRuntimePolicy == RuntimePolicy.Off)
-            {
-                return string.Empty;
-            }
-
-            var requestStore = glimpseRequestContext.RequestStore;
-            var hasRendered = false;
-
-            if (requestStore.Contains(Constants.ScriptsHaveRenderedKey))
-            {
-                hasRendered = requestStore.Get<bool>(Constants.ScriptsHaveRenderedKey);
-            }
-
-            if (hasRendered)
-            {
-                return string.Empty;
-            }
-
-            var glimpseScriptTags = GlimpseScriptTagsGenerator.Generate(glimpseRequestContext.GlimpseRequestId, Configuration);
-
-            requestStore.Set(Constants.ScriptsHaveRenderedKey, true);
-            return glimpseScriptTags;
         }
 
         public void Dispose()

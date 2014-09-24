@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Glimpse.Core;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
 using Microsoft.Owin;
@@ -41,7 +39,7 @@ namespace Glimpse.Owin.Middleware
                     switch (glimpseRequestContextHandle.RequestHandlingMode)
                     {
                         case RequestHandlingMode.RegularRequest:
-                            await ExecuteRegularRequest(glimpseRequestContextHandle, request, response, environment);
+                            await ExecuteRegularRequest(glimpseRequestContextHandle, environment);
                             break;
                         case RequestHandlingMode.ResourceRequest:
                             await ExecuteResourceRequest(glimpseRequestContextHandle, request.Query);
@@ -66,15 +64,10 @@ namespace Glimpse.Owin.Middleware
                 new ResourceParameters(queryString.ToDictionary(qs => qs.Key, qs => qs.Value.First())));
         }
 
-        private async Task ExecuteRegularRequest(GlimpseRequestContextHandle glimpseRequestContextHandle, IOwinRequest request, IOwinResponse response, IDictionary<string, object> environment)
+        private async Task ExecuteRegularRequest(GlimpseRequestContextHandle glimpseRequestContextHandle, IDictionary<string, object> environment)
         {
             try
             {
-                // V2Merge: Hack's a million!
-#warning Even with this hack, it seems wrong, as the scripts will always be injected independent of the RuntimePolicy (only DisplayGlimpseClient should render it, and we only know that at the end)
-                var htmlSnippet = GlimpseRuntime.Instance.GenerateScriptTags(glimpseRequestContextHandle);
-                response.Body = new PreBodyTagInjectionStream(htmlSnippet, response.Body, Encoding.UTF8, request.Uri.AbsoluteUri, GlimpseRuntime.Instance.Configuration.Logger);
-
                 await innerNext(environment);
             }
             finally

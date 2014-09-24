@@ -1,4 +1,9 @@
-﻿using Glimpse.Owin.Katana;
+﻿using System;
+using System.IO;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using Glimpse.Owin.Katana;
 using Owin;
 
 namespace Glimpse.Owin.Sample
@@ -7,11 +12,34 @@ namespace Glimpse.Owin.Sample
     {
         public void Configuration(IAppBuilder app)
         {
-            app = app.WithGlimpse();
+            app.Map("/flush", innerMap =>
+            {
+                innerMap = innerMap.WithGlimpse();
+                innerMap.Run(async handler =>
+                {
+                    handler.Response.ContentType = "text/html";
 
+                    await WriteAndFlushAsync(handler.Response.Body, "<html><body>first part flushed on " + DateTime.Now.ToString("HH:mm:ss") + "<br/>");
+
+                    Thread.Sleep(1500);
+                    await WriteAndFlushAsync(handler.Response.Body, "flushed again on " + DateTime.Now.ToString("HH:mm:ss") + "<br/>");
+
+                    Thread.Sleep(1500);
+                    await WriteAndFlushAsync(handler.Response.Body, "final flush on " + DateTime.Now.ToString("HH:mm:ss") + "</body></html>");
+                });
+            });
+
+            app = app.WithGlimpse();
             app.UseWelcomePage();
 
             app.UseErrorPage();
+        }
+
+        private static async Task WriteAndFlushAsync(Stream stream, string content)
+        {
+            byte[] buffer = Encoding.UTF8.GetBytes(content);
+            stream.Write(buffer, 0, buffer.Length);
+            await stream.FlushAsync();
         }
     }
 }

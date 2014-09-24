@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Glimpse.Core.Extensibility;
+#if NET35
+using Glimpse.Core.Backport;
+#endif
 
 namespace Glimpse.Core.Framework
 {
@@ -10,6 +13,8 @@ namespace Glimpse.Core.Framework
     /// </summary>
     internal sealed class GlimpseRequestContext : IGlimpseRequestContext
     {
+        private RuntimePolicyDeterminator RuntimePolicyDeterminator { get; set; }
+
         private RuntimePolicy currentRuntimePolicy;
         private IExecutionTimer activeExecutionTimer;
 
@@ -18,30 +23,37 @@ namespace Glimpse.Core.Framework
         /// <summary>
         /// Initializes a new instance of the <see cref="GlimpseRequestContext" />
         /// </summary>
-        /// <param name="glimpseRequestId">The Id assigned to the request by Glimpse.</param>
         /// <param name="requestResponseAdapter">The <see cref="IRequestResponseAdapter "/> of this request.</param>
         /// <param name="initialRuntimePolicy">The initial <see cref="RuntimePolicy "/> for this request.</param>
         /// <param name="resourceEndpointConfiguration">The <see cref="IResourceEndpointConfiguration"/>.</param>
         /// <param name="endpointBaseUri">The endpoint base URI.</param>
+        /// <param name="runtimePolicyDeterminator">The runtime policy determinator</param>
+        /// <param name="scriptTagsGenerator">The script tags generator</param>
+        /// <param name="onScriptTagGenerationExceptionCallback">The callback used by the <paramref name="scriptTagsGenerator"/> in case an exception occurs.</param>
         public GlimpseRequestContext(
-            Guid glimpseRequestId,
             IRequestResponseAdapter requestResponseAdapter,
             RuntimePolicy initialRuntimePolicy,
             IResourceEndpointConfiguration resourceEndpointConfiguration,
-            string endpointBaseUri)
+            string endpointBaseUri,
+            RuntimePolicyDeterminator runtimePolicyDeterminator,
+            IScriptTagsGenerator scriptTagsGenerator,
+            Action<string,Exception> onScriptTagGenerationExceptionCallback = null)
         {
-            if (requestResponseAdapter == null)
-            {
-                throw new ArgumentNullException("requestResponseAdapter");
-            }
+            Guard.ArgumentNotNull("requestResponseAdapter", requestResponseAdapter);
+            Guard.ArgumentNotNull("resourceEndpointConfiguration", resourceEndpointConfiguration);
+            Guard.ArgumentNotNull("runtimePolicyDeterminator", runtimePolicyDeterminator);
 
             if (string.IsNullOrEmpty(endpointBaseUri))
             {
                 throw new ArgumentException("endpointBaseUri is null or empty");
             }
 
-            GlimpseRequestId = glimpseRequestId;
+            GlimpseRequestId = Guid.NewGuid();
             RequestResponseAdapter = requestResponseAdapter;
+            RuntimePolicyDeterminator = runtimePolicyDeterminator;
+
+            ScriptTagsProvider = new ScriptTagsProvider(GlimpseRequestId, scriptTagsGenerator, IsAllowedToProvideScriptTags, onScriptTagGenerationExceptionCallback);
+
             RequestHandlingMode = resourceEndpointConfiguration.IsResourceRequest(requestResponseAdapter.RequestMetadata.RequestUri, endpointBaseUri)
                                     ? RequestHandlingMode.ResourceRequest
                                     : RequestHandlingMode.RegularRequest;
@@ -92,6 +104,11 @@ namespace Glimpse.Core.Framework
         public RequestHandlingMode RequestHandlingMode { get; private set; }
 
         /// <summary>
+        /// Gets the <see cref="Framework.ScriptTagsProvider"/> for the referenced request
+        /// </summary>
+        public IScriptTagsProvider ScriptTagsProvider { get; private set; }
+
+        /// <summary>
         /// Gets the <see cref="IExecutionTimer"/> for the referenced request
         /// </summary>
         public IExecutionTimer CurrentExecutionTimer
@@ -134,6 +151,13 @@ namespace Glimpse.Core.Framework
         {
             GlobalStopwatch.Stop();
             return GlobalStopwatch.Elapsed;
+        }
+
+        private bool IsAllowedToProvideScriptTags()
+        {
+            // we reuse the same runtime event but were are not causing side effects as the result is not stored in the current runtime policy
+            var policy = RuntimePolicyDeterminator.DetermineRuntimePolicy(RuntimeEvent.EndRequest, CurrentRuntimePolicy, RequestResponseAdapter);
+            return policy.HasFlag(RuntimePolicy.DisplayGlimpseClient);
         }
     }
 }

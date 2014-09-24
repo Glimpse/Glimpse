@@ -1,42 +1,33 @@
 using System.IO;
-using System.Text;
 using System.Text.RegularExpressions;
-using Glimpse.Core.Extensibility;
 
-namespace Glimpse.Core
+namespace Glimpse.Core.Framework
 {
     /// <summary>
-    /// This class will inject some html snippet (most likely the Glimpse Client script tags, but it can be anything) in the resulting HTML output.
+    /// This class will inject the Glimpse script tags in the resulting HTML output.
     /// It will look for the last occurrence of the &lt;/body&gt; tag and inject the snippet right before that tag.
-    /// An instance of this class should be assigned as a filter to the outgoing response so that the injection can be done once all the rendering is completed.
     /// </summary>
-    public class PreBodyTagInjectionStream : Stream
+    public class ScriptTagsInjectionStream : Stream
     {
         private const string BodyClosingTag = "</body>";
         private const string TroubleshootingDocsUri = "http://getglimpse.com/Help/Troubleshooting";
 
-        private ILogger Logger { get; set; }
-        
-        private string HtmlSnippet { get; set; }
-        
         private Stream OutputStream { get; set; }
-        
-        private Encoding ContentEncoding { get; set; }
-        
+        private ScriptTagsInjectionOptions Options { get; set; }
+
         private Regex BodyEndRegex { get; set; }
-        
-        private string CurrentRequestRawUrl { get; set; }
-        
         private string UnwrittenCharactersFromPreviousCall { get; set; }
 
-        public PreBodyTagInjectionStream(string htmlSnippet, Stream outputStream, Encoding contentEncoding, string currentRequestRawUrl, ILogger logger)
+        private bool InjectionDone { get; set; }
+
+        public ScriptTagsInjectionStream(Stream outputStream, ScriptTagsInjectionOptions options)
         {
-            HtmlSnippet = htmlSnippet + BodyClosingTag;
+            Guard.ArgumentNotNull("outputStream", outputStream);
+            Guard.ArgumentNotNull("options", options);
+
             OutputStream = outputStream;
-            ContentEncoding = contentEncoding;
+            Options = options;
             BodyEndRegex = new Regex(BodyClosingTag, RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.IgnoreCase | RegexOptions.RightToLeft);
-            CurrentRequestRawUrl = currentRequestRawUrl ?? "unknown";
-            Logger = logger;
         }
 
         public override bool CanRead
@@ -67,6 +58,14 @@ namespace Glimpse.Core
 
         public override void Close()
         {
+            if (Options.InjectionRequired && !InjectionDone)
+            {
+                Options.NotifyInjectionFailure(string.Format(
+                    "Unable to locate '</body>' with content encoding '{0}'. The response may be compressed or the markup may actually be missing a '</body>' tag. See {1} for information on troubleshooting this issue.",
+                    Options.ContentEncoding.EncodingName,
+                    TroubleshootingDocsUri));
+            }
+
             OutputStream.Close();
         }
 
@@ -87,6 +86,12 @@ namespace Glimpse.Core
 
         public override void Write(byte[] buffer, int offset, int count)
         {
+            if (!Options.InjectionRequired)
+            {
+                OutputStream.Write(buffer, offset, count);
+                return;
+            }
+
             // There are different cases we need to deal with
             // Normally you would expect the contentInBuffer to contain the complete HTML code to return, but this is not always true because it is possible that 
             // the content that will be send back is larger than the buffer foreseen by ASP.NET (currently the buffer seems to be a little bit less than 16K)
@@ -113,7 +118,7 @@ namespace Glimpse.Core
             // - in case there was a </body> tag found, the replacement will be done
             // - in case there was no </body> tag found, then the warning will be written to the log, indicating something went wrong
             // either way, the remaining unwritten characters will be sent down the output stream.
-            string contentInBuffer = ContentEncoding.GetString(buffer, offset, count);
+            string contentInBuffer = Options.ContentEncoding.GetString(buffer, offset, count);
 
             // Prepend remaining characters from the previous call, if any
             if (!string.IsNullOrEmpty(UnwrittenCharactersFromPreviousCall))
@@ -153,6 +158,12 @@ namespace Glimpse.Core
 
         public override void Flush()
         {
+            if (!Options.InjectionRequired)
+            {
+                OutputStream.Flush();
+                return;
+            }
+
             if (!string.IsNullOrEmpty(UnwrittenCharactersFromPreviousCall))
             {
                 string finalContentToWrite = UnwrittenCharactersFromPreviousCall;
@@ -160,16 +171,13 @@ namespace Glimpse.Core
                 if (BodyEndRegex.IsMatch(UnwrittenCharactersFromPreviousCall))
                 {
                     // apparently we did seem to match a </body> tag, which means we can replace the last match with our HTML snippet
-                    finalContentToWrite = BodyEndRegex.Replace(UnwrittenCharactersFromPreviousCall, HtmlSnippet, 1);
-                }
-                else
-                {
-                    // there was no </body> tag found, so we write down a warning to the log
-                    Logger.Warn("Unable to locate '</body>' with content encoding '{0}' for request '{1}'. The response may be compressed or the markup may actually be missing a '</body>' tag. See {2} for information on troubleshooting this issue.", ContentEncoding.EncodingName, CurrentRequestRawUrl, TroubleshootingDocsUri);
+                    finalContentToWrite = BodyEndRegex.Replace(UnwrittenCharactersFromPreviousCall, Options.GetScriptTagsToInject() + BodyClosingTag, 1);
+                    InjectionDone = true;
                 }
 
                 // either way, if a replacement has been done or a warning has been written to the logs, the remaining unwritten characters must be written to the output stream
                 WriteToOutputStream(finalContentToWrite);
+                UnwrittenCharactersFromPreviousCall = null;
             }
 
             OutputStream.Flush();
@@ -177,7 +185,7 @@ namespace Glimpse.Core
 
         private void WriteToOutputStream(string content)
         {
-            byte[] outputBuffer = ContentEncoding.GetBytes(content);
+            byte[] outputBuffer = Options.ContentEncoding.GetBytes(content);
             OutputStream.Write(outputBuffer, 0, outputBuffer.Length);
         }
     }

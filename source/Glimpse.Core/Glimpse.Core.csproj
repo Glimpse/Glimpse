@@ -121,6 +121,9 @@
     <Compile Include="Framework\DisplayProvider.cs" />
     <Compile Include="Framework\GlimpseRuntimeNotAvailableException.cs" />
     <Compile Include="Framework\GlimpseRuntimeInitializer.cs" />
+    <Compile Include="Framework\ScriptTagsProvider.cs" />
+    <Compile Include="Framework\IScriptTagsGenerator.cs" />
+    <Compile Include="Framework\IScriptTagsProvider.cs" />
     <Compile Include="Framework\InspectorProvider.cs" />
     <Compile Include="Framework\IReadonlyConfiguration.cs" />
     <Compile Include="Framework\KeyCreator.cs" />
@@ -128,7 +131,7 @@
     <Compile Include="Framework\ICurrentGlimpseRequestIdTracker.cs" />
     <Compile Include="Framework\IGlimpseRequestContext.cs" />
     <Compile Include="Framework\GlimpseRequestContext.cs" />
-    <Compile Include="Framework\GlimpseScriptTagsGenerator.cs" />
+    <Compile Include="Framework\ScriptTagsGenerator.cs" />
     <Compile Include="Framework\IResourceEndpointConfiguration.cs" />
     <Compile Include="Framework\RuntimePolicyDeterminator.cs" />
     <Compile Include="Framework\TabProvider.cs" />
@@ -139,7 +142,9 @@
     <Compile Include="Framework\Support\ExecutionBlockBase.cs" />
     <Compile Include="Framework\Support\IExecutionTask.cs" />
     <Compile Include="Framework\UriTemplateResourceEndpointConfiguration.cs" />
+    <Compile Include="Framework\ScriptTagsInjectionOptions.cs" />
     <Compile Include="Guard.cs" />
+    <Compile Include="Framework\ScriptTagsInjectionFailedEventArgs.cs" />
     <Compile Include="Message\RuntimeMessage.cs" />
     <Compile Include="Metadata\CorrelationInstanceMetadata.cs" />
     <Compile Include="Metadata\DocumentationTabMetadata.cs" />
@@ -153,7 +158,7 @@
     <Compile Include="Metadata\ResourceMetadata.cs" />
     <Compile Include="Metadata\TabMetadata.cs" />
     <Compile Include="Metadata\VersionMetadata.cs" />
-    <Compile Include="PreBodyTagInjectionStream.cs" />
+    <Compile Include="Framework\ScriptTagsInjectionStream.cs" />
     <Compile Include="Policy\AddRemoveClearItemsConfigurator.cs" />
     <Compile Include="Policy\ContentTypePolicyConfigurator.cs" />
     <Compile Include="Extensibility\IContentTypePolicyConfigurator.cs" />

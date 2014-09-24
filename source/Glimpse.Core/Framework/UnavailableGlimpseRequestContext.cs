@@ -28,6 +28,7 @@ namespace Glimpse.Core.Framework
             GlimpseRequestId = new Guid();
             RequestStore = new DataStoreStub();
             CurrentExecutionTimer = new ExecutionTimerStub();
+            ScriptTagsProvider = new ScriptTagsProviderStub();
         }
 
         /// <summary>
@@ -82,6 +83,11 @@ namespace Glimpse.Core.Framework
         {
             get { return RequestHandlingMode.Unhandled; }
         }
+
+        /// <summary>
+        /// Gets the <see cref="IScriptTagsProvider"/> for the referenced request
+        /// </summary>
+        public IScriptTagsProvider ScriptTagsProvider { get; private set; }
 
         /// <summary>
         /// Gets the <see cref="IExecutionTimer"/> for the referenced request
@@ -175,6 +181,24 @@ namespace Glimpse.Core.Framework
             public TimerResult Stop(TimeSpan offset)
             {
                 return LogAccess("CurrentExecutionTimer.Stop", () => new TimerResult { Duration = TimeSpan.Zero, Offset = TimeSpan.Zero, StartTime = DateTime.MinValue });
+            }
+        }
+
+        private class ScriptTagsProviderStub : IScriptTagsProvider
+        {
+            public bool ScriptTagsAllowedToBeProvided
+            {
+                get { return false; }
+            }
+
+            public bool ScriptTagsAlreadyProvided
+            {
+                get { return true; }
+            }
+
+            public string GetScriptTags()
+            {
+                return string.Empty;
             }
         }
     }

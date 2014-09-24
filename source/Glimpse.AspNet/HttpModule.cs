@@ -2,6 +2,7 @@
 using System.Web;
 using System.Web.Compilation;
 using System.Web.Hosting;
+using Glimpse.Core;
 using Glimpse.Core.Configuration;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;

@@ -48,18 +48,6 @@ namespace Glimpse.Test.AspNet
         }
 
         [Fact]
-        public void InjectHttpResponseBody()
-        {
-            var outputString = "<script src=\"test.js\"></script>";
-
-            RequestResponseAdapter.InjectHttpResponseBody(outputString);
-
-            RequestResponseAdapter.HttpContextMock.VerifyGet(ctx => ctx.Response);
-            RequestResponseAdapter.HttpResponseMock.VerifyGet(r => r.Filter);
-            RequestResponseAdapter.HttpResponseMock.VerifySet(r => r.Filter = It.IsAny<Stream>());
-        }
-
-        [Fact]
         public void SetHttpResponseStatusCode()
         {
             var statusCode = 200;

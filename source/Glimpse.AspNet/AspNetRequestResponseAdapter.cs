@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Text;
 using System.Web;
 using Glimpse.Core;
 using Glimpse.Core.Extensibility;
@@ -17,6 +19,25 @@ namespace Glimpse.AspNet
         public object RuntimeContext
         {
             get { return Context; }
+        }
+
+        public Stream OutputStream
+        {
+            get
+            {
+                return Context.Response.Filter;
+            }
+
+            set
+            {
+                Guard.ArgumentNotNull("value", value);
+                Context.Response.Filter = value;
+            }
+        }
+
+        public Encoding ResponseEncoding
+        {
+            get { return Context.Response.ContentEncoding; }
         }
 
         public IRequestMetadata RequestMetadata
@@ -76,19 +97,6 @@ namespace Glimpse.AspNet
             catch (Exception exception)
             {
                 Logger.Error("Exception setting cookie '{0}' with value '{1}'.", exception, name, value);
-            }
-        }
-
-        public void InjectHttpResponseBody(string htmlSnippet)
-        {
-            try
-            {
-                var response = Context.Response;
-                response.Filter = new PreBodyTagInjectionStream(htmlSnippet, response.Filter, response.ContentEncoding, Context.Request != null ? Context.Request.RawUrl : null, Logger);
-            }
-            catch (Exception exception)
-            {
-                Logger.Error("Exception injecting Http response body with Html snippet '{0}'.", exception, htmlSnippet);
             }
         }
 

@@ -10,7 +10,7 @@ namespace Glimpse.AspNet.Controls
         {
             if (GlimpseRuntime.IsAvailable)
             {
-                writer.Write(GlimpseRuntime.Instance.GenerateScriptTags(GlimpseRuntime.Instance.CurrentRequestContext));
+                writer.Write(GlimpseRuntime.Instance.CurrentRequestContext.ScriptTagsProvider.GetScriptTags());
             }
         }
     }

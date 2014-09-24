@@ -1,4 +1,6 @@
-﻿using Glimpse.Core.Extensibility;
+﻿using System.IO;
+using System.Text;
+using Glimpse.Core.Extensibility;
 
 namespace Glimpse.Core.Framework
 {
@@ -25,6 +27,8 @@ namespace Glimpse.Core.Framework
         /// </example>
         object RuntimeContext { get; }
 
+        Stream OutputStream { get; set; }
+
         /// <summary>
         /// Gets the request metadata.
         /// </summary>
@@ -36,6 +40,8 @@ namespace Glimpse.Core.Framework
         /// In ASP.NET, a <c>HttpRequest</c> contains must data required for creating a <see cref="IRequestMetadata"/>.
         /// </example>
         IRequestMetadata RequestMetadata { get; }
+
+        Encoding ResponseEncoding { get; }
 
         /// <summary>
         /// Sets the Http response header.
@@ -56,15 +62,6 @@ namespace Glimpse.Core.Framework
         /// <param name="name">The name.</param>
         /// <param name="value">The value.</param>
         void SetCookie(string name, string value);
-
-        /// <summary>
-        /// Injects the Http response body.
-        /// </summary>
-        /// <param name="htmlSnippet">The HTML snippet.</param>
-        /// <remarks>
-        /// Inserts the given html snippet into the html document just before the end <c>&lt;/body&gt;</c> tag.
-        /// </remarks>
-        void InjectHttpResponseBody(string htmlSnippet);
 
         /// <summary>
         /// Writes the Http response.
