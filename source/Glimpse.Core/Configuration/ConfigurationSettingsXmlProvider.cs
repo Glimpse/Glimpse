@@ -39,7 +39,7 @@ namespace Glimpse.Core.Configuration
             Guard.ArgumentNotNull(persistenceStore, "persistenceStore");
             Guard.ArgumentNotNull(currentGlimpseRequestIdTracker, "currentGlimpseRequestIdTracker");
 
-            var collectionSettingsFactory = new CollectionSettingsFactory(ConfigurationDocument.GetAttributeValue("discoveryLocation", false, "bin\\debug"));
+            var collectionSettingsFactory = new CollectionSettingsFactory(ConfigurationDocument.GetAttributeValue("discoveryLocation", false, string.Empty));
 
             return new ConfigurationSettings(
                resourceEndpointConfiguration,

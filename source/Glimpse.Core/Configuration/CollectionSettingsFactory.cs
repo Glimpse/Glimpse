@@ -30,7 +30,7 @@ namespace Glimpse.Core.Configuration
         {
             if (xmlConfiguration == null)
             {
-                return new CollectionSettings(new Type[0], new CustomConfiguration[0]);
+                return new CollectionSettings(new Type[0], new CustomConfiguration[0], true, DefaultDiscoveryLocation);
             }
 
             bool autoDiscover = true;
