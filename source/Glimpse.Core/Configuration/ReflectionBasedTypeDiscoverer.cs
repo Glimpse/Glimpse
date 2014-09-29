@@ -16,7 +16,7 @@ namespace Glimpse.Core.Configuration
 
         private ILogger Logger { get; set; }
 
-        public ReflectionBasedTypeDiscoverer()
+        static ReflectionBasedTypeDiscoverer()
         {
             // Initializes the base directory of the application, if the AppDomain is shadow copied, use the shadow directory
             var setupInfo = AppDomain.CurrentDomain.SetupInformation;
