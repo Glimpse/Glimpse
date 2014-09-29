@@ -275,6 +275,9 @@
     <Content Include="Views\FileUpload\Create.cshtml" />
     <Content Include="Views\FileUpload\Index.cshtml" />
     <Content Include="Views\ModelBindingTests\Index.cshtml" />
+    <Content Include="glimpse.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

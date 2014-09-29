@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.Diagnostics;
 using System.IO;
 using System.Xml;
 using Glimpse.Core.Framework;
@@ -55,11 +56,21 @@ namespace Glimpse.Core.Configuration
             // specified by the Section (whether it was specified or the default)
 
             // maybe we need to build in some retry mechanism to read the content of the file
-            if (!string.IsNullOrEmpty(glimpseSection.ExternalConfigurationFile) && File.Exists(glimpseSection.ExternalConfigurationFile))
+            var configurationDocumentLoaded = false;
+            if (!string.IsNullOrEmpty(glimpseSection.ExternalConfigurationFile))
             {
-                configurationDocument.Load(glimpseSection.ExternalConfigurationFile);
+                var externalConfigurationFile = Path.IsPathRooted(glimpseSection.ExternalConfigurationFile)
+                    ? glimpseSection.ExternalConfigurationFile
+                    : Path.Combine(AppDomain.CurrentDomain.BaseDirectory, glimpseSection.ExternalConfigurationFile);
+
+                if (File.Exists(externalConfigurationFile))
+                {
+                    configurationDocument.Load(externalConfigurationFile);
+                    configurationDocumentLoaded = true;
+                }
             }
-            else
+
+            if (!configurationDocumentLoaded)
             {
                 configurationDocument.LoadXml(glimpseSection.XmlContent.OuterXml);
             }
