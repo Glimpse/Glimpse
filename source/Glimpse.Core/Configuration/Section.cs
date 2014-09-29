@@ -11,16 +11,18 @@ namespace Glimpse.Core.Configuration
         {
             var defaultXmlDocument = new XmlDocument();
             defaultXmlDocument.LoadXml(
-                "<?xml version=\"1.0\" encoding=\"utf-8\" ?>" +
-                "<glimpse defaultRuntimePolicy=\"On\" endpointBaseUri=\"~/Glimpse.axd\" discoveryLocation=\"bin\\debug\">" +
-                "<logging level=\"Trace\" />" +
-                "</glimpse>");
+              @"<?xml version=""1.0"" encoding=""utf-8"" ?>
+                <glimpse defaultRuntimePolicy=""On"" endpointBaseUri=""~/Glimpse.axd"">
+                    <logging level=""Trace"" />
+                </glimpse>
+            ");
 
             XmlContent = defaultXmlDocument.DocumentElement;
         }
 
         protected override void DeserializeSection(XmlReader reader)
         {
+            reader.Read();
             var doc = new XmlDocument();
             doc.LoadXml(reader.ReadOuterXml());
 
@@ -35,7 +37,6 @@ namespace Glimpse.Core.Configuration
         }
 
         public XmlElement XmlContent { get; private set; }
-
         public string ExternalConfigurationFile { get; private set; }
         public Type ConfigurationSettingsProviderType { get; private set; }
     }
