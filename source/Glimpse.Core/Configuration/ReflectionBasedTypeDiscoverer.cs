@@ -12,15 +12,15 @@ namespace Glimpse.Core.Configuration
     /// </summary>
     public class ReflectionBasedTypeDiscoverer
     {
-        private static string ApplicationBaseDirectory { get; set; }
+        private static string ApplicationBaseDiscoveryDirectory { get; set; }
 
         private ILogger Logger { get; set; }
 
         static ReflectionBasedTypeDiscoverer()
         {
-            // Initializes the base directory of the application, if the AppDomain is shadow copied, use the shadow directory
+            // Initializes the base directory of the application to probe for assemblies, if the AppDomain is shadow copied, use the shadow directory
             var setupInfo = AppDomain.CurrentDomain.SetupInformation;
-            ApplicationBaseDirectory = string.Equals(setupInfo.ShadowCopyFiles, "true", StringComparison.OrdinalIgnoreCase)
+            ApplicationBaseDiscoveryDirectory = string.Equals(setupInfo.ShadowCopyFiles, "true", StringComparison.OrdinalIgnoreCase)
                        ? Path.Combine(setupInfo.CachePath, setupInfo.ApplicationName)
                        : AppDomain.CurrentDomain.BaseDirectory;
         }
@@ -42,7 +42,7 @@ namespace Glimpse.Core.Configuration
 
             var resolvedInstances = new List<TInstance>();
 
-            resolvedInstances.AddRange(discoveryLocation.Equals(ApplicationBaseDirectory)
+            resolvedInstances.AddRange(discoveryLocation.Equals(ApplicationBaseDiscoveryDirectory)
                 ? GetInstancesOfType<TInstance>(typesToIgnore)
                 : GetInstancesOfType<TInstance>(discoveryLocation, typesToIgnore));
 
@@ -51,10 +51,10 @@ namespace Glimpse.Core.Configuration
 
         private static string SanitizeDiscoveryLocation(string discoveryLocation)
         {
-            var sanitizedDiscoveryLocation = discoveryLocation ?? ApplicationBaseDirectory;
+            var sanitizedDiscoveryLocation = discoveryLocation ?? ApplicationBaseDiscoveryDirectory;
 
             // If this isn't an absolute path then root it with the Application base directory
-            sanitizedDiscoveryLocation = Path.IsPathRooted(sanitizedDiscoveryLocation) ? sanitizedDiscoveryLocation : Path.Combine(ApplicationBaseDirectory, sanitizedDiscoveryLocation);
+            sanitizedDiscoveryLocation = Path.IsPathRooted(sanitizedDiscoveryLocation) ? sanitizedDiscoveryLocation : Path.Combine(ApplicationBaseDiscoveryDirectory, sanitizedDiscoveryLocation);
 
             if (!Directory.Exists(sanitizedDiscoveryLocation))
             {
