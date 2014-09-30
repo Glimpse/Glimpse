@@ -141,7 +141,6 @@
     <Compile Include="Framework\UriTemplateResourceEndpointConfiguration.cs" />
     <Compile Include="Guard.cs" />
     <Compile Include="Message\RuntimeMessage.cs" />
-    <Compile Include="Metadata\CorrelationInstanceMetadata.cs" />
     <Compile Include="Metadata\DocumentationTabMetadata.cs" />
     <Compile Include="Metadata\HashMetadata.cs" />
     <Compile Include="Metadata\KeysHeadingsTabMetadata.cs" />
