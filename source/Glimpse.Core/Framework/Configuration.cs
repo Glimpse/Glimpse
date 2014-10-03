@@ -76,8 +76,6 @@ namespace Glimpse.Core.Framework
             PersistenceStore = persistenceStore;
             XmlConfiguration = xmlConfigurationSection;
             CurrentGlimpseRequestIdTracker = currentGlimpseRequestIdTracker ?? new CallContextCurrentGlimpseRequestIdTracker();
-
-            // TODO: Instantiate the user's IOC container (if they have one)
         }
 
         /// <summary>
@@ -87,8 +85,6 @@ namespace Glimpse.Core.Framework
         /// The configured <see cref="ICurrentGlimpseRequestIdTracker"/>.
         /// </value>
         public ICurrentGlimpseRequestIdTracker CurrentGlimpseRequestIdTracker { get; private set; }
-
-        public IServiceLocator UserServiceLocator { get; set; }
 
         public Section XmlConfiguration 
         {
@@ -114,7 +110,7 @@ namespace Glimpse.Core.Framework
         /// <value>
         /// The client scripts.
         /// </value>
-        /// <returns>A collection of <see cref="IClientScript"/> instances resolved by the <see cref="IServiceLocator"/>s, otherwise all <see cref="IClientScript"/>s discovered in the configured discovery location.</returns>
+        /// <returns>A collection of <see cref="IClientScript"/> instances discovered in the configured discovery location.</returns>
         /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
         public ICollection<IClientScript> ClientScripts
         {
@@ -146,18 +142,13 @@ namespace Glimpse.Core.Framework
         /// <value>
         /// The default resource.
         /// </value>
-        /// <returns>A <see cref="IResource"/> instance resolved by the <see cref="IServiceLocator"/>s, otherwise <see cref="ConfigurationResource"/>.</returns>
+        /// <returns>A <see cref="IResource"/> instance.</returns>
         /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
         public IResource DefaultResource
         {
             get
             {
                 if (defaultResource != null)
-                {
-                    return defaultResource;
-                }
-
-                if (TrySingleInstanceFromServiceLocators(out defaultResource))
                 {
                     return defaultResource;
                 }
@@ -237,17 +228,12 @@ namespace Glimpse.Core.Framework
         /// <summary>
         /// Instantiates an instance of <see cref="IHtmlEncoder"/>.
         /// </summary>
-        /// <returns>A <see cref="IHtmlEncoder"/> instance resolved by the <see cref="IServiceLocator"/>s, otherwise <see cref="AntiXssEncoder"/> (leveraging the <see href="http://wpl.codeplex.com/">Microsoft Web Protection Library</see>).</returns>
+        /// <returns>A <see cref="IHtmlEncoder"/> instance (leveraging the <see href="http://wpl.codeplex.com/">Microsoft Web Protection Library</see>).</returns>
         public IHtmlEncoder HtmlEncoder
         {
             get
             {
                 if (htmlEncoder != null)
-                {
-                    return htmlEncoder;
-                }
-
-                if (TrySingleInstanceFromServiceLocators(out htmlEncoder))
                 {
                     return htmlEncoder;
                 }
@@ -273,18 +259,13 @@ namespace Glimpse.Core.Framework
         /// <value>
         /// The configured <see cref="ILogger"/>.
         /// </value>
-        /// <returns>A <see cref="ILogger"/> instance resolved by the <see cref="IServiceLocator"/>s, otherwise a <see cref="NullLogger"/> or <see cref="NLogLogger"/> (leveraging the <see href="http://nlog-project.org/">NLog</see> project) based on configuration settings.</returns>
+        /// <returns>A <see cref="ILogger"/> instance (leveraging the <see href="http://nlog-project.org/">NLog</see> project) based on configuration settings.</returns>
         /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
         public ILogger Logger
         {
             get
             {
                 if (logger != null)
-                {
-                    return logger;
-                }
-
-                if (TrySingleInstanceFromServiceLocators(out logger))
                 {
                     return logger;
                 }
@@ -315,7 +296,7 @@ namespace Glimpse.Core.Framework
         /// <summary>
         /// Gets or sets the <see cref="IMessageBroker"/>.
         /// </summary>
-        /// <returns>A <see cref="IMessageBroker"/> instance resolved by one of the <see cref="IServiceLocator"/>s, otherwise <see cref="MessageBroker"/>.</returns>
+        /// <returns>A <see cref="IMessageBroker"/> instance.</returns>
         /// <value>
         /// The configured <see cref="IMessageBroker"/>.
         /// </value>
@@ -325,11 +306,6 @@ namespace Glimpse.Core.Framework
             get
             {
                 if (messageBroker != null)
-                {
-                    return messageBroker;
-                }
-
-                if (TrySingleInstanceFromServiceLocators(out messageBroker))
                 {
                     return messageBroker;
                 }
@@ -383,7 +359,7 @@ namespace Glimpse.Core.Framework
         /// <value>
         /// The configured collection of <see cref="IInspector"/>.
         /// </value>
-        /// <returns>A collection of <see cref="IInspector"/> instances resolved by the <see cref="IServiceLocator"/>s, otherwise all <see cref="IInspector"/>s discovered in the configured discovery location.</returns>
+        /// <returns>A collection of <see cref="IInspector"/> instances discovered in the configured discovery location.</returns>
         /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
         public ICollection<IInspector> Inspectors
         {
@@ -415,18 +391,13 @@ namespace Glimpse.Core.Framework
         /// <value>
         /// The configured <see cref="IProxyFactory"/>.
         /// </value>
-        /// <returns>A <see cref="IProxyFactory"/> instance resolved by the <see cref="IServiceLocator"/>s, otherwise <see cref="CastleDynamicProxyFactory"/> (leveraging <see href="http://www.castleproject.org/projects/dynamicproxy/">Castle DynamicProxy</see>.).</returns>
+        /// <returns>A <see cref="IProxyFactory"/> instance (leveraging <see href="http://www.castleproject.org/projects/dynamicproxy/">Castle DynamicProxy</see>.).</returns>
         /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
         public IProxyFactory ProxyFactory
         {
             get
             {
                 if (proxyFactory != null)
-                {
-                    return proxyFactory;
-                }
-
-                if (TrySingleInstanceFromServiceLocators(out proxyFactory))
                 {
                     return proxyFactory;
                 }
@@ -482,7 +453,7 @@ namespace Glimpse.Core.Framework
         /// <value>
         /// The configured collection of <see cref="IResource"/>.
         /// </value>
-        /// <returns>A collection of <see cref="IResource"/> instances resolved by the <see cref="IServiceLocator"/>s, otherwise all <see cref="IResource"/>s discovered in the configured discovery location.</returns>
+        /// <returns>A collection of <see cref="IResource"/> instances discovered in the configured discovery location.</returns>
         /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
         public ICollection<IResource> Resources
         {
@@ -514,7 +485,7 @@ namespace Glimpse.Core.Framework
         /// <value>
         /// The configured collection of <see cref="IRuntimePolicy"/>.
         /// </value>
-        /// <returns>A collection of <see cref="IRuntimePolicy"/> instances resolved by the <see cref="IServiceLocator"/>s, otherwise all <see cref="IRuntimePolicy"/>s discovered in the configured discovery location.</returns>
+        /// <returns>A collection of <see cref="IRuntimePolicy"/> instances discovered in the configured discovery location.</returns>
         /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
         public ICollection<IRuntimePolicy> RuntimePolicies
         {
@@ -546,18 +517,13 @@ namespace Glimpse.Core.Framework
         /// <value>
         /// The configured <see cref="ISerializer"/>.
         /// </value>
-        /// <returns>A <see cref="ISerializer"/> instance resolved by the <see cref="IServiceLocator"/>s, otherwise <see cref="JsonNetSerializer"/> (leveraging <see href="http://json.codeplex.com/">Json.Net</see>).</returns>
+        /// <returns>A <see cref="ISerializer"/> instance (leveraging <see href="http://json.codeplex.com/">Json.Net</see>).</returns>
         /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
         public ISerializer Serializer
         {
             get
             {
                 if (serializer != null)
-                {
-                    return serializer;
-                }
-
-                if (TrySingleInstanceFromServiceLocators(out serializer))
                 {
                     return serializer;
                 }
@@ -583,7 +549,7 @@ namespace Glimpse.Core.Framework
         /// <summary>
         /// Gets or sets a collection of <see cref="ISerializationConverter"/>s.
         /// </summary>
-        /// <returns>A collection of <see cref="ISerializationConverter"/> instances resolved by the <see cref="IServiceLocator"/>s, otherwise all <see cref="ISerializationConverter"/>s discovered in the configured discovery location.</returns>
+        /// <returns>A collection of <see cref="ISerializationConverter"/> instances discovered in the configured discovery location.</returns>
         public ICollection<ISerializationConverter> SerializationConverters 
         {
             get
@@ -614,7 +580,7 @@ namespace Glimpse.Core.Framework
         /// <value>
         /// The configured <see cref="ITab"/>.
         /// </value>
-        /// <returns>A collection of <see cref="ITab"/> instances resolved by the <see cref="IServiceLocator"/>s, otherwise all <see cref="ITab"/>s discovered in the configured discovery location.</returns>
+        /// <returns>A collection of <see cref="ITab"/> instances discovered in the configured discovery location.</returns>
         /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
         public ICollection<ITab> Tabs
         {
@@ -646,18 +612,13 @@ namespace Glimpse.Core.Framework
         /// <value>
         /// The configured <see cref="IMetadata"/>.
         /// </value>
-        /// <returns>A collection of <see cref="IMetadata"/> instances resolved by the <see cref="IServiceLocator"/>s, otherwise all <see cref="ITab"/>s discovered in the configured discovery location.</returns>
+        /// <returns>A collection of <see cref="IMetadata"/> instances discovered in the configured discovery location.</returns>
         /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
         public ICollection<IMetadata> Metadata
         {
             get
             {
                 if (metadata != null)
-                {
-                    return metadata;
-                }
-
-                if (TryAllInstancesFromServiceLocators(out metadata))
                 {
                     return metadata;
                 }
@@ -683,18 +644,13 @@ namespace Glimpse.Core.Framework
         /// <value>
         /// The configured <see cref="ITabMetadata"/>.
         /// </value>
-        /// <returns>A collection of <see cref="ITabMetadata"/> instances resolved by the <see cref="IServiceLocator"/>s, otherwise all <see cref="ITab"/>s discovered in the configured discovery location.</returns>
+        /// <returns>A collection of <see cref="ITabMetadata"/> instances discovered in the configured discovery location.</returns>
         /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
         public ICollection<ITabMetadata> TabMetadata
         {
             get
             {
                 if (tabMetadata != null)
-                {
-                    return tabMetadata;
-                }
-
-                if (TryAllInstancesFromServiceLocators(out tabMetadata))
                 {
                     return tabMetadata;
                 }
@@ -720,18 +676,13 @@ namespace Glimpse.Core.Framework
         /// <value>
         /// The configured <see cref="IInstanceMetadata"/>.
         /// </value>
-        /// <returns>A collection of <see cref="IInstanceMetadata"/> instances resolved by the <see cref="IServiceLocator"/>s, otherwise all <see cref="ITab"/>s discovered in the configured discovery location.</returns>
+        /// <returns>A collection of <see cref="IInstanceMetadata"/> instances discovered in the configured discovery location.</returns>
         /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
         public ICollection<IInstanceMetadata> InstanceMetadata
         {
             get
             {
                 if (instanceMetadata != null)
-                {
-                    return instanceMetadata;
-                }
-
-                if (TryAllInstancesFromServiceLocators(out instanceMetadata))
                 {
                     return instanceMetadata;
                 }
@@ -848,21 +799,6 @@ namespace Glimpse.Core.Framework
             }
         }
 
-        private bool TrySingleInstanceFromServiceLocators<T>(out T instance) where T : class
-        {
-            if (UserServiceLocator != null)
-            {
-                instance = UserServiceLocator.GetInstance<T>();
-                if (instance != null)
-                {
-                    return true;
-                }
-            }
-
-            instance = null;
-            return false;
-        }
-
         private ILogger CreateLogger()
         {
             // Root the path if it isn't already and add a filename if one isn't specified
@@ -882,55 +818,14 @@ namespace Glimpse.Core.Framework
             return new NLogLogger(new LogFactory(loggingConfiguration).GetLogger("Glimpse"));
         }
 
-        private bool TryAllInstancesFromServiceLocators<T>(out ICollection<T> instance) where T : class
+        private ICollection<T> CreateDiscoverableCollection<T>(DiscoverableCollectionElement config)
         {
-            if (UserServiceLocator != null)
-            {
-                var result = UserServiceLocator.GetAllInstances<T>();
-                if (result != null)
-                {
-                    instance = result;
-                    return true;
-                }
-            }
-
-            instance = null;
-
-            return false;
-        }
-
-        private IDiscoverableCollection<T> CreateDiscoverableCollection<T>(DiscoverableCollectionElement config)
-        {
-            var discoverableCollection = new ReflectionDiscoverableCollection<T>(Logger);
-
-            discoverableCollection.IgnoredTypes.AddRange(config.IgnoredTypes);
-
-            // Default to config.DiscoveryLocation (collection specific) otherwise overrides 
-            // Configuration.DiscoveryLocation (on main <glimpse> node)
-            var locationCascade = string.IsNullOrEmpty(config.DiscoveryLocation) ? (string.IsNullOrEmpty(XmlConfiguration.DiscoveryLocation) ? null : XmlConfiguration.DiscoveryLocation) : config.DiscoveryLocation;
-            if (locationCascade != null)
-            {
-                discoverableCollection.DiscoveryLocation = locationCascade;
-            }
-
-            discoverableCollection.AutoDiscover = config.AutoDiscover;
-            if (discoverableCollection.AutoDiscover)
-            {
-                discoverableCollection.Discover();
-            }
-
-            return discoverableCollection;
+            return DiscoverableCollectionFactory.Create<T>(config, XmlConfiguration.DiscoveryLocation, Logger);
         }
         
         private ICollection<TElementType> InstantiateDiscoverableCollection<TElementType>(DiscoverableCollectionElement configuredDiscoverableCollection)
             where TElementType : class
         {
-            ICollection<TElementType> collection;
-            if (TryAllInstancesFromServiceLocators(out collection))
-            {
-                return collection;
-            }
-
             var discoverableCollection = CreateDiscoverableCollection<TElementType>(configuredDiscoverableCollection);
 
             // get the list of configurators

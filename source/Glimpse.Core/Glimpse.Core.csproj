@@ -118,6 +118,7 @@
     <Compile Include="Framework\BaseProvider.cs" />
     <Compile Include="Framework\CallContextCurrentGlimpseRequestIdTracker.cs" />
     <Compile Include="Framework\Crc32.cs" />
+    <Compile Include="Framework\DiscoverableCollectionFactory.cs" />
     <Compile Include="Framework\DisplayProvider.cs" />
     <Compile Include="Framework\GlimpseRuntimeNotAvailableException.cs" />
     <Compile Include="Framework\GlimpseRuntimeInitializer.cs" />
@@ -235,7 +236,6 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Framework\IPersistenceStore.cs" />
     <Compile Include="Framework\IReadOnlyPersistenceStore.cs" />
-    <Compile Include="Framework\IServiceLocator.cs" />
     <Compile Include="Framework\ReflectionDiscoverableCollection.cs" />
     <Compile Include="Framework\ResourceEndpointConfiguration.cs" />
     <Compile Include="Framework\ResourceParameters.cs" />

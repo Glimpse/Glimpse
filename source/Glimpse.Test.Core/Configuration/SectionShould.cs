@@ -207,33 +207,5 @@ namespace Glimpse.Test.Core.Configuration
 
             Assert.Equal(element, section.SerializationConverters);
         }
-
-        [Fact]
-        public void LoadUserServiceLocatorWhenConfigured()
-        {
-            var section = (Section)ConfigurationManager.GetSection("glimpse");
-
-            Assert.NotNull(section.ServiceLocatorType);
-            Assert.True(section.ServiceLocatorType == typeof(DummyServiceLocator));
-        }
-
-        [Fact]
-        public void ReturnDefaultServiceLocatorType()
-        {
-            var section = new Section();
-
-            Assert.Null(section.ServiceLocatorType);
-        }
-
-        [Fact]
-        public void GetSetDefaultServiceLocatorType()
-        {
-            var section = new Section();
-            var type = typeof(SectionShould);
-
-            section.ServiceLocatorType = type;
-
-            Assert.Equal(type, section.ServiceLocatorType);
-        }
     }
 }

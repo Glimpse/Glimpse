@@ -172,30 +172,10 @@ namespace Glimpse.Test.Core.Framework
             Assert.NotNull(sut.HtmlEncoder);
         }
 
-        [Theory, AutoMock]
-        public void GetHtmlEncoderFromServiceLocator(IServiceLocator serviceLocator, IHtmlEncoder expected)
-        {
-            serviceLocator.Setup(sl => sl.GetInstance<IHtmlEncoder>()).Returns(expected);
-            sut.UserServiceLocator = serviceLocator;
-
-            Assert.Equal(expected, sut.HtmlEncoder);
-            serviceLocator.Verify(l => l.GetInstance<IHtmlEncoder>(), Times.Once());
-        }
-
         [Fact]
         public void GetDefaultMessageBrokerWithoutServiceLocator()
         {
             Assert.NotNull(sut.MessageBroker);
-        }
-
-        [Theory, AutoMock]
-        public void GetMessageBrokerFromServiceLocator(IServiceLocator serviceLocator, IMessageBroker expected)
-        {
-            serviceLocator.Setup(l => l.GetInstance<IMessageBroker>()).Returns(expected);
-            sut.UserServiceLocator = serviceLocator;
-
-            Assert.Equal(expected, sut.MessageBroker);
-            serviceLocator.Verify(l => l.GetInstance<IMessageBroker>(), Times.Once());
         }
 
         [Fact]
@@ -204,45 +184,16 @@ namespace Glimpse.Test.Core.Framework
             Assert.NotNull(sut.ProxyFactory);
         }
 
-        [Theory, AutoMock]
-        public void GetProxyFactoryFromServiceLocator(IServiceLocator serviceLocator, IProxyFactory expected)
-        {
-            serviceLocator.Setup(l => l.GetInstance<IProxyFactory>()).Returns(expected);
-            sut.UserServiceLocator = serviceLocator;
-
-            Assert.Equal(expected, sut.ProxyFactory);
-        }
-
         [Fact]
         public void GetDefaultSerializerWithoutServiceLocator()
         {
             Assert.NotNull(sut.Serializer);
         }
 
-        [Theory, AutoMock]
-        public void GetSerializerFromServiceLocator(IServiceLocator serviceLocator, ISerializer expected)
-        {
-            serviceLocator.Setup(l => l.GetInstance<ISerializer>()).Returns(expected);
-            sut.UserServiceLocator = serviceLocator;
-
-            Assert.Equal(expected, sut.Serializer);
-            serviceLocator.Verify(l => l.GetInstance<ISerializer>(), Times.Once());
-        }
-
         [Fact]
         public void GetDefaultDefaultResourceWithoutServiceLocator()
         {
             Assert.NotNull(sut.DefaultResource);
-        }
-
-        [Theory, AutoMock]
-        public void GetDefaultResourceFromServiceLocator(IServiceLocator serviceLocator, IResource expected)
-        {
-            serviceLocator.Setup(l => l.GetInstance<IResource>()).Returns(expected);
-            sut.UserServiceLocator = serviceLocator;
-
-            Assert.Equal(expected, sut.DefaultResource);
-            serviceLocator.Verify(l => l.GetInstance<IResource>(), Times.Once());
         }
 
         [Fact]
@@ -257,39 +208,10 @@ namespace Glimpse.Test.Core.Framework
             Assert.NotNull(sut.ClientScripts);
         }
 
-        [Theory, AutoMock]
-        public void GetClientScriptsFromServiceLocator(IServiceLocator serviceLocator, ICollection<IClientScript> expected)
-        {
-            serviceLocator.Setup(ul => ul.GetAllInstances<IClientScript>()).Returns(expected);
-            sut.UserServiceLocator = serviceLocator;
-
-            Assert.Equal(expected, sut.ClientScripts);
-            serviceLocator.Verify(ul => ul.GetAllInstances<IClientScript>(), Times.Once());
-        }
-
-        [Theory, AutoMock]
-        public void LeverageServiceLocatorForInspectors(IServiceLocator serviceLocator, ICollection<IInspector> expected)
-        {
-            serviceLocator.Setup(l => l.GetAllInstances<IInspector>()).Returns(expected);
-            sut.UserServiceLocator = serviceLocator;
-
-            Assert.Equal(expected, sut.Inspectors);
-        }
-
         [Fact]
         public void GetDefaultSerializationConvertersWithoutServiceLocator()
         {
             Assert.NotNull(sut.SerializationConverters);
-        }
-
-        [Theory, AutoMock]
-        public void GetServiceLocatorFromServiceLocator(IServiceLocator serviceLocator, ICollection<ISerializationConverter> expected)
-        {
-            serviceLocator.Setup(l => l.GetAllInstances<ISerializationConverter>()).Returns(expected);
-            sut.UserServiceLocator = serviceLocator;
-
-            Assert.Equal(expected, sut.SerializationConverters);
-            serviceLocator.Verify(l => l.GetAllInstances<ISerializationConverter>(), Times.Once());
         }
 
         [Fact]
@@ -306,45 +228,6 @@ namespace Glimpse.Test.Core.Framework
             sut.XmlConfiguration = new Section { Logging = { Level = LoggingLevel.Warn } };
 
             Assert.NotNull(sut.Logger);
-        }
-
-        [Theory, AutoMock]
-        public void GetLoggerFromServiceLocator(IServiceLocator serviceLocator, ILogger expected)
-        {
-            serviceLocator.Setup(ul => ul.GetInstance<ILogger>()).Returns(expected);
-            sut.UserServiceLocator = serviceLocator;
-
-            Assert.Equal(expected, sut.Logger);
-            serviceLocator.Verify(ul => ul.GetInstance<ILogger>(), Times.Once());
-        }
-
-        [Theory, AutoMock]
-        public void GetTabsFromServiceLocator(IServiceLocator serviceLocator, ICollection<ITab> expected)
-        {
-            serviceLocator.Setup(l => l.GetAllInstances<ITab>()).Returns(expected);
-            sut.UserServiceLocator = serviceLocator;
-
-            Assert.Equal(expected, sut.Tabs);
-            serviceLocator.Verify(l => l.GetAllInstances<ITab>(), Times.Once());
-        }
-
-        [Theory, AutoMock]
-        public void GetResourcesFromServiceLocator(IServiceLocator serviceLocator, ICollection<IResource> expected)
-        {
-            serviceLocator.Setup(l => l.GetAllInstances<IResource>()).Returns(expected);
-            sut.UserServiceLocator = serviceLocator;
-
-            Assert.Equal(expected, sut.Resources);
-        }
-
-        [Theory, AutoMock]
-        public void GetDefaultRuntimePoliciesFromServiceLocator(IServiceLocator serviceLocator, ICollection<IRuntimePolicy> expected)
-        {
-            serviceLocator.Setup(l => l.GetAllInstances<IRuntimePolicy>()).Returns(expected);
-            sut.UserServiceLocator = serviceLocator;
-
-            Assert.Equal(expected, sut.RuntimePolicies);
-            serviceLocator.Verify(l => l.GetAllInstances<IRuntimePolicy>(), Times.Once());
         }
     }
 }

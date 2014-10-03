@@ -326,26 +326,6 @@ namespace Glimpse.Core.Configuration
         }
 
         /// <summary>
-        /// Gets or sets an <see cref="IServiceLocator"/> Glimpse will use to override default type resolution.
-        /// </summary>
-        /// <example>
-        /// <code>
-        /// <![CDATA[
-        /// <glimpse defaultRuntimePolicy="On" endpointBaseUri="~/Glimpse.axd" serviceLocatorType="{Namespace.Type, AssemblyName}">
-        ///     <!-- Additional Glimpse configuration nodes -->
-        /// </glimpse>
-        /// ]]>
-        /// </code>
-        /// </example>
-        [ConfigurationProperty("serviceLocatorType", DefaultValue = null)]
-        [TypeConverter(typeof(TypeConverter))]
-        public Type ServiceLocatorType
-        {
-            get { return (Type)base["serviceLocatorType"]; }
-            set { base["serviceLocatorType"] = value; }
-        }
-
-        /// <summary>
         /// Gets or sets the base Uri endpoint for accessing all resources. The <c>EndpointBaseUri</c> is leveraged by an instance of <see cref="ResourceEndpointConfiguration"/> in order to generate dynamic resource Uris.
         /// </summary>
         /// <remarks>
