@@ -63,7 +63,7 @@ namespace Glimpse.Core.Framework
             get { return configuration.Tabs; }
         }
 
-        public ICollection<IMetadata> Metadata
+        public IDictionary<string, object> Metadata
         {
             get { return configuration.Metadata; }
         }

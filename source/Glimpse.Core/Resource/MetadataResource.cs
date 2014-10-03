@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
@@ -9,7 +10,7 @@ namespace Glimpse.Core.Resource
     /// <summary>
     /// The <see cref="IResource"/> implementation responsible for providing the Glimpse client all pertinent system configuration information.
     /// </summary>
-    public class MetadataResource : IResource, IKey
+    public class MetadataResource : IPrivilegedResource, IKey
     {
         internal const string InternalName = "glimpse_metadata";
         private const int CacheDuration = 12960000; // 150 days
@@ -50,6 +51,11 @@ namespace Glimpse.Core.Resource
             get { return new[] { ResourceParameter.Hash, ResourceParameter.Callback }; }
         }
 
+        public IResourceResult Execute(IResourceContext context)
+        {
+            throw new NotSupportedException(string.Format(Resources.PrivilegedResourceExecuteNotSupported, GetType().Name));
+        }
+
         /// <summary>
         /// Executes the specified resource with the specific context.
         /// </summary>
@@ -57,9 +63,9 @@ namespace Glimpse.Core.Resource
         /// <returns>
         ///   <see cref="IResourceResult" /> that can be executed when the Http response is ready to be returned.
         /// </returns>
-        public IResourceResult Execute(IResourceContext context)
+        public IResourceResult Execute(IResourceContext context, IReadOnlyConfiguration configuration, IRequestResponseAdapter requestResponseAdapter)
         {
-            var metadata = context.PersistenceStore.GetMetadata();
+            var metadata = configuration.Metadata;
 
             if (metadata == null)
             {

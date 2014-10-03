@@ -37,16 +37,16 @@ namespace Glimpse.Test.Core.Resource
         {
             var metadata = new Dictionary<string, object>();
 
-            var storeMock = new Mock<IReadOnlyPersistenceStore>();
-            storeMock.Setup(s => s.GetMetadata()).Returns(metadata);
+            var configMock = new Mock<IReadOnlyConfiguration>();
+            configMock.Setup(c => c.Metadata).Returns(metadata);
 
             var contextMock = new Mock<IResourceContext>();
-            contextMock.Setup(c => c.PersistenceStore).Returns(storeMock.Object);
+            contextMock.Setup(c => c.PersistenceStore).Returns(new Mock<IReadOnlyPersistenceStore>().Object);
             contextMock.Setup(c => c.Parameters[ResourceParameter.Callback.Name]).Returns("a string");
 
             var resource = new MetadataResource();
 
-            var result = resource.Execute(contextMock.Object);
+            var result = resource.Execute(contextMock.Object, configMock.Object, new Mock<IRequestResponseAdapter>().Object);
 
             Assert.NotNull(result);
         }
@@ -54,15 +54,15 @@ namespace Glimpse.Test.Core.Resource
         [Fact]
         public void Return404ResultIfDataIsMissing()
         {
-            var storeMock = new Mock<IReadOnlyPersistenceStore>();
-            storeMock.Setup(s => s.GetMetadata()).Returns<IDictionary<string, object>>(null);
+            var configMock = new Mock<IReadOnlyConfiguration>();
+            configMock.Setup(c => c.Metadata).Returns<IDictionary<string, object>>(null);
 
             var contextMock = new Mock<IResourceContext>();
-            contextMock.Setup(c => c.PersistenceStore).Returns(storeMock.Object);
+            contextMock.Setup(c => c.PersistenceStore).Returns(new Mock<IReadOnlyPersistenceStore>().Object);
 
             var resource = new MetadataResource();
 
-            var result = resource.Execute(contextMock.Object);
+            var result = resource.Execute(contextMock.Object, configMock.Object, new Mock<IRequestResponseAdapter>().Object);
 
             Assert.NotNull(result);
 

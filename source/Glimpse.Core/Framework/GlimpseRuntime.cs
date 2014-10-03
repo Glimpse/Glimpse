@@ -82,28 +82,24 @@ namespace Glimpse.Core.Framework
         /// <param name="configuration">The configuration</param>
         /// <param name="activeGlimpseRequestContexts">The store for active <see cref="IGlimpseRequestContext"/> instances</param>
         /// <param name="runtimePolicyDeterminator">The runtime policy determinator</param>
-        /// <param name="metadataProvider">The metadata provider</param>
         /// <param name="tabProvider">The tab provider</param>
         /// <param name="displayProvider">The display provider</param>
         internal GlimpseRuntime(
             IReadOnlyConfiguration configuration,
             ActiveGlimpseRequestContexts activeGlimpseRequestContexts,
             RuntimePolicyDeterminator runtimePolicyDeterminator,
-            MetadataProvider metadataProvider,
             TabProvider tabProvider,
             DisplayProvider displayProvider)
         {
             Guard.ArgumentNotNull("configuration", configuration);
             Guard.ArgumentNotNull("activeGlimpseRequestContexts", activeGlimpseRequestContexts);
             Guard.ArgumentNotNull("runtimePolicyDeterminator", runtimePolicyDeterminator);
-            Guard.ArgumentNotNull("metadataProvider", metadataProvider);
             Guard.ArgumentNotNull("tabProvider", tabProvider);
             Guard.ArgumentNotNull("displayProvider", displayProvider);
 
             Configuration = configuration;
             ActiveGlimpseRequestContexts = activeGlimpseRequestContexts;
             RuntimePolicyDeterminator = runtimePolicyDeterminator;
-            MetadataProvider = metadataProvider;
             TabProvider = tabProvider;
             DisplayProvider = displayProvider;
         }
@@ -127,8 +123,6 @@ namespace Glimpse.Core.Framework
         private ActiveGlimpseRequestContexts ActiveGlimpseRequestContexts { get; set; }
         
         private RuntimePolicyDeterminator RuntimePolicyDeterminator { get; set; }
-        
-        private MetadataProvider MetadataProvider { get; set; }
         
         private TabProvider TabProvider { get; set; }
         
@@ -210,7 +204,7 @@ namespace Glimpse.Core.Framework
                 if (runtimePolicy.HasFlag(RuntimePolicy.PersistResults))
                 {
                     var persistenceStore = Configuration.PersistenceStore;
-                    var metadata = new GlimpseRequest(glimpseRequestContext.GlimpseRequestId, requestMetadata, TabProvider.GetResultsStore(glimpseRequestContext), DisplayProvider.GetResultsStore(glimpseRequestContext), timingDuration, MetadataProvider.GetRequestMetadata(glimpseRequestContext));
+                    var metadata = new GlimpseRequest(glimpseRequestContext.GlimpseRequestId, requestMetadata, TabProvider.GetResultsStore(glimpseRequestContext), DisplayProvider.GetResultsStore(glimpseRequestContext), timingDuration, Configuration.Metadata);
 
                     try
                     {

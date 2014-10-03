@@ -37,11 +37,5 @@ namespace Glimpse.Core.Framework
         /// <param name="count">The count.</param>
         /// <returns>Collection of requests that represent the top x number of requests.</returns>
         IEnumerable<GlimpseRequest> GetTop(int count);
-
-        /// <summary>
-        /// Gets the metadata.
-        /// </summary>
-        /// <returns>Metadata that is currently applied.</returns>
-        IDictionary<string, object> GetMetadata();
     }
 }

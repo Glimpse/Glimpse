@@ -13,11 +13,5 @@ namespace Glimpse.Core.Framework
         /// </summary>
         /// <param name="request">The request.</param>
         void Save(GlimpseRequest request);
-
-        /// <summary>
-        /// Saves the specified system metadata.
-        /// </summary>
-        /// <param name="metadata">The metadata.</param>
-        void SaveMetadata(IDictionary<string, object> metadata);
     }
 }

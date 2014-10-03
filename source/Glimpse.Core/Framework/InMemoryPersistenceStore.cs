@@ -62,15 +62,6 @@ namespace Glimpse.Core.Framework
         }
 
         /// <summary>
-        /// Saves the specified system metadata.
-        /// </summary>
-        /// <param name="metadata">The metadata.</param>
-        public void SaveMetadata(IDictionary<string, object> metadata)
-        {
-            Metadata = metadata;
-        }
-
-        /// <summary>
         /// Gets the by request id.
         /// </summary>
         /// <param name="requestId">The request id.</param>

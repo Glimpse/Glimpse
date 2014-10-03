@@ -35,7 +35,7 @@ namespace Glimpse.Core.Framework
         private ICollection<IRuntimePolicy> runtimePolicies;
         private ISerializer serializer;
         private ICollection<ITab> tabs;
-        private ICollection<IMetadata> metadata;
+        private IDictionary<string,object> metadata;
         private ICollection<ITabMetadata> tabMetadata;
         private ICollection<IInstanceMetadata> instanceMetadata;
         private ICollection<IDisplay> displays;
@@ -614,7 +614,7 @@ namespace Glimpse.Core.Framework
         /// </value>
         /// <returns>A collection of <see cref="IMetadata"/> instances discovered in the configured discovery location.</returns>
         /// <exception cref="System.ArgumentNullException">An exception is thrown if the value is set to <c>null</c>.</exception>
-        public ICollection<IMetadata> Metadata
+        public IDictionary<string, object> Metadata
         {
             get
             {
@@ -623,7 +623,27 @@ namespace Glimpse.Core.Framework
                     return metadata;
                 }
 
-                metadata = CreateDiscoverableCollection<IMetadata>(XmlConfiguration.Metadata);
+                var metadataProviders = CreateDiscoverableCollection<IMetadata>(XmlConfiguration.Metadata);
+
+                metadata = new Dictionary<string, object>();
+                var readonlyConfig = new ReadOnlyConfigurationAdapter(this);
+
+                foreach (var extension in metadataProviders)
+                {
+                    try
+                    {
+                        var result = extension.GetMetadata(readonlyConfig);
+                        if (result != null)
+                        {
+                            metadata[extension.Key] = result;
+                        }
+                    }
+                    catch (Exception exception)
+                    {
+                        logger.Error(Glimpse.Core.Resources.ExecuteMetadataExtensionsError, exception, extension.GetType());
+                    }
+                }
+
                 return metadata;
             }
 
@@ -741,7 +761,7 @@ namespace Glimpse.Core.Framework
                 configuredTypes.AddRange(Resources.Select(resource => resource.GetType()).OrderBy(type => type.Name));
                 configuredTypes.AddRange(ClientScripts.Select(clientScript => clientScript.GetType()).OrderBy(type => type.Name));
                 configuredTypes.AddRange(RuntimePolicies.Select(policy => policy.GetType()).OrderBy(type => type.Name));
-                configuredTypes.AddRange(Metadata.Select(extensions => extensions.GetType()).OrderBy(type => type.Name));
+                configuredTypes.AddRange(Metadata.OrderBy(m => m.Key).Select(m => m.Value.GetType()));
                 configuredTypes.AddRange(TabMetadata.Select(extensions => extensions.GetType()).OrderBy(type => type.Name));
 
                 var crc32 = new Crc32();

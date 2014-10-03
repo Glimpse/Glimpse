@@ -63,16 +63,12 @@ namespace Glimpse.Test.Core.Tester
             var inspectorProvider = new InspectorProvider(readonlyConfiguration, activeGlimpseRequestContexts);
             inspectorProvider.Setup();
 
-            var metadataProvider = new MetadataProvider(readonlyConfiguration);
-            metadataProvider.SaveMetadata();
-
             var runtimePolicyDeterminator = new RuntimePolicyDeterminator(readonlyConfiguration);
 
             GlimpseRuntime = new GlimpseRuntime(
                 readonlyConfiguration,
                 activeGlimpseRequestContexts,
                 runtimePolicyDeterminator,
-                metadataProvider,
                 tabProvider,
                 displayProvider);
 

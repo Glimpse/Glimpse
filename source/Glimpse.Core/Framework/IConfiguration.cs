@@ -68,7 +68,7 @@ namespace Glimpse.Core.Framework
         /// Gets the metadata extensions.
         /// </summary>
         /// <value>The metadata extensions.</value>
-        ICollection<IMetadata> Metadata { get; set; }
+        IDictionary<string, object> Metadata { get; set; }
 
         /// <summary>
         /// Gets the tab metadata extensions.

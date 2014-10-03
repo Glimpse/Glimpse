@@ -120,7 +120,7 @@ namespace Glimpse.Core.Resource
 
             glimpseConfigurationTemplate.Add("glimpseRuntimeVersion", configuration.Version);
              
-            var resources = configuration.PersistenceStore.GetMetadata().GetResources();
+            var resources = configuration.Metadata.GetResources();
             var logosResource = resources[LogosResource.InternalName].Replace("{&" + ResourceParameter.Hash.Name + "}", string.Empty);
             var logoNamePlaceholder = "{" + ResourceParameter.LogoName.Name + "}";
             glimpseConfigurationTemplate.Add("glimpseFaviconUri", logosResource.Replace(logoNamePlaceholder, "glimpse_favicon"));

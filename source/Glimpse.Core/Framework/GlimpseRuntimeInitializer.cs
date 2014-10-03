@@ -107,16 +107,12 @@ namespace Glimpse.Core.Framework
                         var inspectorProvider = new InspectorProvider(readonlyConfiguration, activeGlimpseRequestContexts);
                         inspectorProvider.Setup();
 
-                        var metadataProvider = new MetadataProvider(readonlyConfiguration);
-                        metadataProvider.SaveMetadata();
-
                         var runtimePolicyDeterminator = new RuntimePolicyDeterminator(readonlyConfiguration);
 
                         GlimpseRuntime.Instance = new GlimpseRuntime(
                             readonlyConfiguration,
                             activeGlimpseRequestContexts,
                             runtimePolicyDeterminator,
-                            metadataProvider,
                             tabProvider,
                             displayProvider);
                     }
