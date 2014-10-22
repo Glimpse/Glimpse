@@ -32,7 +32,6 @@ namespace Glimpse.Owin.Middleware
             if (GlimpseRuntime.IsAvailable)
             {
                 var request = new OwinRequest(environment);
-                var response = new OwinResponse(environment);
                 var requestResponseAdapter = new OwinRequestResponseAdapter(environment);
 
                 using (var glimpseRequestContextHandle = GlimpseRuntime.Instance.BeginRequest(requestResponseAdapter))
@@ -43,7 +42,7 @@ namespace Glimpse.Owin.Middleware
                             await ExecuteRegularRequest(glimpseRequestContextHandle, environment);
                             break;
                         case RequestHandlingMode.ResourceRequest:
-                            await ExecuteResourceRequest(glimpseRequestContextHandle, request.Query);
+                            ExecuteResourceRequest(glimpseRequestContextHandle, request.Query);
                             break;
                         default:
                             await innerNext(environment);
@@ -57,11 +56,11 @@ namespace Glimpse.Owin.Middleware
             }
         }
 
-        private static async Task ExecuteResourceRequest(GlimpseRequestContextHandle glimpseRequestContextHandle, IReadableStringCollection queryString)
+        private static void ExecuteResourceRequest(GlimpseRequestContextHandle glimpseRequestContextHandle, IReadableStringCollection queryString)
         {
             GlimpseRuntime.Instance.ExecuteResource(
-                glimpseRequestContextHandle, 
-                queryString[UriTemplateResourceEndpointConfiguration.DefaultResourceNameKey], 
+                glimpseRequestContextHandle,
+                queryString[UriTemplateResourceEndpointConfiguration.DefaultResourceNameKey],
                 new ResourceParameters(queryString.ToDictionary(qs => qs.Key, qs => qs.Value.First())));
         }
 
