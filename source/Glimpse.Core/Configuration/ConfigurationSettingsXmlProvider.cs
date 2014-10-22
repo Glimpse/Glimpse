@@ -11,16 +11,16 @@ namespace Glimpse.Core.Configuration
     /// </summary>
     internal class ConfigurationSettingsXmlProvider : IConfigurationSettingsProvider
     {
-        private XmlDocument ConfigurationDocument { get; set; }
+        private XmlElement ConfigurationElement { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConfigurationSettingsXmlProvider" /> class.
         /// </summary>
-        /// <param name="configurationDocument">The configuration document</param>
-        public ConfigurationSettingsXmlProvider(XmlDocument configurationDocument)
+        /// <param name="configurationElement">The configuration document</param>
+        public ConfigurationSettingsXmlProvider(XmlElement configurationElement)
         {
-            Guard.ArgumentNotNull(configurationDocument, "configurationDocument");
-            ConfigurationDocument = configurationDocument;
+            Guard.ArgumentNotNull(configurationElement, "configurationElement");
+            ConfigurationElement = configurationElement;
         }
 
         /// <summary>
@@ -39,14 +39,14 @@ namespace Glimpse.Core.Configuration
             Guard.ArgumentNotNull(persistenceStore, "persistenceStore");
             Guard.ArgumentNotNull(currentGlimpseRequestIdTracker, "currentGlimpseRequestIdTracker");
 
-            var collectionSettingsFactory = new CollectionSettingsFactory(ConfigurationDocument.GetAttributeValue("discoveryLocation", false, string.Empty));
+            var collectionSettingsFactory = new CollectionSettingsFactory(ConfigurationElement.GetAttributeValue("discoveryLocation", false, string.Empty));
 
             return new ConfigurationSettings(
                resourceEndpointConfiguration,
                persistenceStore,
                currentGlimpseRequestIdTracker,
-               ConfigurationDocument.GetAttributeValueAsEnum("defaultRuntimePolicy", false, RuntimePolicy.On),
-               ConfigurationDocument.GetAttributeValue("endpointBaseUri", false, "~/Glimpse.axd"),
+               ConfigurationElement.GetAttributeValueAsEnum("defaultRuntimePolicy", false, RuntimePolicy.On),
+               ConfigurationElement.GetAttributeValue("endpointBaseUri", false, "~/Glimpse.axd"),
                CreateLoggingSettings(),
                collectionSettingsFactory.Create(GetXmlElementOrDefault("clientScripts")),
                collectionSettingsFactory.Create(GetXmlElementOrDefault("inspectors")),
@@ -75,7 +75,7 @@ namespace Glimpse.Core.Configuration
         {
             try
             {
-                return ConfigurationDocument.GetElementsByTagName(elementName).OfType<XmlElement>().SingleOrDefault();
+                return ConfigurationElement.GetElementsByTagName(elementName).OfType<XmlElement>().SingleOrDefault();
             }
             catch (Exception)
             {

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Configuration;
-using System.Diagnostics;
 using System.IO;
 using System.Xml;
 using Glimpse.Core.Framework;
@@ -76,7 +75,7 @@ namespace Glimpse.Core.Configuration
             }
 
             // we'll use the built-in xml provider
-            return new ConfigurationSettingsXmlProvider(configurationDocument);
+            return new ConfigurationSettingsXmlProvider(configurationDocument.DocumentElement);
         }
     }
 }
