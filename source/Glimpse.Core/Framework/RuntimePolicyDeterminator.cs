@@ -2,9 +2,6 @@
 using System.Linq;
 using Glimpse.Core.Configuration;
 using Glimpse.Core.Extensibility;
-#if NET35
-using Glimpse.Core.Backport;
-#endif
 
 namespace Glimpse.Core.Framework
 {

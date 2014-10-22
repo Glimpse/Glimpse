@@ -14,15 +14,15 @@ using Glimpse.Core.Extensibility;
 namespace Glimpse.AspNet.Tab
 {
     public class Environment : AspNetTab, IDocumentation, IKey, ILayoutControl
-    { 
-        private readonly IEnumerable<string> systemNamspaces = new List<string> { "System", "Microsoft" }; 
+    {
+        private readonly IEnumerable<string> systemNamspaces = new List<string> { "System", "Microsoft" };
 
         public override string Name
         {
             get { return "Environment"; }
         }
 
-        public string Key 
+        public string Key
         {
             get { return "glimpse_environment"; }
         }
@@ -97,21 +97,20 @@ namespace Glimpse.AspNet.Tab
 
         private EnvironmentMachineModel BuildMachineDetails()
         {
-            var is64BitOperatingSystem = Is64BitOperatingSystem();
             var name = string.Format("{0} ({1} processors)", System.Environment.MachineName, System.Environment.ProcessorCount);
-            var operatingSystem = string.Format("{0} ({1} bit)", System.Environment.OSVersion.VersionString, is64BitOperatingSystem == null ? "?" : is64BitOperatingSystem.Value ? "64" : "32");  
+            var operatingSystem = string.Format("{0} ({1} bit)", System.Environment.OSVersion.VersionString, System.Environment.Is64BitOperatingSystem ? "64" : "32");
             var startTime = DateTime.Now.AddMilliseconds(System.Environment.TickCount * -1);
 
             return new EnvironmentMachineModel { Name = name, OperatingSystem = operatingSystem, StartTime = startTime };
         }
-        
+
         private EnvironmentTimeZoneModel BuildTimeZoneDetails()
-        { 
+        {
             var timeZoneInfo = TimeZoneInfo.Local;
 
             var name = timeZoneInfo.DaylightName;
             var utcOffset = timeZoneInfo.BaseUtcOffset.Hours;
-            var utcOffsetWithDls = timeZoneInfo.BaseUtcOffset.Hours; 
+            var utcOffsetWithDls = timeZoneInfo.BaseUtcOffset.Hours;
             var isDaylightSavingTime = false;
             if (timeZoneInfo.IsDaylightSavingTime(DateTime.Now))
             {
@@ -153,18 +152,18 @@ namespace Glimpse.AspNet.Tab
             var appAssemblies = new List<EnvironmentAssemblyModel>();
 
             foreach (var assembly in allAssemblies)
-            { 
+            {
                 var assemblyName = assembly.GetName();
                 var name = assemblyName.Name;
                 var version = assemblyName.Version.ToString();
                 var versionInfo = GetVersionNumber(assembly);
-                var culture = string.IsNullOrEmpty(assemblyName.CultureInfo.Name) ? "neutral" : assemblyName.CultureInfo.Name; 
+                var culture = string.IsNullOrEmpty(assemblyName.CultureInfo.Name) ? "neutral" : assemblyName.CultureInfo.Name;
                 var fromGac = assembly.GlobalAssemblyCache;
-                var fullTrust = IsFullyTrusted(assembly); 
+                var fullTrust = assembly.IsFullyTrusted;
 
                 var result = new EnvironmentAssemblyModel { Name = name, Version = version, VersionInfo = versionInfo, Culture = culture, FromGac = fromGac, FullTrust = fullTrust };
 
-                var isSystem = systemNamspaces.Any(systemNamspace => assembly.FullName.StartsWith(systemNamspace)); 
+                var isSystem = systemNamspaces.Any(systemNamspace => assembly.FullName.StartsWith(systemNamspace));
                 if (isSystem)
                 {
                     sysAssemblies.Add(result);
@@ -172,7 +171,7 @@ namespace Glimpse.AspNet.Tab
                 else
                 {
                     appAssemblies.Add(result);
-                } 
+                }
             }
 
             if (appAssemblies.Count > 0)
@@ -206,26 +205,8 @@ namespace Glimpse.AspNet.Tab
             return AspNetHostingPermissionLevel.None;
         }
 
-        private bool? Is64BitOperatingSystem()
-        {
-#if NET35
-            return null;      
-#else
-            return System.Environment.Is64BitOperatingSystem;
-#endif
-        }
-
-        private bool? IsFullyTrusted(Assembly assembly)
-        {
-#if NET35
-            return null;      
-#else
-            return assembly.IsFullyTrusted;
-#endif
-        }
-
         private string GetVersionNumber(Assembly assembly)
-        { 
+        {
             var infoVersion = assembly.GetCustomAttributes(typeof(AssemblyInformationalVersionAttribute), false)
                                             .Cast<AssemblyInformationalVersionAttribute>()
                                             .SingleOrDefault();

@@ -5,9 +5,6 @@ using Glimpse.Core.Configuration;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Message;
 using Glimpse.Core.ResourceResult;
-#if NET35
-using Glimpse.Core.Backport;
-#endif
 
 namespace Glimpse.Core.Framework
 {
