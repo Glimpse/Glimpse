@@ -175,7 +175,6 @@
     <Compile Include="Resource\LogosResource.cs" />
     <Compile Include="SerializationConverter\EnumerableOfITimelineMessageConverter.cs" />
     <Compile Include="Setting\Initializer.cs" />
-    <Compile Include="Support\Compatability.cs" />
     <Compile Include="Support\NuGetPackageDiscoverer.cs" />
     <Compile Include="Support\NuGetPackageDiscoveryResult.cs" />
     <Compile Include="Support\NuGetPackage.cs" />

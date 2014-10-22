@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Glimpse.Core.Support;
 
 namespace Glimpse.Core.Framework
 {
@@ -43,11 +42,11 @@ namespace Glimpse.Core.Framework
             UserAgent = requestMetadata.GetHttpHeader(Constants.UserAgentHeaderName);
             Metadata = instanceMetadata;
 
-            Guid parentRequestId; 
-            if (RequestIsAjax && Compatability.TryParseGuid(requestMetadata.GetHttpHeader(Constants.HttpRequestHeader), out parentRequestId))
+            Guid parentRequestId;
+            if (RequestIsAjax && Guid.TryParse(requestMetadata.GetHttpHeader(Constants.HttpRequestHeader), out parentRequestId))
             {
                 ParentRequestId = parentRequestId;
-            } 
+            }
         }
 
         /// <summary>

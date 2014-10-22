@@ -4,7 +4,6 @@ using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
 using Glimpse.Core.Framework;
 using Glimpse.Core.ResourceResult;
-using Glimpse.Core.Support;
 
 namespace Glimpse.Core.Resource
 {
@@ -71,11 +70,11 @@ namespace Glimpse.Core.Resource
             }
 
             Guid requestId;
-            var request = context.Parameters.GetValueOrDefault(ResourceParameter.RequestId.Name); 
-            if (!Compatability.TryParseGuid(request, out requestId))
+            var request = context.Parameters.GetValueOrDefault(ResourceParameter.RequestId.Name);
+            if (!Guid.TryParse(request, out requestId))
             {
                 return new StatusCodeResourceResult(404, string.Format("Could not parse RequestId '{0} as GUID.'", request));
-            } 
+            }
 
             var data = context.PersistenceStore.GetByRequestId(requestId); 
             if (data == null)
