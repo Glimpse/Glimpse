@@ -33,7 +33,7 @@ Glimpse wouldn't be what it is today without the love and support of some awesom
 
 If you would like to get involved, there are plenty of things that you can do. There are issues that are good for first-timers ringfenced and tagged Jump In in GitHub. If you'd rather start off on something more self-contained, why not write an extension?
 
- - **Issues** - Glimpse maintains several issues that are good for first-timers [tagged as Jump In on GitHub](https://github.com/Glimpse/Glimpse/issues?labels=Jump+In&milestone=&page=1&sort=updated&state=open). If one peaks your interest, feel free to work on it and let us know if you need any help doing so.
+ - **Issues** - Glimpse maintains several issues that are good for first-timers [tagged as Jump In on GitHub](https://github.com/Glimpse/Glimpse/issues?labels=Jump+In&milestone=&page=1&sort=updated&state=open). If one piques your interest, feel free to work on it and let us know if you need any help doing so.
     - [Learn more about how "Jump In" issues work](http://nikcodes.com/2013/05/10/new-contributor-jump-in/)
  - **New Features** - For those looking to get more deeply involved, reach out to find out about our current efforts and how you can help.
     - [Learn more about contributing to Glimpse core](http://getglipse.com/Docs/Contributing)
