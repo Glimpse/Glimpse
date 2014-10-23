@@ -33,6 +33,10 @@ task clean {
     Delete-Directory "$source_dir\Glimpse.Core.Net40\bin"
     Delete-Directory "$source_dir\Glimpse.Core.Net40\obj"
     
+    "   Glimpse.Owin"
+    Delete-Directory "$source_dir\Glimpse.Owin\bin"
+    Delete-Directory "$source_dir\Glimpse.Owin\obj"
+    
     "   Glimpse.AspNet"
     Delete-Directory "$source_dir\Glimpse.AspNet\bin"
     Delete-Directory "$source_dir\Glimpse.AspNet\obj"
@@ -153,6 +157,9 @@ task merge -depends test {
     
     "   Glimpse.Core.Net40"
     exec { & .\ilmerge.exe /targetplatform:"v4,$framework_dir" /log /out:"$source_dir\Glimpse.Core.Net45\nuspec\lib\net40\Glimpse.Core.dll" /internalize:$base_dir\ILMergeInternalize.txt "$source_dir\Glimpse.Core.Net40\bin\Release\Glimpse.Core.dll" "$source_dir\Glimpse.Core.Net40\bin\Release\Newtonsoft.Json.dll" "$source_dir\Glimpse.Core.Net40\bin\Release\Castle.Core.dll" "$source_dir\Glimpse.Core.Net40\bin\Release\NLog.dll" "$source_dir\Glimpse.Core.Net40\bin\Release\AntiXssLibrary.dll" "$source_dir\Glimpse.Core.Net40\bin\Release\Tavis.UriTemplates.dll" "$source_dir\Glimpse.Core.Net45\bin\Release\Antlr4.StringTemplate.dll"}
+
+    "   Glimpse.Owin"
+    copy $source_dir\Glimpse.Owin\bin\Release\Glimpse.Owin.* $source_dir\Glimpse.Owin\nuspec\lib\net40\
     
     "   Glimpse.AspNet.Net45"
     copy $source_dir\Glimpse.AspNet.Net45\bin\Release\Glimpse.AspNet.* $source_dir\Glimpse.AspNet.Net45\nuspec\lib\net45\
@@ -206,6 +213,10 @@ task pack -depends merge {
     $version = Get-AssemblyInformationalVersion $source_dir\Glimpse.Core\Properties\AssemblyInfo.cs | Update-AssemblyInformationalVersion
     exec { & .\nuget.exe pack $source_dir\Glimpse.Core.Net45\NuSpec\Glimpse.nuspec -OutputDirectory $build_dir\local -Symbols -Version $version }
     
+    "   Glimpse.Owin.nuspec"
+    $version = Get-AssemblyInformationalVersion $source_dir\Glimpse.Owin\Properties\AssemblyInfo.cs | Update-AssemblyInformationalVersion
+    exec { & .\nuget.exe pack $source_dir\Glimpse.Owin\NuSpec\Glimpse.Owin.nuspec -OutputDirectory $build_dir\local -Symbols -Version $version }
+    
     "   Glimpse.AspNet.nuspec"
     $version = Get-AssemblyInformationalVersion $source_dir\Glimpse.AspNet\Properties\AssemblyInfo.cs | Update-AssemblyInformationalVersion
     exec { & .\nuget.exe pack $source_dir\Glimpse.AspNet.Net45\NuSpec\Glimpse.AspNet.nuspec -OutputDirectory $build_dir\local -Symbols -Version $version }
@@ -245,6 +256,7 @@ task pack -depends merge {
     "   Glimpse.zip"
     New-Item $build_dir\local\zip\Core\net45 -Type directory -Force > $null
     New-Item $build_dir\local\zip\Core\net40 -Type directory -Force > $null
+    New-Item $build_dir\local\zip\Owin\net40 -Type directory -Force > $null
     New-Item $build_dir\local\zip\AspNet\net45 -Type directory -Force > $null
     New-Item $build_dir\local\zip\AspNet\net40 -Type directory -Force > $null
     New-Item $build_dir\local\zip\MVC3\net40 -Type directory -Force > $null
@@ -264,6 +276,8 @@ task pack -depends merge {
     
     copy $source_dir\Glimpse.Core.Net45\nuspec\lib\net45\Glimpse.Core.* $build_dir\local\zip\Core\net45    
     copy $source_dir\Glimpse.Core.Net45\nuspec\lib\net40\Glimpse.Core.* $build_dir\local\zip\Core\net40
+
+    copy $source_dir\Glimpse.Owin\nuspec\lib\net40\Glimpse.Owin.* $build_dir\local\zip\Owin\net40
     
     copy $source_dir\Glimpse.AspNet.Net45\nuspec\lib\net45\Glimpse.AspNet.* $build_dir\local\zip\AspNet\net45
     copy $source_dir\Glimpse.AspNet.Net45\nuspec\lib\net40\Glimpse.AspNet.* $build_dir\local\zip\AspNet\net40
