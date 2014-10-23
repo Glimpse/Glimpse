@@ -50,10 +50,177 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Glimpse.Ado\**\*.cs" Exclude="..\Glimpse.Ado\Properties\AssemblyInfo.cs">
-      <Link />
+    <Compile Include="..\Glimpse.Ado\AlternateType\GlimpseDbCommand.cs">
+      <Link>
+      </Link>
+      <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="..\Glimpse.Ado\AlternateType\GlimpseDbConnection.cs">
+      <Link>
+      </Link>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="..\Glimpse.Ado\AlternateType\GlimpseDbDataAdapter.cs">
+      <Link>
+      </Link>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="..\Glimpse.Ado\AlternateType\GlimpseDbDataReader.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Ado\AlternateType\GlimpseDbProviderFactory.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Ado\AlternateType\GlimpseDbTransaction.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Ado\AlternateType\Support.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Ado\Display\SqlDisplay.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Ado\Extensibility\ICommandParameterParser.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Ado\Initialize.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Ado\Inspector\AdoInspector.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Ado\Inspector\Core\AdoExecutionBlock.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Ado\Inspector\Core\DbProviderFactoriesExecutionTask.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Ado\Message\AdoCommandMessage.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Ado\Message\AdoMessage.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Ado\Message\AdoTransactionMessage.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Ado\Message\CommandDurationAndRowCountMessage.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Ado\Message\CommandErrorMessage.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Ado\Message\CommandExecutedMessage.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Ado\Message\CommandExecutedParamater.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Ado\Message\CommandRowCountMessage.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Ado\Message\ConnectionClosedMessage.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Ado\Message\ConnectionStartedMessage.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Ado\Message\DtcTransactionCompletedMessage.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Ado\Message\DtcTransactionEnlistedMessage.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Ado\Message\MvcTimelineCategory.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Ado\Message\TransactionBeganMessage.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Ado\Message\TransactionCommitMessage.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Ado\Message\TransactionRollbackMessage.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Ado\Model\CommandMetadata.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Ado\Model\CommandParameterMetadata.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Ado\Model\ConnectionMetadata.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Ado\Model\MessageAggregator.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Ado\Model\QueryMetadata.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Ado\Model\TransactionMetadata.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Ado\Properties\AssemblyInfo.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Ado\Resources.Designer.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Ado\SqlStatistics.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Ado\SqlStatisticsCalculator.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Ado\Tab\Sql.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Ado\Tab\Support\CommandParameterParser.cs">
+      <Link>
+      </Link>
+    </Compile>
+    <Compile Include="..\Glimpse.Ado\Tab\Support\CommandSanitizer.cs">
+      <Link>
+      </Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="..\Glimpse.Ado\Resources.resx" />

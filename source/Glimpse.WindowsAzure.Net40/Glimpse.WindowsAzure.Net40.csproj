@@ -46,10 +46,9 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Glimpse.WindowsAzure\**\*.cs" Exclude="..\Glimpse.WindowsAzure\Properties\AssemblyInfo.cs">
+    <Compile Include="..\Glimpse.WindowsAzure\**\*.cs">
       <Link />
     </Compile>
-    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="NuSpec\Glimpse.WindowsAzure.nuspec" />

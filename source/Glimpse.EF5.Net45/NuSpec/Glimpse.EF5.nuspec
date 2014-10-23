@@ -14,12 +14,11 @@
         <description>Glimpse is a web debugging and diagnostics tool used to gain a better understanding of whats happening inside of your web application. Provides Glimpse tabs for EF5.</description>
         <summary>Glimpse tabs for Entity Framework 5.</summary>
         <releaseNotes>
-Bantamweight release for EF:
- - Fixed bug when using DbGeography type in some edge cases
+Initial v2 Alpha Release
         </releaseNotes>
         <tags>ASP.NET Web WebForms Glimpse EF EntityFramework SQL performance profiling timing diagnostics</tags>
         <dependencies> 
-          <dependency id="Glimpse.Ado" version="1.7.0" />
+          <dependency id="Glimpse.Ado" version="2.0.0-alpha0" />
         </dependencies>
     </metadata>
     <files>

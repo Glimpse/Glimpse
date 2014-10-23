@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using Glimpse.Core.Extensibility;
 
 [assembly: ComVisible(false)]
-[assembly: Guid("3b7a68a9-2d81-49c9-9838-c72698176b91")]
+[assembly: Guid("3b7a68a9-2d81-49c9-9838-c72698176b81")]
 
 [assembly: AssemblyTitle("Glimpse Windows Azure Caching Assembly")]
 [assembly: AssemblyDescription("Windows Azure Caching interfaces and types for Glimpse.")]// When you right-click the assembly file in Windows Explorer, this attribute appears as the Comments value on the Version tab of the file properties dialog box.

@@ -55,10 +55,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Glimpse.WindowsAzure.ServiceBus\**\*.cs" Exclude="..\Glimpse.WindowsAzure.ServiceBus\Properties\AssemblyInfo.cs">
+    <Compile Include="..\Glimpse.WindowsAzure.ServiceBus\**\*.cs">
       <Link />
     </Compile>
-    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
