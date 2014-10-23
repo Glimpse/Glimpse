@@ -87,11 +87,7 @@ namespace Glimpse.Core.Policy
                     XmlAttribute runtimePolicyAttribute = itemNode.Attributes["runtimePolicy"];
                     if (runtimePolicyAttribute != null)
                     {
-#if NET35
-                        if (!Glimpse.Core.Backport.Net35Backport.TryParseEnum(runtimePolicyAttribute.Value, true, out runtimePolicy))
-#else
                         if (!Enum.TryParse(runtimePolicyAttribute.Value, out runtimePolicy))
-#endif
                         {
                             throw new GlimpseException("'" + runtimePolicyAttribute.Value + "' is not a valid RuntimePolicy value");
                         }

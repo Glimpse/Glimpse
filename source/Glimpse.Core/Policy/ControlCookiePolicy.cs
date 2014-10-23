@@ -37,20 +37,13 @@ namespace Glimpse.Core.Policy
             {
                 return RuntimePolicy.Off;
             }
-                
+
             RuntimePolicy result;
 
-#if NET35
-            if (!global::Glimpse.Core.Backport.Net35Backport.TryParseEnum(cookie, true, out result))
-            {
-                return RuntimePolicy.Off;
-            }
-#else
             if (!Enum.TryParse(cookie, true, out result))
             {
                 return RuntimePolicy.Off;
             }
-#endif
 
             return result;
         }

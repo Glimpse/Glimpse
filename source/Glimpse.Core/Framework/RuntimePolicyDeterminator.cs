@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Glimpse.Core.Extensibility;
-#if NET35
-using Glimpse.Core.Backport;
-#endif
 
 namespace Glimpse.Core.Framework
 {
