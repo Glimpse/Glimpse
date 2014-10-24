@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Glimpse.Owin.Middleware;
 using Owin;
 
-namespace Glimpse.Owin.Katana
+namespace Glimpse.Owin
 {
     public class AppBuilder : IAppBuilder
     {
@@ -16,7 +16,7 @@ namespace Glimpse.Owin.Katana
             innerApp = app;
             manager = MiddlewareManager.Instance;
             builderId = Guid.NewGuid();
-            innerApp.Use<GlimpseMiddleware>(Properties); // This is the earliest we can add middleware
+            innerApp.Use<RuntimeMiddleware>(Properties); // This is the earliest we can add middleware
         }
 
         public IDictionary<string, object> Properties
@@ -29,7 +29,7 @@ namespace Glimpse.Owin.Katana
             var middlewareType = middleware is Type ? middleware as Type : middleware.GetType();
             manager.Register(builderId, middlewareType);
 
-            innerApp.Use<HeadMiddleware>(middlewareType, builderId);
+            innerApp.Use<MiddlewareWrapper>(middlewareType, builderId);
             innerApp.Use(middleware, args);
             
             return this;

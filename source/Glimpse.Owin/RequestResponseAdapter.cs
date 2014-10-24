@@ -6,15 +6,15 @@ using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
 using Microsoft.Owin;
 
-namespace Glimpse.Owin.Middleware
+namespace Glimpse.Owin
 {
-    public class OwinRequestResponseAdapter : IRequestResponseAdapter
+    public class RequestResponseAdapter : IRequestResponseAdapter
     {
         private readonly IDictionary<string, object> environment;
         private readonly OwinRequest request;
         private readonly OwinResponse response;
 
-        public OwinRequestResponseAdapter(IDictionary<string, object> environment)
+        public RequestResponseAdapter(IDictionary<string, object> environment)
         {
             this.environment = environment;
             this.request = new OwinRequest(environment); // Merge RequestMetadata and requestResponseAdapter together?

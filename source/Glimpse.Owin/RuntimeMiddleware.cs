@@ -8,17 +8,15 @@ using Microsoft.Owin;
 
 namespace Glimpse.Owin.Middleware
 {
-    public class GlimpseMiddleware
+    public class RuntimeMiddleware
     {
         private readonly Func<IDictionary<string, object>, Task> innerNext;
         private readonly IConfiguration config;
 
-        public GlimpseMiddleware(Func<IDictionary<string, object>, Task> next, IDictionary<string, object> serverStore)
+        public RuntimeMiddleware(Func<IDictionary<string, object>, Task> next, IDictionary<string, object> serverStore)
         {
             innerNext = next;
-            config = new Configuration(
-                    new UriTemplateResourceEndpointConfiguration(),
-                    new InMemoryPersistenceStore(new DictionaryDataStoreAdapter((Dictionary<string, object>)serverStore)));
+            config = new Configuration(new UriTemplateResourceEndpointConfiguration(), new InMemoryPersistenceStore(new DictionaryDataStoreAdapter((Dictionary<string, object>)serverStore)));
         }
 
         public async Task Invoke(IDictionary<string, object> environment)
@@ -32,7 +30,7 @@ namespace Glimpse.Owin.Middleware
             {
                 var request = new OwinRequest(environment);
                 var response = new OwinResponse(environment);
-                var requestResponseAdapter = new OwinRequestResponseAdapter(environment);
+                var requestResponseAdapter = new RequestResponseAdapter(environment);
 
                 using (var glimpseRequestContextHandle = GlimpseRuntime.Instance.BeginRequest(requestResponseAdapter))
                 {
@@ -58,10 +56,7 @@ namespace Glimpse.Owin.Middleware
 
         private static async Task ExecuteResourceRequest(GlimpseRequestContextHandle glimpseRequestContextHandle, IReadableStringCollection queryString)
         {
-            GlimpseRuntime.Instance.ExecuteResource(
-                glimpseRequestContextHandle, 
-                queryString[UriTemplateResourceEndpointConfiguration.DefaultResourceNameKey], 
-                new ResourceParameters(queryString.ToDictionary(qs => qs.Key, qs => qs.Value.First())));
+            GlimpseRuntime.Instance.ExecuteResource(glimpseRequestContextHandle, queryString[UriTemplateResourceEndpointConfiguration.DefaultResourceNameKey], new ResourceParameters(queryString.ToDictionary(qs => qs.Key, qs => qs.Value.First())));
         }
 
         private async Task ExecuteRegularRequest(GlimpseRequestContextHandle glimpseRequestContextHandle, IDictionary<string, object> environment)
