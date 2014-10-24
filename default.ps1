@@ -159,7 +159,7 @@ task merge -depends test {
     exec { & .\ilmerge.exe /targetplatform:"v4,$framework_dir" /log /out:"$source_dir\Glimpse.Core.Net45\nuspec\lib\net40\Glimpse.Core.dll" /internalize:$base_dir\ILMergeInternalize.txt "$source_dir\Glimpse.Core.Net40\bin\Release\Glimpse.Core.dll" "$source_dir\Glimpse.Core.Net40\bin\Release\Newtonsoft.Json.dll" "$source_dir\Glimpse.Core.Net40\bin\Release\Castle.Core.dll" "$source_dir\Glimpse.Core.Net40\bin\Release\NLog.dll" "$source_dir\Glimpse.Core.Net40\bin\Release\AntiXssLibrary.dll" "$source_dir\Glimpse.Core.Net40\bin\Release\Tavis.UriTemplates.dll" "$source_dir\Glimpse.Core.Net45\bin\Release\Antlr4.StringTemplate.dll"}
 
     "   Glimpse.Owin"
-    copy $source_dir\Glimpse.Owin\bin\Release\Glimpse.Owin.* $source_dir\Glimpse.Owin\nuspec\lib\net40\
+    exec { & .\ilmerge.exe /targetplatform:"v4" /out:"$source_dir\Glimpse.Owin\nuspec\lib\net40\Glimpse.Owin.dll" /internalize "$source_dir\Glimpse.Owin\bin\Release\Glimpse.Owin.dll" "$source_dir\Glimpse.Owin\bin\Release\Microsoft.Owin.dll" }
     
     "   Glimpse.AspNet.Net45"
     copy $source_dir\Glimpse.AspNet.Net45\bin\Release\Glimpse.AspNet.* $source_dir\Glimpse.AspNet.Net45\nuspec\lib\net45\
