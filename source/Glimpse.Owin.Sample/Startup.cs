@@ -28,6 +28,17 @@ namespace Glimpse.Owin.Sample
                 });
             });
 
+            app.Map("/issue856", innerMap =>
+            {
+                innerMap = innerMap.WithGlimpse();
+                innerMap.Run(async context =>
+                {
+                    context.Response.ContentType = "text/html";
+
+                    await context.Response.WriteAsync("<html><body>Hello world</body></html>");
+                });
+            });
+
             app = app.WithGlimpse();
             app.UseWelcomePage();
 

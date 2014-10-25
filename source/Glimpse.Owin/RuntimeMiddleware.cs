@@ -29,7 +29,6 @@ namespace Glimpse.Owin.Middleware
             if (GlimpseRuntime.IsAvailable)
             {
                 var request = new OwinRequest(environment);
-                var response = new OwinResponse(environment);
                 var requestResponseAdapter = new RequestResponseAdapter(environment);
 
                 using (var glimpseRequestContextHandle = GlimpseRuntime.Instance.BeginRequest(requestResponseAdapter))
@@ -37,7 +36,7 @@ namespace Glimpse.Owin.Middleware
                     switch (glimpseRequestContextHandle.RequestHandlingMode)
                     {
                         case RequestHandlingMode.RegularRequest:
-                            await ExecuteRegularRequest(glimpseRequestContextHandle, environment);
+                            await ExecuteRegularRequest(glimpseRequestContextHandle, environment, new OwinResponse(environment));
                             break;
                         case RequestHandlingMode.ResourceRequest:
                             await ExecuteResourceRequest(glimpseRequestContextHandle, request.Query);
@@ -59,11 +58,12 @@ namespace Glimpse.Owin.Middleware
             GlimpseRuntime.Instance.ExecuteResource(glimpseRequestContextHandle, queryString[UriTemplateResourceEndpointConfiguration.DefaultResourceNameKey], new ResourceParameters(queryString.ToDictionary(qs => qs.Key, qs => qs.Value.First())));
         }
 
-        private async Task ExecuteRegularRequest(GlimpseRequestContextHandle glimpseRequestContextHandle, IDictionary<string, object> environment)
+        private async Task ExecuteRegularRequest(GlimpseRequestContextHandle glimpseRequestContextHandle, IDictionary<string, object> environment, OwinResponse owinResponse)
         {
             try
             {
                 await innerNext(environment);
+                await owinResponse.Body.FlushAsync();
             }
             finally
             {

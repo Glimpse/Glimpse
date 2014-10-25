@@ -58,6 +58,8 @@ namespace Glimpse.Core.Framework
 
         public override void Close()
         {
+            OnFlush();
+
             if (Options.InjectionRequired && !InjectionDone)
             {
                 Options.NotifyInjectionFailure(string.Format(
@@ -157,6 +159,11 @@ namespace Glimpse.Core.Framework
         }
 
         public override void Flush()
+        {
+            OnFlush();
+        }
+
+        private void OnFlush()
         {
             if (!Options.InjectionRequired)
             {
