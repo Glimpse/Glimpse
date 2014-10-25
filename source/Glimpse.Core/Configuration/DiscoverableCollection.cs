@@ -12,6 +12,7 @@ namespace Glimpse.Core.Configuration
     /// </summary>
     /// <typeparam name="TItem">The type of the items in the collection.</typeparam>
     public abstract class DiscoverableCollection<TItem> : ICollection<TItem>
+        where TItem : class
     {
         /// <summary>
         /// Occurs when a change has been made to the collection. The change can be an addition or a removal
@@ -40,7 +41,6 @@ namespace Glimpse.Core.Configuration
 
             Items = new List<TItem>();
 
-#warning maybe extract the discover part outside of the collection, there is no need for the collection to do that, it only needs to keep track of the elements and initialize it with their custom configuration
             if (configuration.AutoDiscover)
             {
                 var resolvedInstances = new ReflectionBasedTypeDiscoverer(logger).ResolveAndCreateInstancesOfType<TItem>(
@@ -51,41 +51,35 @@ namespace Glimpse.Core.Configuration
                     this.AddCore(resolvedInstance);
                 }
 
-                AssignInitialCustomConfigurations();
+                AssignCustomConfigurations();
             }
 
             Changed += onChange;
         }
 
-        private void AssignInitialCustomConfigurations()
+        private void AssignCustomConfigurations(string customConfigurationKeyFilter = null)
         {
             // get the list of configurators
             var configurators = Items.OfType<IConfigurable>()
                 .Select(configurable => configurable.Configurator)
+                .Where(configurator => customConfigurationKeyFilter == null || string.Equals(configurator.CustomConfigurationKey, customConfigurationKeyFilter, StringComparison.InvariantCulture))
                 .GroupBy(configurator => configurator.CustomConfigurationKey);
 
             // have each configurator, configure its "configurable"
             foreach (var groupedConfigurators in configurators)
             {
-                if (groupedConfigurators.Count() != 1)
+                // a default custom configuration (one without explicitly having specified a configurator type) can be used but only when there is only
+                // one configurator available for the given key. This is not allowed when there are multiple configurators using the same custom configuration 
+                // key inside the same discoverable collection.
+                var defaultCustomConfigurationAllowed = groupedConfigurators.Count() == 1;
+
+                foreach (var configurator in groupedConfigurators)
                 {
-                    // there are multiple configurators using the same custom configuration key inside the same discoverable collection
-                    // this means that any existing custom configuration content must be resolved by using the custom configuration key
-                    // and the type for which the configurator is
-                    foreach (var configurator in groupedConfigurators)
-                    {
-                        string customConfiguration = Configuration.GetCustomConfiguration(configurator.CustomConfigurationKey, configurator.GetType());
-                        if (!string.IsNullOrEmpty(customConfiguration))
-                        {
-                            configurator.ProcessCustomConfiguration(customConfiguration);
-                        }
-                    }
-                }
-                else
-                {
-                    var configurator = groupedConfigurators.Single();
-                    string customConfiguration = Configuration.GetCustomConfiguration(configurator.CustomConfigurationKey);
-                    if (!string.IsNullOrEmpty(customConfiguration))
+                    // it is important to get the custom configuration first, before checking whether it will be processed as it is always
+                    // possible that getting the custom configuration might result in an exception due to a misconfiguration.
+                    string customConfiguration = Configuration.GetCustomConfiguration(configurator.CustomConfigurationKey, configurator.GetType(), defaultCustomConfigurationAllowed);
+
+                    if (!configurator.ProcessedCustomConfiguration && !string.IsNullOrEmpty(customConfiguration))
                     {
                         configurator.ProcessCustomConfiguration(customConfiguration);
                     }
@@ -105,8 +99,15 @@ namespace Glimpse.Core.Configuration
 
         private void AddCore(TItem item)
         {
-            // before adding the item, we'll initialize it with a custom configuration if requested
             Items.Add(item);
+            var itemAsConfigurable = item as IConfigurable;
+            if (itemAsConfigurable != null)
+            {
+                // once the item has been added, we'll assign the updated list of configurables with their corresponding custom configuration.
+                // By specifying the custom configuration key of the freshly added item's configurator, we limit the group of affected configurators.
+                AssignCustomConfigurations(itemAsConfigurable.Configurator.CustomConfigurationKey);
+            }
+
             Logger.Debug(Resources.DiscoverableCollectionAddItem, typeof(TItem).Name, item.GetType());
         }
 

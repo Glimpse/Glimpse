@@ -90,7 +90,6 @@
     <Compile Include="Configuration\CollectionSettingsFactory.cs" />
     <Compile Include="Configuration\CustomConfiguration.cs" />
     <Compile Include="Configuration\CollectionSettings.cs" />
-    <Compile Include="Configuration\DiscoverableCollectionElement.cs" />
     <Compile Include="Configuration\Section.cs" />
     <Compile Include="Configuration\LoggingElement.cs" />
     <Compile Include="Configuration\LoggingLevel.cs" />

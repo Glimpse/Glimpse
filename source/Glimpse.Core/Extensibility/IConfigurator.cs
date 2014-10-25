@@ -15,5 +15,7 @@ namespace Glimpse.Core.Framework
         /// </summary>
         /// <param name="customConfiguration">The custom configuration</param>
         void ProcessCustomConfiguration(string customConfiguration);
+
+        bool ProcessedCustomConfiguration { get; }
     }
 }

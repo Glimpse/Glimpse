@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Glimpse.Core.Framework;
 
@@ -9,7 +10,7 @@ namespace Glimpse.Core.Configuration
     /// </summary>
     public class CollectionSettings
     {
-        private CustomConfiguration[] CustomConfigurations { get; set; }
+        private Dictionary<string, CustomConfiguration[]> CustomConfigurationsByKey { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CollectionSettings" /> class
@@ -23,10 +24,71 @@ namespace Glimpse.Core.Configuration
             Guard.ArgumentNotNull(typesToIgnore, "typesToIgnore");
             Guard.ArgumentNotNull(customConfigurations, "customConfigurations");
 
+            ValidateAndInitializeCustomConfigurations(customConfigurations);
             TypesToIgnore = typesToIgnore;
-            CustomConfigurations = customConfigurations;
             AutoDiscover = autoDiscover;
             DiscoveryLocation = discoveryLocation;
+        }
+
+        private void ValidateAndInitializeCustomConfigurations(CustomConfiguration[] customConfigurations)
+        {
+            var customConfigurationsByKey = new Dictionary<string, CustomConfiguration[]>();
+
+            var groupedCustomConfigurationsByKey = customConfigurations.GroupBy(customConfiguration => customConfiguration.Key);
+            foreach (var groupedCustomConfigurationByKey in groupedCustomConfigurationsByKey)
+            {
+                var numberOfCustomConfigurationsForKey = groupedCustomConfigurationByKey.Count();
+                if (numberOfCustomConfigurationsForKey != 1)
+                {
+                    // if multiple custom configurations have been specified with the same key, then all of them must have specified
+                    // a unique corresponding configurator type for that key.
+                    if (groupedCustomConfigurationByKey.Any(customConfiguration => customConfiguration.ConfiguratorType == null))
+                    {
+                        throw new GlimpseException(string.Format(
+                            "Found {0} custom configurations for key '{1}' but not all of them defined their corresponding configurator type.",
+                            numberOfCustomConfigurationsForKey,
+                            groupedCustomConfigurationByKey.Key));
+                    }
+                    else
+                    {
+                        foreach (var groupedCustomConfigurationByKeyAndType in groupedCustomConfigurationByKey.GroupBy(customConfiguration => customConfiguration.ConfiguratorType))
+                        {
+                            var numberOfCustomerConfigurationsByKeyAndType = groupedCustomConfigurationByKeyAndType.Count();
+                            if (numberOfCustomerConfigurationsByKeyAndType != 1)
+                            {
+                                throw new GlimpseException(string.Format(
+                                    "Found {0} custom configurations for key '{1}' and type '{2}', please merge them.",
+                                    numberOfCustomerConfigurationsByKeyAndType,
+                                    groupedCustomConfigurationByKey.Key,
+                                    groupedCustomConfigurationByKeyAndType.Key));
+                            }
+                        }
+                    }
+                }
+
+                customConfigurationsByKey.Add(groupedCustomConfigurationByKey.Key, groupedCustomConfigurationByKey.ToArray());
+            }
+
+            // we will also check whether the same configurator type has been assigned to multiple custom configurations, as that wouldn't make sense either
+            var groupedCustomConfigurationsByType = customConfigurations
+                .Where(customConfiguration => customConfiguration.ConfiguratorType != null)
+                .GroupBy(customConfiguration => customConfiguration.ConfiguratorType);
+
+            foreach (var groupedCustomConfigurationByType in groupedCustomConfigurationsByType)
+            {
+                var numberOfCustomConfigurationsForType = groupedCustomConfigurationByType.Count();
+
+                if (numberOfCustomConfigurationsForType != 1)
+                {
+                    throw new GlimpseException(string.Format(
+                        "Found {0} custom configurations for type '{1}' which is not allowed. The following keys were involved : '{2}'.",
+                        numberOfCustomConfigurationsForType,
+                        groupedCustomConfigurationByType.Key,
+                        string.Join(", ", groupedCustomConfigurationByType.Select(customConfiguration => customConfiguration.Key))));
+                }
+            }
+
+            CustomConfigurationsByKey = customConfigurationsByKey;
         }
 
         /// <summary>
@@ -52,72 +114,39 @@ namespace Glimpse.Core.Configuration
         public Type[] TypesToIgnore { get; private set; }
 
         /// <summary>
-        /// Gets the custom configuration for the given configuration key
-        /// </summary>
-        /// <param name="configurationKey">The configuration key</param>
-        /// <returns>The corresponding custom configuration or <code>null</code> if none has been found</returns>
-        public string GetCustomConfiguration(string configurationKey)
-        {
-            return GetCustomConfiguration(configurationKey, null);
-        }
-
-        /// <summary>
         /// Gets the custom configuration for the given configuration key and type
         /// </summary>
         /// <param name="configurationKey">The configuration key</param>
-        /// <param name="configurationFor">The type for which the configuration should apply</param>
+        /// <param name="requestingConfigurator">The requesting configurator</param>
+        /// <param name="defaultCustomConfigurationAllowed">
+        /// Indicates whether or not the default custom configuration, if any, is allowed to be returned
+        /// when no exact key/configuratorType match was found.</param>
         /// <returns>The corresponding custom configuration or <code>null</code> if none has been found</returns>
-        public string GetCustomConfiguration(string configurationKey, Type configurationFor)
+        public string GetCustomConfiguration(string configurationKey, Type requestingConfigurator, bool defaultCustomConfigurationAllowed)
         {
-            var customConfigurationsElementsForKey = CustomConfigurations
-                .Where(customConfigurationElement => string.Equals(customConfigurationElement.Key, configurationKey, StringComparison.InvariantCultureIgnoreCase))
-                .ToList();
-
-            // return null if there is no configuration defined
-            if (customConfigurationsElementsForKey.Count == 0)
+            CustomConfiguration[] customConfigurationsForKey;
+            if (CustomConfigurationsByKey.TryGetValue(configurationKey, out customConfigurationsForKey))
             {
-                return null;
-            }
-
-            // return the value, but if the configurationFor has a value then the type must be specified explicitly in the configuration
-            if (customConfigurationsElementsForKey.Count == 1)
-            {
-                var customConfiguration = customConfigurationsElementsForKey[0];
-                if (configurationFor != null && customConfiguration.Type != configurationFor)
+                var customConfigurationForKeyAndType = customConfigurationsForKey.SingleOrDefault(customConfiguration => customConfiguration.ConfiguratorType == requestingConfigurator);
+                if (customConfigurationForKeyAndType != null)
+                {
+                    return customConfigurationForKeyAndType.ConfigurationContent;
+                }
+                else if (defaultCustomConfigurationAllowed)
+                {
+                    var defaultCustomConfiguration = customConfigurationsForKey.SingleOrDefault(customConfiguration => customConfiguration.ConfiguratorType == null);
+                    return defaultCustomConfiguration != null ? defaultCustomConfiguration.ConfigurationContent : null;
+                }
+                else
                 {
                     throw new GlimpseException(string.Format(
-                        "Found custom configuration with name '{0}' but it was defined for type '{1}' instead of '{2}'",
-                        configurationKey,
-                        customConfiguration.Type != null ? customConfiguration.Type.FullName : "untyped",
-                        configurationFor.FullName));
+                        "Found {0} custom configurations for key '{1}' but they were defined for other configurator types and a default (if available) was not allowed either.",
+                        customConfigurationsForKey.Length,
+                        configurationKey));
                 }
-
-                return customConfiguration.ConfigurationContent;
             }
 
-            // there are multiple elements with the same key, which is not a problem as long as they all have a type defined and the one we need is
-            // available as well
-            if (customConfigurationsElementsForKey.Any(customConfigurationElement => customConfigurationElement.Type == null))
-            {
-                throw new GlimpseException(string.Format(
-                    "Found {0} custom configurations for name '{1}' but not all of them have explicitly specified the type it is for.",
-                    customConfigurationsElementsForKey.Count,
-                    configurationKey));
-            }
-
-            // maybe they provided multiple elements for the same key and type which is bad as well, they should merge it
-            var numberOfElementsForKeyAndType = customConfigurationsElementsForKey.Count(customConfigurationElement => customConfigurationElement.Type == configurationFor);
-            if (numberOfElementsForKeyAndType != 1)
-            {
-                throw new GlimpseException(string.Format(
-                    "Found {0} custom configurations for name '{1}' and type '{2}', please merge them.",
-                    numberOfElementsForKeyAndType,
-                    configurationKey,
-                    configurationFor));
-            }
-
-            return customConfigurationsElementsForKey.Single(
-                customConfigurationElement => customConfigurationElement.Type == configurationFor).ConfigurationContent;
+            return null;
         }
     }
 }

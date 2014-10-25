@@ -62,15 +62,20 @@ namespace Glimpse.Core.Policy
                         }
                     }
                 }
+
+                ProcessedCustomConfiguration = true;
             }
             catch (Exception exception)
             {
+#warning this logging doesn't make sense as we are initializing the configuration hence fault will not be logged
                 if (GlimpseRuntime.IsAvailable)
                 {
                     GlimpseRuntime.Instance.Configuration.Logger.Error("Failed to process custom configuration by '" + this.GetType().FullName + "'", exception);
                 }
             }
         }
+
+        public bool ProcessedCustomConfiguration { get; private set; }
 
         /// <summary>
         /// Gets the configured items
