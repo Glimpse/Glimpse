@@ -29,7 +29,7 @@ namespace Glimpse.Owin
             var middlewareType = middleware is Type ? middleware as Type : middleware.GetType();
             manager.Register(builderId, middlewareType);
 
-            innerApp.Use<MiddlewareWrapper>(middlewareType, builderId);
+            innerApp.Use<WrapperMiddleware>(middlewareType, builderId);
             innerApp.Use(middleware, args);
             
             return this;

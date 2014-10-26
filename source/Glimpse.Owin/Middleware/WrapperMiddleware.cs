@@ -4,14 +4,14 @@ using System.Threading.Tasks;
 
 namespace Glimpse.Owin.Middleware
 {
-    public class MiddlewareWrapper
+    public class WrapperMiddleware
     {
         private readonly Func<IDictionary<string, object>, Task> next;
         private readonly MiddlewareManager manager;
         private readonly Type middlewareType;
         private readonly Guid builderId;
 
-        public MiddlewareWrapper(Func<IDictionary<string, object>, Task> next, Type middlewareType, Guid builderId)
+        public WrapperMiddleware(Func<IDictionary<string, object>, Task> next, Type middlewareType, Guid builderId)
         {
             this.next = next;
             this.manager = MiddlewareManager.Instance;
