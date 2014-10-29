@@ -17,9 +17,9 @@ using Glimpse.Core.Extensibility;
 
 // Version is in major.minor.build format to support http://semver.org/
 // Keep these three attributes in sync
-[assembly: AssemblyVersion("1.9.1")]
-[assembly: AssemblyFileVersion("1.9.1")]
-[assembly: AssemblyInformationalVersion("1.9.1")]
+[assembly: AssemblyVersion("1.9.2")]
+[assembly: AssemblyFileVersion("1.9.2")]
+[assembly: AssemblyInformationalVersion("1.9.2")]
 
 [assembly: CLSCompliant(true)]
 [assembly: InternalsVisibleTo("Glimpse.Test.AspNet")]

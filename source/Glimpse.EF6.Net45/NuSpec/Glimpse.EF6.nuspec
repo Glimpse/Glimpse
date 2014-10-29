@@ -15,7 +15,7 @@
         <summary>Glimpse tabs for Entity Framework 6.</summary>
         <releaseNotes>
 Featherweight release for EF:
- - Update to work around bug in EF 6.1.1
+ - Fix bug lead to cast exceptions on GlimpseDbConnection by loosen GetDbProviderManifestToken behavior
         </releaseNotes>
         <tags>ASP.NET Web WebForms Glimpse EF EntityFramework SQL performance profiling timing diagnostics</tags>
         <dependencies> 
