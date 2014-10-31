@@ -9,7 +9,7 @@ namespace Glimpse.AspNet.Inspector
     public class RoutesInspector : IInspector
     {
         private static readonly FieldInfo MappedRoutesField = typeof(System.Web.Routing.RouteCollection).GetField("_namedMap", BindingFlags.NonPublic | BindingFlags.Instance);
-        private static readonly List<string> IgnoredRouteTypes = new List<string> { "System.Web.Http.WebHost.Routing.HttpWebRoute" };
+        private static readonly List<string> IgnoredRouteTypes = new List<string> { "System.Web.Http.WebHost.Routing.HttpWebRoute", "System.Web.Mvc.Routing.LinkGenerationRoute" };
          
         public void Setup(IInspectorContext context)
         {
@@ -38,21 +38,53 @@ namespace Glimpse.AspNet.Inspector
                         routeName = pair.Key;
                         mixins = new[] { new RouteNameMixin(pair.Key) };
                     }
-                      
-                    if (alternateBaseImplementation.TryCreate(originalObj, out newObj, mixins))
+
+
+                    if (originalObj.GetType().ToString() == "System.Web.Mvc.Routing.RouteCollectionRoute")
                     {
-                        currentRoutes[i] = newObj;
+                        // This catches any routing that has been defined using Attribute Based Routing
+                        // System.Web.Mvc.Routing.RouteCollectionRoute is a collection of Routes
 
-                        if (!string.IsNullOrEmpty(routeName))
+                        var subRoutes = originalObj.GetType().GetField("_subRoutes", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(originalObj);
+                        var routes = (IList<System.Web.Routing.Route>)subRoutes.GetType().GetField("_routes", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(subRoutes);
+
+                        var alternateImplementation = new AlternateType.Route(context.ProxyFactory, context.Logger);
+
+                        for (var j = 0; j < routes.Count; j++)
                         {
-                            mappedRoutes[routeName] = newObj;
-                        }
+                            var route = routes[j];
+                            var newSubRouteObj = (System.Web.Routing.Route)null;
 
-                        logger.Info(Resources.RouteSetupReplacedRoute, originalObj.GetType());
+                            if (alternateImplementation.TryCreate(route, out newSubRouteObj, mixins))
+                            {
+                                routes[j] = newSubRouteObj;
+                                logger.Info(Resources.RouteSetupReplacedRoute, originalObj.GetType());
+                            }
+                            else
+                            {
+                                logger.Info(Resources.RouteSetupNotReplacedRoute, originalObj.GetType());
+                            }
+
+                        }
                     }
+
                     else
                     {
-                        logger.Info(Resources.RouteSetupNotReplacedRoute, originalObj.GetType());
+                        if (alternateBaseImplementation.TryCreate(originalObj, out newObj, mixins))
+                        {
+                            currentRoutes[i] = newObj;
+
+                            if (!string.IsNullOrEmpty(routeName))
+                            {
+                                mappedRoutes[routeName] = newObj;
+                            }
+
+                            logger.Info(Resources.RouteSetupReplacedRoute, originalObj.GetType());
+                        }
+                        else
+                        {
+                            logger.Info(Resources.RouteSetupNotReplacedRoute, originalObj.GetType());
+                        }
                     }
                 }
             }

@@ -1,0 +1,8 @@
+﻿@if(ViewBag.CartCount > 0) {
+    <li>
+    @Html.ActionLink("Cart(" +  ViewBag.CartCount as string  + ")",
+        "Index",
+        "ShoppingCart",
+        new { id = "cart-status", title = ViewBag.CartSummary })
+    </li>
+}

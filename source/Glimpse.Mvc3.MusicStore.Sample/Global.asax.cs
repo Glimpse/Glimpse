@@ -95,8 +95,8 @@ namespace MvcMusicStore
 
         private void Application_BeginRequest()
         {
-            string rawUrlLowercased = Request.RawUrl.ToLower();
-            if (rawUrlLowercased.Contains("glimpse.axd") || rawUrlLowercased.Contains("/home/csptest"))
+            var rawUrlLowercased = Request.RawUrl.ToLower();
+            if (rawUrlLowercased.Contains("/home/csptest"))
             {
                 // this will work
                 // HttpContext.Current.Response.Headers.Add("Content-Security-Policy", "default-src 'self' style-src 'unsafe-inline'");

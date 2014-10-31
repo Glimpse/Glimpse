@@ -110,7 +110,15 @@ namespace Glimpse.AspNet.Model
         {
             if (httpRequest != null)
             {
-                var files = httpRequest.Files;
+                HttpFileCollectionBase files = null;
+
+                try
+                {
+                    files = httpRequest.Files;
+                }
+                catch (HttpException)
+                {
+                }
 
                 if (files != null)
                 {

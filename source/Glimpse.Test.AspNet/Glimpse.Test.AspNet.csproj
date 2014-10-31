@@ -64,7 +64,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AlternateType\RouteBaseGetRouteDataShould.cs" />
+    <Compile Include="AlternateType\RouteGetRouteDataShould.cs" />
+    <Compile Include="AlternateType\RouteShould .cs" />
     <Compile Include="AlternateType\RouteBaseShould.cs" />
     <Compile Include="AlternateType\RouteConstraintMatchShould.cs" />
     <Compile Include="AlternateType\RouteConstraintRegexShould.cs" />
@@ -118,7 +119,6 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

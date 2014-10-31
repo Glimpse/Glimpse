@@ -13,7 +13,8 @@ using Glimpse.Test.Common;
 using Glimpse.Test.AspNet.Inspector;
 using Moq;
 using Xunit;
-using Xunit.Extensions; 
+using Xunit.Extensions;
+using Glimpse.AspNet.Message; 
 
 namespace Glimpse.Test.AspNet.Tab
 { 
@@ -82,8 +83,8 @@ namespace Glimpse.Test.AspNet.Tab
         { 
             tab.Setup(setupContext);
 
-            setupContext.MessageBroker.Verify(mb => mb.Subscribe(It.IsAny<Action<RouteBase.ProcessConstraint.Message>>()));
-            setupContext.MessageBroker.Verify(mb => mb.Subscribe(It.IsAny<Action<RouteBase.GetRouteData.Message>>())); 
+            setupContext.MessageBroker.Verify(mb => mb.Subscribe(It.IsAny<Action<ProcessConstraintMessage>>()));
+            setupContext.MessageBroker.Verify(mb => mb.Subscribe(It.IsAny<Action<RouteDataMessage>>())); 
         }
 
         [Theory, AutoMock]
@@ -99,18 +100,18 @@ namespace Glimpse.Test.AspNet.Tab
 
             route = (System.Web.Routing.Route) System.Web.Routing.RouteTable.Routes[0];
 
-            var routeMessage = new RouteBase.GetRouteData.Message(route.GetHashCode(), new System.Web.Routing.RouteData(), "routeName")
+            var routeMessage = new RouteDataMessage(route.GetHashCode(), new System.Web.Routing.RouteData(), "routeName")
                 .AsSourceMessage(route.GetType(), null)
                 .AsTimedMessage(new TimerResult { Duration = TimeSpan.FromMilliseconds(19) });
-            var constraintMessage = new RouteBase.ProcessConstraint.Message(new RouteBase.ProcessConstraint.Arguments(new object[] { (HttpContextBase)null, constraint, "test", (System.Web.Routing.RouteValueDictionary)null, System.Web.Routing.RouteDirection.IncomingRequest }), route.GetHashCode(), true)
+            var constraintMessage = new ProcessConstraintMessage(route.GetHashCode(), constraint.GetHashCode(), true, "test", constraint, (System.Web.Routing.RouteValueDictionary)null, System.Web.Routing.RouteDirection.IncomingRequest)
                 .AsTimedMessage(new TimerResult { Duration = TimeSpan.FromMilliseconds(25) })
                 .AsSourceMessage(route.GetType(), null);
 
-            context.TabStore.Setup(mb => mb.Contains(typeof(IList<RouteBase.ProcessConstraint.Message>).AssemblyQualifiedName)).Returns(true).Verifiable();
-            context.TabStore.Setup(mb => mb.Contains(typeof(IList<RouteBase.GetRouteData.Message>).AssemblyQualifiedName)).Returns(true).Verifiable();
+            context.TabStore.Setup(mb => mb.Contains(typeof(IList<ProcessConstraintMessage>).AssemblyQualifiedName)).Returns(true).Verifiable();
+            context.TabStore.Setup(mb => mb.Contains(typeof(IList<RouteDataMessage>).AssemblyQualifiedName)).Returns(true).Verifiable();
 
-            context.TabStore.Setup(mb => mb.Get(typeof(IList<RouteBase.ProcessConstraint.Message>).AssemblyQualifiedName)).Returns(new List<RouteBase.ProcessConstraint.Message> { constraintMessage }).Verifiable();
-            context.TabStore.Setup(mb => mb.Get(typeof(IList<RouteBase.GetRouteData.Message>).AssemblyQualifiedName)).Returns(new List<RouteBase.GetRouteData.Message> { routeMessage }).Verifiable();
+            context.TabStore.Setup(mb => mb.Get(typeof(IList<ProcessConstraintMessage>).AssemblyQualifiedName)).Returns(new List<ProcessConstraintMessage> { constraintMessage }).Verifiable();
+            context.TabStore.Setup(mb => mb.Get(typeof(IList<RouteDataMessage>).AssemblyQualifiedName)).Returns(new List<RouteDataMessage> { routeMessage }).Verifiable();
              
             var model = tab.GetData(context) as List<RouteModel>;
             var itemModel = model[0];
