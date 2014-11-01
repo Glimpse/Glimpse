@@ -5,14 +5,14 @@ using Microsoft.AspNet.Builder;
 
 namespace Glimpse.AspNet5
 {
-    public class Builder : IApplicationBuilder
+    public class ApplicationBuilder : IApplicationBuilder
     {
         private readonly IApplicationBuilder innerBuilder;
         private readonly static IDictionary<string, object> ApplicationStore = new Dictionary<string, object>();
         private readonly Guid builderId;
         private readonly MiddlewareManager manager;
 
-        public Builder(IApplicationBuilder app)
+        public ApplicationBuilder(IApplicationBuilder app)
         {
             innerBuilder = app;
 
@@ -34,7 +34,7 @@ namespace Glimpse.AspNet5
 
         public IApplicationBuilder New()
         {
-            return new Builder(innerBuilder.New());
+            return new ApplicationBuilder(innerBuilder.New());
         }
 
         public RequestDelegate Build()
