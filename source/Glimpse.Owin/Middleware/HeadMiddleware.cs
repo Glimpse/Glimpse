@@ -4,16 +4,17 @@ using System.Linq;
 using System.Threading.Tasks;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
+using Glimpse.Owin.Framework;
 using Microsoft.Owin;
 
 namespace Glimpse.Owin.Middleware
 {
-    public class RuntimeMiddleware
+    public class HeadMiddleware
     {
         private readonly Func<IDictionary<string, object>, Task> innerNext;
         private readonly IConfiguration config;
 
-        public RuntimeMiddleware(Func<IDictionary<string, object>, Task> next, IDictionary<string, object> serverStore)
+        public HeadMiddleware(Func<IDictionary<string, object>, Task> next, IDictionary<string, object> serverStore)
         {
             innerNext = next;
             config = new Configuration(new UriTemplateResourceEndpointConfiguration(), new InMemoryPersistenceStore(new DictionaryDataStoreAdapter((Dictionary<string, object>)serverStore)));

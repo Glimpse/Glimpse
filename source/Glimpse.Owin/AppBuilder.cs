@@ -16,7 +16,7 @@ namespace Glimpse.Owin
             innerApp = app;
             manager = MiddlewareManager.Instance;
             builderId = Guid.NewGuid();
-            innerApp.Use<RuntimeMiddleware>(Properties); // This is the earliest we can add middleware
+            innerApp.Use<HeadMiddleware>(Properties); // This is the earliest we can add middleware
         }
 
         public IDictionary<string, object> Properties
@@ -29,7 +29,7 @@ namespace Glimpse.Owin
             var middlewareType = middleware is Type ? middleware as Type : middleware.GetType();
             manager.Register(builderId, middlewareType);
 
-            innerApp.Use<WrapperMiddleware>(middlewareType, builderId);
+            innerApp.Use<GlimpseMiddleware>(middlewareType, builderId);
             innerApp.Use(middleware, args);
             
             return this;

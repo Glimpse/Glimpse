@@ -2,7 +2,7 @@
 using Glimpse.Core.Framework;
 using Microsoft.Owin;
 
-namespace Glimpse.Owin
+namespace Glimpse.Owin.Framework
 {
     public class RequestMetadata : IRequestMetadata
     {

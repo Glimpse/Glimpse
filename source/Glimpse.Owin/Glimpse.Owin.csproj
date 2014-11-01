@@ -49,12 +49,12 @@
   <ItemGroup>
     <Compile Include="AppBuilder.cs" />
     <Compile Include="IAppBuilderExtensions.cs" />
-    <Compile Include="RuntimeMiddleware.cs" />
-    <Compile Include="Middleware\WrapperMiddleware.cs" />
+    <Compile Include="Middleware\HeadMiddleware.cs" />
+    <Compile Include="Middleware\GlimpseMiddleware.cs" />
     <Compile Include="Middleware\MiddlewareExecutionInfo.cs" />
     <Compile Include="Middleware\MiddlewareManager.cs" />
-    <Compile Include="RequestResponseAdapter.cs" />
-    <Compile Include="RequestMetadata.cs" />
+    <Compile Include="Framework\RequestResponseAdapter.cs" />
+    <Compile Include="Framework\RequestMetadata.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tab\Middleware.cs" />
   </ItemGroup>
