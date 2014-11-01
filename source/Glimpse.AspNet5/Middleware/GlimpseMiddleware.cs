@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Glimpse.Core;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
+using Glimpse.AspNet5.Framework;
 using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Builder;
 

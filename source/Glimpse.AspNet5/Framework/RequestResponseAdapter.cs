@@ -7,7 +7,7 @@ using Glimpse.Core.Framework;
 using Microsoft.AspNet.Http;
 using Glimpse.Core;
 
-namespace Glimpse.AspNet5.Middleware
+namespace Glimpse.AspNet5.Framework
 {
     public class RequestResponseAdapter : IRequestResponseAdapter
     {
