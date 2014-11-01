@@ -10,13 +10,10 @@ namespace Glimpse.Core.Resource
     public class LogosResource : FileResource, IKey
     {
         internal const string InternalName = "glimpse_logos";
-        private const string GlimpseTextLogoResourceName = "Glimpse.Core.EmbeddedResources.glimpse_text_logo.png";
-        private const string GlimpseImageLogoResourceName = "Glimpse.Core.EmbeddedResources.glimpse_image_logo.png";
-        private const string GlimpseFaviconResourceName = "Glimpse.Core.EmbeddedResources.glimpse_favicon.png";
-        private const string GithubLogoResourceName = "Glimpse.Core.EmbeddedResources.github_logo.gif";
-        private const string TwitterLogoResourceName = "Glimpse.Core.EmbeddedResources.twitter_logo.png";
+        
+        private IDictionary<string, EmbeddedResourceInfo> Infos { get; set; }
 
-        private readonly IDictionary<string, EmbeddedResourceInfo> embeddedResourceInfos = new Dictionary<string, EmbeddedResourceInfo>();
+        //private readonly  embeddedResourceInfos = new Dictionary<string, EmbeddedResourceInfo>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LogosResource" /> class.
@@ -24,13 +21,14 @@ namespace Glimpse.Core.Resource
         public LogosResource()
         {
             Name = InternalName;
+            Infos = new Dictionary<string, EmbeddedResourceInfo>();
 
             var assembly = this.GetType().Assembly;
-            embeddedResourceInfos.Add("glimpse_text_logo", new EmbeddedResourceInfo(assembly, GlimpseTextLogoResourceName, "image/png"));
-            embeddedResourceInfos.Add("glimpse_image_logo", new EmbeddedResourceInfo(assembly, GlimpseImageLogoResourceName, "image/png"));
-            embeddedResourceInfos.Add("glimpse_favicon", new EmbeddedResourceInfo(assembly, GlimpseFaviconResourceName, "image/png"));
-            embeddedResourceInfos.Add("github_logo", new EmbeddedResourceInfo(assembly, GithubLogoResourceName, "image/gif"));
-            embeddedResourceInfos.Add("twitter_logo", new EmbeddedResourceInfo(assembly, TwitterLogoResourceName, "image/png"));
+            Infos.Add("glimpse_text_logo", new EmbeddedResourceInfo(assembly, "EmbeddedResources/glimpse_text_logo.png", "image/png"));
+            Infos.Add("glimpse_image_logo", new EmbeddedResourceInfo(assembly, "EmbeddedResources/glimpse_image_logo.png", "image/png"));
+            Infos.Add("glimpse_favicon", new EmbeddedResourceInfo(assembly, "EmbeddedResources/glimpse_favicon.png", "image/png"));
+            Infos.Add("github_logo", new EmbeddedResourceInfo(assembly, "EmbeddedResources/github_logo.gif", "image/gif"));
+            Infos.Add("twitter_logo", new EmbeddedResourceInfo(assembly, "EmbeddedResources/twitter_logo.png", "image/png"));
         }
 
         /// <summary>
@@ -65,7 +63,7 @@ namespace Glimpse.Core.Resource
             var logoname = context.Parameters.GetValueOrDefault(ResourceParameter.LogoName.Name);
 
             EmbeddedResourceInfo embeddedResourceInfo;
-            if (!string.IsNullOrEmpty(logoname) && embeddedResourceInfos.TryGetValue(logoname, out embeddedResourceInfo))
+            if (!string.IsNullOrEmpty(logoname) && Infos.TryGetValue(logoname, out embeddedResourceInfo))
             {
                 return embeddedResourceInfo;
             }

@@ -9,7 +9,7 @@ namespace Glimpse.Core.Resource
     {
         internal const string InternalName = "glimpse_client";
 
-        private EmbeddedResourceInfo GlimpseClientEmbeddedResourceInfo { get; set; }
+        private EmbeddedResourceInfo Info { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ClientResource" /> class.
@@ -17,11 +17,7 @@ namespace Glimpse.Core.Resource
         public ClientResource()
         {
             Name = InternalName;
-
-            GlimpseClientEmbeddedResourceInfo = new EmbeddedResourceInfo(
-                this.GetType().Assembly,
-                "Glimpse.Core.glimpse.js", 
-                "application/x-javascript");
+            Info = new EmbeddedResourceInfo(this.GetType().Assembly, "glimpse.js", "application/x-javascript");
         }
 
         /// <summary>
@@ -42,7 +38,7 @@ namespace Glimpse.Core.Resource
         /// <returns>Information about the embedded Glimpse Client</returns>
         protected override EmbeddedResourceInfo GetEmbeddedResourceInfo(IResourceContext context)
         {
-            return GlimpseClientEmbeddedResourceInfo;
+            return Info;
         }
     }
 }

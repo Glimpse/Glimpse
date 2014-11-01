@@ -9,12 +9,15 @@ namespace Glimpse.Core.Resource
     {
         internal const string InternalName = "glimpse_sprite";
 
+        private EmbeddedResourceInfo Info { get; set; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SpriteResource" /> class.
         /// </summary>
         public SpriteResource()
         {
             Name = InternalName;
+            Info = new EmbeddedResourceInfo(this.GetType().Assembly, "EmbeddedResources/sprite.png", "image/png");
         }
 
         /// <summary>
@@ -30,7 +33,7 @@ namespace Glimpse.Core.Resource
 
         protected override EmbeddedResourceInfo GetEmbeddedResourceInfo(IResourceContext context)
         {
-            return new EmbeddedResourceInfo(this.GetType().Assembly, "Glimpse.Core.EmbeddedResources.sprite.png", "image/png");
+            return Info;
         }
     }
 }

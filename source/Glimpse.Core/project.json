@@ -1,17 +1,28 @@
 ﻿{
-  "dependencies": {
-    "AntiXSS": "4.2.1",
-    "Castle.Core": "3.1.0",
-    "Newtonsoft.Json": "5.0.6",
-    "NLog": "2.0.0.2000",
-    "Tavis.UriTemplates": "0.1.1",
-    "System.configuration": "",
-    "System.Xml": "",
-    "Antlr4.StringTemplate": "4.0.6.9004"
-  },
-  "frameworks": {
-    "aspnet50": {
-      "dependencies": {}
-    }
-  }
+    "dependencies": {
+        "AntiXSS": "4.2.1",
+        "Castle.Core": "3.1.0",
+        "Newtonsoft.Json": "5.0.6",
+        "NLog": "2.0.0.2000",
+        "Tavis.UriTemplates": "0.1.1",
+        "System.configuration": "",
+        "System.Xml": "",
+        "Antlr4.StringTemplate": "4.0.6.9004"
+    },
+    "frameworks": {
+        "aspnet50": {
+            "dependencies": { } 
+        }
+    },
+    "resources": [
+        "glimpse.js",
+        "EmbeddedResources/github_logo.gif",
+        "EmbeddedResources/glimpse_favicon.png",
+        "EmbeddedResources/glimpse_image_logo.png",
+        "EmbeddedResources/glimpse_text_logo.png",
+        "EmbeddedResources/sprite.png",
+        "EmbeddedResources/glimpse_config.html",
+        "EmbeddedResources/glimpse_config.css",
+        "EmbeddedResources/glimpse_config.js"
+    ]
 }

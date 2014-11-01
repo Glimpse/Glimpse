@@ -339,8 +339,12 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="EmbeddedResources\glimpse_config.css" />
-    <EmbeddedResource Include="EmbeddedResources\glimpse_config.js" />
+    <EmbeddedResource Include="EmbeddedResources\glimpse_config.css">
+    	<LogicalName>EmbeddedResources/glimpse_config.css</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EmbeddedResources\glimpse_config.js">
+    	<LogicalName>EmbeddedResources/glimpse_config.js</LogicalName>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -348,16 +352,32 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="glimpse.js" />
+    <EmbeddedResource Include="glimpse.js">
+    	<LogicalName>glimpse.js</LogicalName>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="EmbeddedResources\glimpse_favicon.png" />
-    <EmbeddedResource Include="EmbeddedResources\github_logo.gif" />
-    <EmbeddedResource Include="EmbeddedResources\glimpse_image_logo.png" />
-    <EmbeddedResource Include="EmbeddedResources\glimpse_text_logo.png" />
-    <EmbeddedResource Include="EmbeddedResources\twitter_logo.png" />
-    <EmbeddedResource Include="EmbeddedResources\sprite.png" />
-    <EmbeddedResource Include="EmbeddedResources\glimpse_config.html" />
+    <EmbeddedResource Include="EmbeddedResources\glimpse_favicon.png">
+    	<LogicalName>EmbeddedResources/glimpse_config.js</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EmbeddedResources\github_logo.gif">
+    	<LogicalName>EmbeddedResources/github_logo.gif</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EmbeddedResources\glimpse_image_logo.png">
+    	<LogicalName>EmbeddedResources/glimpse_image_logo.png</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EmbeddedResources\glimpse_text_logo.png">
+    	<LogicalName>EmbeddedResources/glimpse_text_logo.png</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EmbeddedResources\twitter_logo.png">
+    	<LogicalName>EmbeddedResources/twitter_logo.png</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EmbeddedResources\sprite.png">
+    	<LogicalName>EmbeddedResources/sprite.png</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EmbeddedResources\glimpse_config.html">
+    	<LogicalName>EmbeddedResources/glimpse_config.html</LogicalName>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

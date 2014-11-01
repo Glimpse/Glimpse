@@ -9,12 +9,15 @@ namespace Glimpse.Core.Resource
     {
         internal const string InternalName = "glimpse_config_style";
 
+        private EmbeddedResourceInfo Info { get; set; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ConfigurationStyleResource" /> class.
         /// </summary>
         public ConfigurationStyleResource()
         {
             Name = InternalName;
+            Info = new EmbeddedResourceInfo(this.GetType().Assembly, "EmbeddedResources/glimpse_config.css", "text/css");
         }
 
         /// <summary>
@@ -35,7 +38,7 @@ namespace Glimpse.Core.Resource
         /// <returns>Information about the embedded Glimpse Configuration Style</returns>
         protected override EmbeddedResourceInfo GetEmbeddedResourceInfo(IResourceContext context)
         {
-            return new EmbeddedResourceInfo(this.GetType().Assembly, "Glimpse.Core.EmbeddedResources.glimpse_config.css", "text/css");
+            return Info;
         }
     }
 }

@@ -9,12 +9,15 @@ namespace Glimpse.Core.Resource
     {
         internal const string InternalName = "glimpse_config_script";
 
+        private EmbeddedResourceInfo Info { get; set; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ConfigurationScriptResource" /> class.
         /// </summary>
         public ConfigurationScriptResource()
         {
             Name = InternalName;
+            Info = new EmbeddedResourceInfo(this.GetType().Assembly, "EmbeddedResources/glimpse_config.js", "text/javascript");
         }
 
         /// <summary>
@@ -35,7 +38,7 @@ namespace Glimpse.Core.Resource
         /// <returns>Information about the embedded Glimpse Configuration Script</returns>
         protected override EmbeddedResourceInfo GetEmbeddedResourceInfo(IResourceContext context)
         {
-            return new EmbeddedResourceInfo(this.GetType().Assembly, "Glimpse.Core.EmbeddedResources.glimpse_config.js", "text/javascript");
+            return Info;
         }
     }
 }

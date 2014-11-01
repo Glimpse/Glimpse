@@ -78,39 +78,46 @@
   <ItemGroup>
     <EmbeddedResource Include="..\Glimpse.Core\glimpse.js">
       <Link>glimpse.js</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Glimpse.Core\glimpseInsight.js">
-      <Link>glimpseInsight.js</Link>
+      <LogicalName>glimpse.js</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Glimpse.Core\Resources.resx" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="..\Glimpse.Core\EmbeddedResources\github_logo.gif">
       <Link>EmbeddedResources\github_logo.gif</Link>
+      <LogicalName>EmbeddedResources/github_logo.gif</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Glimpse.Core\EmbeddedResources\glimpse_favicon.png">
       <Link>EmbeddedResources\glimpse_favicon.png</Link>
+      <LogicalName>EmbeddedResources/glimpse_favicon.png</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Glimpse.Core\EmbeddedResources\glimpse_image_logo.png">
       <Link>EmbeddedResources\glimpse_image_logo.png</Link>
+      <LogicalName>EmbeddedResources/glimpse_image_logo.png</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Glimpse.Core\EmbeddedResources\glimpse_text_logo.png">
       <Link>EmbeddedResources\glimpse_text_logo.png</Link>
+      <LogicalName>EmbeddedResources/glimpse_text_logo.png</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Glimpse.Core\EmbeddedResources\twitter_logo.png">
       <Link>EmbeddedResources\twitter_logo.png</Link>
+      <LogicalName>EmbeddedResources/twitter_logo.png</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Glimpse.Core\EmbeddedResources\sprite.png">
       <Link>EmbeddedResources\sprite.png</Link>
+      <LogicalName>EmbeddedResources/sprite.png</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Glimpse.Core\EmbeddedResources\glimpse_config.html">
       <Link>EmbeddedResources\glimpse_config.html</Link>
+      <LogicalName>EmbeddedResources/glimpse_config.html</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Glimpse.Core\EmbeddedResources\glimpse_config.css">
       <Link>EmbeddedResources\glimpse_config.css</Link>
+      <LogicalName>EmbeddedResources/glimpse_config.css</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Glimpse.Core\EmbeddedResources\glimpse_config.js">
       <Link>EmbeddedResources\glimpse_config.js</Link>
+      <LogicalName>EmbeddedResources/glimpse_config.js</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
