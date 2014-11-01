@@ -116,7 +116,7 @@ namespace Glimpse.Core.Resource
             }
 
             string glimpseConfigurationTemplateContent = new StreamReader(glimpseConfigurationResourceStream).ReadToEnd();
-            Template glimpseConfigurationTemplate = new Template(new TemplateGroup('$', '$'), glimpseConfigurationTemplateContent);
+            Antlr4.StringTemplate.Template glimpseConfigurationTemplate = new Antlr4.StringTemplate.Template(new TemplateGroup('$', '$'), glimpseConfigurationTemplateContent);
 
             glimpseConfigurationTemplate.Add("glimpseRuntimeVersion", configuration.Version);
              
