@@ -20,7 +20,7 @@ namespace Glimpse.AspNet5.Middleware
         public GlimpseMiddleware(RequestDelegate next, IDictionary<string, object> serverStore)
         {
             innerNext = next;
-            config = new Configuration(new UriTemplateResourceEndpointConfiguration(), new InMemoryPersistenceStore(new DictionaryDataStoreAdapter((Dictionary<string, object>)serverStore)), new Glimpse.Core.Configuration.Section { EndpointBaseUri = "/Glimpse.axd" } );
+            config = new Configuration(new UriTemplateResourceEndpointConfiguration(), new InMemoryPersistenceStore(new DictionaryDataStoreAdapter((Dictionary<string, object>)serverStore)), new Glimpse.Core.Configuration.Section { EndpointBaseUri = "/Glimpse.axd", DefaultRuntimePolicy = RuntimePolicy.On } );
         }
 
         public async Task Invoke(HttpContext context)
