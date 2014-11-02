@@ -358,7 +358,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="EmbeddedResources\glimpse_favicon.png">
-    	<LogicalName>EmbeddedResources/glimpse_config.js</LogicalName>
+    	<LogicalName>EmbeddedResources/glimpse_favicon.js</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="EmbeddedResources\github_logo.gif">
     	<LogicalName>EmbeddedResources/github_logo.gif</LogicalName>
