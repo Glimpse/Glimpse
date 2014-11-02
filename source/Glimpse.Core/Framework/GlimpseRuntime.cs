@@ -146,7 +146,9 @@ namespace Glimpse.Core.Framework
                 Configuration.Logger.Error);
 
             var runtimePolicy = RuntimePolicyDeterminator.DetermineRuntimePolicy(RuntimeEvent.BeginRequest, glimpseRequestContext.CurrentRuntimePolicy, glimpseRequestContext.RequestResponseAdapter);
-            if (runtimePolicy == RuntimePolicy.Off)
+
+            // we check if we are dealing with a resource request, because it is possible that users are requesting the configuration resource to enable Glimpse in the first place, this will be checked while executing the resource
+            if (runtimePolicy == RuntimePolicy.Off && glimpseRequestContext.RequestHandlingMode != RequestHandlingMode.ResourceRequest)
             {
                 return UnavailableGlimpseRequestContextHandle.Instance;
             }
@@ -302,29 +304,29 @@ namespace Glimpse.Core.Framework
             }
 
             IGlimpseRequestContext glimpseRequestContext;
-            if (!ContinueProcessingRequest(glimpseRequestContextHandle, RuntimeEvent.ExecuteResource, RequestHandlingMode.ResourceRequest, out glimpseRequestContext))
+            if (!TryGetRequestContext(glimpseRequestContextHandle.GlimpseRequestId, out glimpseRequestContext))
             {
-                return;
+#warning or maybe only a log and return false instead of throwing an exception? It is an issue though!
+                throw new GlimpseException("No corresponding GlimpseRequestContext found for GlimpseRequestId '" + glimpseRequestContextHandle.GlimpseRequestId + "'.");
             }
 
             var requestResponseAdapter = glimpseRequestContext.RequestResponseAdapter;
 
-            // First we get the current policy as it has been processed so far
+            // First we get the current policy as it has been processed so far (by the GlimpseRuntime.BeginRequest)
             var policy = glimpseRequestContext.CurrentRuntimePolicy;
 
-            // It is possible that the policy now says Off, but if the requested resource is the 
-            // default resource or one of it dependent resources, then we need to make sure there 
-            // is a good reason for not executing that resource, since the default resource (or 
-            // one of it dependencies) is the one we most likely need to set Glimpse On with in the 
-            // first place.
+            // No matter what the current policy now says (On, Off, ...), if the requested resource is the
+            // default resource or one of its dependent resources, then we need to make sure there
+            // is a good reason for not executing that resource, since the default resource (or one of its
+            // dependencies) is the one we most likely need to activate Glimpse with in the first place.
             var defaultResourceDependsOnResources = Configuration.DefaultResource as IDependOnResources;
             if (resourceName.Equals(Configuration.DefaultResource.Name) || (defaultResourceDependsOnResources != null && defaultResourceDependsOnResources.DependsOn(resourceName)))
             {
-                // To be clear we only do this for the default resource (or its dependencies), and 
-                // we do this because it allows us to secure the default resource the same way as 
-                // any other resource, but for this we only rely on runtime policies that handle 
-                // ExecuteResource runtime events and we ignore ignore previously executed runtime 
-                // policies (most likely during BeginRequest). Either way, the default runtime policy 
+                // To be clear we only do this for the default resource (or its dependencies), and
+                // we do this because it allows us to secure the default resource the same way as
+                // any other resource, but for this we only rely on runtime policies that handle
+                // ExecuteResource runtime events and we ignore previously executed runtime
+                // policies (most likely during BeginRequest). Either way, the default runtime policy
                 // is still our starting point and when it says Off, it remains Off
                 policy = RuntimePolicyDeterminator.DetermineRuntimePolicy(RuntimeEvent.ExecuteResource, Configuration.DefaultRuntimePolicy, requestResponseAdapter);
             }
@@ -351,14 +353,9 @@ namespace Glimpse.Core.Framework
                             var resourceContext = new ResourceContext(parameters.GetParametersFor(resource), Configuration.PersistenceStore, logger);
 
                             var privilegedResource = resource as IPrivilegedResource;
-                            if (privilegedResource != null)
-                            {
-                                result = privilegedResource.Execute(resourceContext, Configuration, requestResponseAdapter);
-                            }
-                            else
-                            {
-                                result = resource.Execute(resourceContext);
-                            }
+                            result = privilegedResource != null
+                                ? privilegedResource.Execute(resourceContext, Configuration, requestResponseAdapter)
+                                : resource.Execute(resourceContext);
                         }
                         catch (Exception ex)
                         {
@@ -419,7 +416,7 @@ namespace Glimpse.Core.Framework
 
             if (!TryGetRequestContext(glimpseRequestContextHandle.GlimpseRequestId, out glimpseRequestContext))
             {
-#warning or maybe only a log and return false instead of throwing an exception? It is an isue though!
+#warning or maybe only a log and return false instead of throwing an exception? It is an issue though!
                 throw new GlimpseException("No corresponding GlimpseRequestContext found for GlimpseRequestId '" + glimpseRequestContextHandle.GlimpseRequestId + "'.");
             }
 
