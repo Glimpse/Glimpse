@@ -14,13 +14,11 @@
         <description>Glimpse is a web debugging and diagnostics tool used to gain a better understanding of whats happening inside of your ASP.NET MVC 4.0 application.</description>
         <summary>ASP.NET MVC 4.0 web debugging and diagnostics tool.</summary>
         <releaseNotes>
-Flyweight release for MVC:
- - Added updated support for IUnvalidated and IEnumerable ValueProviders
- - Fixed problem where Response.RedirectToRoute() in Global.asax could throw a NullReferenceException
+Initial v2 Alpha Release
         </releaseNotes>
         <tags>ASP.NET Web MVC Glimpse diagnostics performance profiling timing</tags>
         <dependencies>
-          <dependency id="Glimpse.AspNet" version="1.8.0" />
+          <dependency id="Glimpse.AspNet" version="2.0.0-alpha0" />
         </dependencies>
     </metadata>
     <files>

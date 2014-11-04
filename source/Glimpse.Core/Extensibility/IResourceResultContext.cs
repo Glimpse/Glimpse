@@ -4,7 +4,7 @@ namespace Glimpse.Core.Extensibility
 {
     /// <summary>
     /// <c>IResourceResultContext</c> provides implementations of <see cref="IResourceResult"/> access to the
-    /// <see cref="IFrameworkProvider"/>, <see cref="ISerializer"/> and <see cref="IHtmlEncoder"/>.
+    /// <see cref="IRequestResponseAdapter"/>, <see cref="ISerializer"/> and <see cref="IHtmlEncoder"/>.
     /// </summary>
     public interface IResourceResultContext : IContext
     {
@@ -12,7 +12,7 @@ namespace Glimpse.Core.Extensibility
         /// Gets the framework provider.
         /// </summary>
         /// <value>The framework provider.</value>
-        IFrameworkProvider FrameworkProvider { get; }
+        IRequestResponseAdapter RequestResponseAdapter { get; }
 
         /// <summary>
         /// Gets the serializer.

@@ -36,7 +36,6 @@ namespace Glimpse.Test.Core
             Assert.NotNull(Resources.ExecuteTabError);
             Assert.NotNull(Resources.InitializeInspectorError);
             Assert.NotNull(Resources.InitializeTabError);
-            Assert.NotNull(Resources.EndRequestOutOfOrderRuntimeMethodCall);
             Assert.NotNull(Resources.RenderClientScriptImproperImplementationWarning);
             Assert.NotNull(Resources.RenderClientScriptMissingResourceWarning);
             Assert.NotNull(Resources.GenerateUriParameterKeysWarning);

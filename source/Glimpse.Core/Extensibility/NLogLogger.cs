@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using NLog;
 
 namespace Glimpse.Core.Extensibility
@@ -6,7 +7,7 @@ namespace Glimpse.Core.Extensibility
     /// <summary>
     /// An implementation of <see cref="ILogger"/> based on NLog.
     /// </summary>
-    public class NLogLogger : LoggerBase
+    public class NLogLogger : LoggerBase, IDisposable
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="NLogLogger" /> class.
@@ -131,6 +132,16 @@ namespace Glimpse.Core.Extensibility
         public override void Fatal(string message, Exception exception)
         {
             Logger.FatalException(message, exception);
+        }
+
+        public void Dispose()
+        {
+            NLog.LogManager.Flush(100);
+            
+            // NLog writes its logs asynchronously, which means that if we don't pause the thread, chances are the log will not be written 
+            // especially if dispose is called on appDomain unload. Therefore we pause the thread for 100ms which should be enough for NLog
+            // to do its thing, as we only give it 100ms to start with
+            Thread.Sleep(110);
         }
     }
 }

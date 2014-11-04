@@ -69,6 +69,8 @@ namespace Glimpse.Core.Resource
                 return new StatusCodeResourceResult(404, string.Format("Could not get embedded resource information."));
             }
 
+            var resourceNames = this.GetType().Assembly.GetManifestResourceNames();
+
             using (var resourceStream = embeddedResourceInfo.Assembly.GetManifestResourceStream(embeddedResourceInfo.Name))
             {
                 if (resourceStream != null)

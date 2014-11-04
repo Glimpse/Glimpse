@@ -1,19 +1,15 @@
-﻿using Glimpse.Core.Configuration;
+﻿using Glimpse.Core.Framework;
 
 namespace Glimpse.Core.Extensibility
 {
     /// <summary>
-    /// <c>IConfigurable</c> allows types to participate in their own configuration.
+    /// Represents a type that can be configured by a <see cref="IConfigurator"/>
     /// </summary>
-    /// <remarks>
-    /// Several <see cref="IRuntimePolicy"/> implementations leverage <c>IConfigurable</c> to allow for configuration via <c>web.config</c>.
-    /// </remarks>
     public interface IConfigurable
     {
         /// <summary>
-        /// Provides implementations an instance of <see cref="Section"/> to self populate any end user configuration options.
+        /// Gets the configurator
         /// </summary>
-        /// <param name="section">The configuration section, <c>&lt;glimpse&gt;</c> from <c>web.config</c>.</param>
-        void Configure(Section section);
+        IConfigurator Configurator { get; }
     }
 }

@@ -55,13 +55,14 @@ namespace Glimpse.Ado.AlternateType
 
         private IMessageBroker MessageBroker
         {
-            get { return messageBroker ?? (messageBroker = GlimpseConfiguration.GetConfiguredMessageBroker()); }
+            get { return messageBroker ?? (messageBroker = Support.DetermineMessageBroker()); }
             set { messageBroker = value; }
         }
 
+#warning This is not a TimerStrategy but the actual ExecutionTimer determined by a TimerStrategy
         private IExecutionTimer TimerStrategy
         {
-            get { return timerStrategy ?? (timerStrategy = GlimpseConfiguration.GetConfiguredTimerStrategy()()); }
+            get { return timerStrategy ?? (timerStrategy = Support.DetermineExecutionTimer()); }
             set { timerStrategy = value; }
         }
 

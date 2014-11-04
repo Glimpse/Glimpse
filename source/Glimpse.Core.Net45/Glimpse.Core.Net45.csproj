@@ -27,6 +27,7 @@
     <DocumentationFile>
     </DocumentationFile>
     <Prefer32Bit>false</Prefer32Bit>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -37,6 +38,7 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Release\Glimpse.Core.xml</DocumentationFile>
     <Prefer32Bit>false</Prefer32Bit>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
@@ -63,52 +65,59 @@
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.XML" />
     <Reference Include="Tavis.UriTemplates, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Tavis.UriTemplates.0.1.1\lib\NET40\Tavis.UriTemplates.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Glimpse.Core\**\*.cs" Exclude="..\Glimpse.Core\Properties\AssemblyInfo.cs">
+    <Compile Include="..\Glimpse.Core\**\*.cs">
       <Link />
     </Compile>
-    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="..\Glimpse.Core\glimpse.js">
       <Link>glimpse.js</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\Glimpse.Core\glimpseInsight.js">
-      <Link>glimpseInsight.js</Link>
+      <LogicalName>glimpse.js</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Glimpse.Core\Resources.resx" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="..\Glimpse.Core\EmbeddedResources\github_logo.gif">
       <Link>EmbeddedResources\github_logo.gif</Link>
+      <LogicalName>EmbeddedResources/github_logo.gif</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Glimpse.Core\EmbeddedResources\glimpse_favicon.png">
       <Link>EmbeddedResources\glimpse_favicon.png</Link>
+      <LogicalName>EmbeddedResources/glimpse_favicon.png</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Glimpse.Core\EmbeddedResources\glimpse_image_logo.png">
       <Link>EmbeddedResources\glimpse_image_logo.png</Link>
+      <LogicalName>EmbeddedResources/glimpse_image_logo.png</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Glimpse.Core\EmbeddedResources\glimpse_text_logo.png">
       <Link>EmbeddedResources\glimpse_text_logo.png</Link>
+      <LogicalName>EmbeddedResources/glimpse_text_logo.png</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Glimpse.Core\EmbeddedResources\twitter_logo.png">
       <Link>EmbeddedResources\twitter_logo.png</Link>
+      <LogicalName>EmbeddedResources/twitter_logo.png</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Glimpse.Core\EmbeddedResources\sprite.png">
       <Link>EmbeddedResources\sprite.png</Link>
+      <LogicalName>EmbeddedResources/sprite.png</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Glimpse.Core\EmbeddedResources\glimpse_config.html">
       <Link>EmbeddedResources\glimpse_config.html</Link>
+      <LogicalName>EmbeddedResources/glimpse_config.html</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Glimpse.Core\EmbeddedResources\glimpse_config.css">
       <Link>EmbeddedResources\glimpse_config.css</Link>
+      <LogicalName>EmbeddedResources/glimpse_config.css</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Glimpse.Core\EmbeddedResources\glimpse_config.js">
       <Link>EmbeddedResources\glimpse_config.js</Link>
+      <LogicalName>EmbeddedResources/glimpse_config.js</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -128,7 +137,6 @@
     <Folder Include="NuSpec\lib\net45\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

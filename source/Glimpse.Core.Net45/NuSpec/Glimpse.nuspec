@@ -14,22 +14,18 @@
         <description>Glimpse is a web debugging and diagnostics tool used to gain a better understanding of whats happening inside of your ASP.NET 4.0 application. For ASP.NET MVC3 support, please NuGet Glimpse.MVC3.</description>
         <summary>ASP.NET 4.5 web debugging and diagnostics tool.</summary>
         <releaseNotes>
-Featherweight release for Core:
- - Add button which makes it easy to launch glimpse for service only sites
- - Improve how client renders for thoses using Zurb Foundation
+Initial v2 Alpha Release
         </releaseNotes>
         <tags>ASP.NET Web WebForms Glimpse diagnostics performance profiling timing</tags>
     </metadata>
     <files>
         <file src="tools\*.*" target="tools" />
         <file src="docs\*.*" target="docs" />
-        <file src="lib\net35\*.*" target="lib\net35" />
         <file src="lib\net40\*.*" target="lib\net40" />
         <file src="lib\net45\*.*" target="lib\net45" />
         <file src="..\..\Glimpse.Core\**\*.cs" target="src" />
         <file src="..\..\Glimpse.Core\glimpse.js" target="src" />
         <file src="..\..\Glimpse.Core\Resources.resx" target="src" />
         <file src="..\..\Glimpse.Core\Resources.Designer.cs" target="src\Glimpse.Core" />
-        <file src="..\..\Glimpse.Core.Net35\Backport\*.*" target="src\Backport" />
     </files>
 </package>

@@ -4,9 +4,6 @@
         <assembly filename="source\Glimpse.Test.Core\bin\Release\Glimpse.Test.Core.dll" shadow-copy="true">
             <output type="xml" filename="builds\local\artifacts\test.core.xml" />
         </assembly>
-        <assembly filename="source\Glimpse.Test.Core.Net35\bin\Release\Glimpse.Test.Core.Net35.dll" shadow-copy="true">
-            <output type="xml" filename="builds\local\artifacts\test.core.net35.xml" />
-        </assembly>
         <assembly filename="source\Glimpse.Test.AspNet\bin\Release\Glimpse.Test.AspNet.dll" shadow-copy="true">
             <output type="xml" filename="builds\local\artifacts\test.aspnet.xml" />
         </assembly>

@@ -90,7 +90,7 @@ namespace Glimpse.AspNet.Tab
                 result.Forms.Protection = formsSection.Protection.ToString();
                 result.Forms.RequireSSL = formsSection.RequireSSL;
                 result.Forms.SlidingExpiration = formsSection.SlidingExpiration;
-                result.Forms.TicketCompatibilityMode = TicketCompatibilityMode(formsSection);
+                result.Forms.TicketCompatibilityMode = formsSection.TicketCompatibilityMode.ToString();
                 result.Forms.Timeout = formsSection.Timeout;
 
                 var credentialsSection = formsSection.Credentials;
@@ -230,15 +230,6 @@ namespace Glimpse.AspNet.Tab
             }
 
             return result;
-        }
-
-        private string TicketCompatibilityMode(FormsAuthenticationConfiguration formsSection)
-        {
-#if NET35
-            return "n/a";      
-#else
-            return formsSection.TicketCompatibilityMode.ToString();
-#endif
         }
     }
 }

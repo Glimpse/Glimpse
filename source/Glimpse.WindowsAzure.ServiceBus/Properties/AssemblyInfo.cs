@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using Glimpse.Core.Extensibility;
 
 [assembly: ComVisible(false)]
-[assembly: Guid("3b7a68a9-2d81-49c9-9838-c72698176b9b")]
+[assembly: Guid("3b7a68a9-2d81-49c9-9838-c72698176aaa")]
 
 [assembly: AssemblyTitle("Glimpse Windows Azure ServiceBus Assembly")]
 [assembly: AssemblyDescription("Windows Azure ServiceBus interfaces and types for Glimpse.")]// When you right-click the assembly file in Windows Explorer, this attribute appears as the Comments value on the Version tab of the file properties dialog box.
@@ -19,6 +19,6 @@ using Glimpse.Core.Extensibility;
 [assembly: AssemblyFileVersion("1.0.0")]
 [assembly: AssemblyInformationalVersion("1.0.0")] // Used to specify the NuGet version number at build time
 
-[assembly: CLSCompliant(true)]
+[assembly: CLSCompliant(false)]
 [assembly: InternalsVisibleTo("Glimpse.Test.WindowsAzure.ServiceBus")]
 [assembly: NuGetPackage("Glimpse.WindowsAzure.ServiceBus")]

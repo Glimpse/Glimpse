@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Glimpse.Core.Framework
 {
     /// <summary>
@@ -16,6 +18,6 @@ namespace Glimpse.Core.Framework
         /// Saves the specified system metadata.
         /// </summary>
         /// <param name="metadata">The metadata.</param>
-        void Save(GlimpseMetadata metadata);
+        void SaveMetadata(IDictionary<string, object> metadata);
     }
 }

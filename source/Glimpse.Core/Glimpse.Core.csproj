@@ -64,6 +64,7 @@
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Xml" />
     <Reference Include="Tavis.UriTemplates, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Tavis.UriTemplates.0.1.1\lib\NET40\Tavis.UriTemplates.dll</HintPath>
     </Reference>
@@ -72,21 +73,12 @@
     <Compile Include="ClientScript\Client.cs" />
     <Compile Include="ClientScript\Data.cs" />
     <Compile Include="ClientScript\Metadata.cs" />
-    <Compile Include="Configuration\ContentTypeElement.cs" />
-    <Compile Include="Configuration\ContentTypeElementCollection.cs" />
+    <Compile Include="Configuration\CustomConfigurationElement.cs" />
     <Compile Include="Configuration\DiscoverableCollectionElement.cs" />
     <Compile Include="Configuration\Section.cs" />
     <Compile Include="Configuration\LoggingElement.cs" />
     <Compile Include="Configuration\LoggingLevel.cs" />
-    <Compile Include="Configuration\PolicyDiscoverableCollectionElement.cs" />
-    <Compile Include="Configuration\RegexConverter.cs" />
-    <Compile Include="Configuration\RegexElement.cs" />
-    <Compile Include="Configuration\RegexElementCollection.cs" />
-    <Compile Include="Configuration\StatusCodeElement.cs" />
-    <Compile Include="Configuration\StatusCodeElementCollection.cs" />
     <Compile Include="Configuration\TypeConverter.cs" />
-    <Compile Include="Configuration\TypeElement.cs" />
-    <Compile Include="Configuration\TypeElementCollection.cs" />
     <Compile Include="Display\TimingsDisplay.cs" />
     <Compile Include="Extensibility\AlternateType.cs" />
     <Compile Include="Extensibility\AlternateTypeGenerationHook.cs" />
@@ -94,6 +86,7 @@
     <Compile Include="Extensibility\AlternateMethod.cs" />
     <Compile Include="Extensibility\AntiXssEncoder.cs" />
     <Compile Include="Extensibility\CastleInvocationToAlternateMethodContextAdapter.cs" />
+    <Compile Include="Extensibility\IConfigurator.cs" />
     <Compile Include="Extensibility\IDependOnResources.cs" />
     <Compile Include="Extensibility\DictionaryDataStoreAdapter.cs" />
     <Compile Include="Extensibility\ExecutionTimer.cs" />
@@ -103,20 +96,76 @@
     <Compile Include="Extensibility\IExecutionTimer.cs" />
     <Compile Include="Extensibility\IKey.cs" />
     <Compile Include="Extensibility\ILayoutControl.cs" />
+    <Compile Include="Extensibility\IInstanceMetadata.cs" />
+    <Compile Include="Extensibility\IMetadata.cs" />
     <Compile Include="Extensibility\IParameterValueProvider.cs" />
     <Compile Include="Extensibility\IPrivilegedResource.cs" />
+    <Compile Include="Extensibility\IUriPolicyConfigurator.cs" />
     <Compile Include="Extensibility\ITabLayout.cs" />
+    <Compile Include="Extensibility\ITabMetadata.cs" />
     <Compile Include="Extensibility\IWrapper.cs" />
     <Compile Include="Extensibility\JsonNetConverterDictionaryKeysAreNotPropertyNames.cs" />
     <Compile Include="Extensibility\InspectorContext.cs" />
+    <Compile Include="Extensibility\RequestHandlingMode.cs" />
     <Compile Include="Extensibility\RuntimePolicy.cs" />
     <Compile Include="Extensibility\Subscriber.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Framework\ActiveGlimpseRequestContextEventArgs.cs" />
+    <Compile Include="Framework\ActiveGlimpseRequestContexts.cs" />
     <Compile Include="Framework\AssemblyTypesResolver.cs" />
+    <Compile Include="Framework\BaseDataProvider.cs" />
+    <Compile Include="Framework\BaseProvider.cs" />
+    <Compile Include="Framework\CallContextCurrentGlimpseRequestIdTracker.cs" />
     <Compile Include="Framework\Crc32.cs" />
+    <Compile Include="Framework\DisplayProvider.cs" />
+    <Compile Include="Framework\GlimpseRuntimeNotAvailableException.cs" />
+    <Compile Include="Framework\GlimpseRuntimeInitializer.cs" />
+    <Compile Include="Framework\ScriptTagsProvider.cs" />
+    <Compile Include="Framework\IScriptTagsGenerator.cs" />
+    <Compile Include="Framework\IScriptTagsProvider.cs" />
+    <Compile Include="Framework\InspectorProvider.cs" />
+    <Compile Include="Framework\IReadonlyConfiguration.cs" />
+    <Compile Include="Framework\KeyCreator.cs" />
+    <Compile Include="Framework\ReadonlyConfigurationAdapter.cs" />
+    <Compile Include="Framework\ICurrentGlimpseRequestIdTracker.cs" />
+    <Compile Include="Framework\IGlimpseRequestContext.cs" />
+    <Compile Include="Framework\GlimpseRequestContext.cs" />
+    <Compile Include="Framework\ScriptTagsGenerator.cs" />
+    <Compile Include="Framework\IResourceEndpointConfiguration.cs" />
+    <Compile Include="Framework\RuntimePolicyDeterminator.cs" />
+    <Compile Include="Framework\TabProvider.cs" />
+    <Compile Include="Framework\UnavailableGlimpseRequestContextHandle.cs" />
+    <Compile Include="Framework\GlimpseRequestContextHandle.cs" />
+    <Compile Include="Framework\UnavailableGlimpseRequestContext.cs" />
     <Compile Include="Framework\ReflectionBlackList.cs" />
     <Compile Include="Framework\Support\ExecutionBlockBase.cs" />
     <Compile Include="Framework\Support\IExecutionTask.cs" />
+    <Compile Include="Framework\UriTemplateResourceEndpointConfiguration.cs" />
+    <Compile Include="Framework\ScriptTagsInjectionOptions.cs" />
+    <Compile Include="Guard.cs" />
+    <Compile Include="Framework\ScriptTagsInjectionFailedEventArgs.cs" />
+    <Compile Include="Message\RuntimeMessage.cs" />
+    <Compile Include="Metadata\CorrelationInstanceMetadata.cs" />
+    <Compile Include="Metadata\DocumentationTabMetadata.cs" />
+    <Compile Include="Metadata\HashMetadata.cs" />
+    <Compile Include="Metadata\KeysHeadingsTabMetadata.cs" />
+    <Compile Include="Metadata\LayoutTabMetadata.cs" />
+    <Compile Include="GlimpseConfiguration.cs" />
+    <Compile Include="GlimpseTimeline.cs" />
+    <Compile Include="Message\TimelineMessage.cs" />
+    <Compile Include="Framework\MetadataProvider.cs" />
+    <Compile Include="Metadata\ResourceMetadata.cs" />
+    <Compile Include="Metadata\TabMetadata.cs" />
+    <Compile Include="Metadata\VersionMetadata.cs" />
+    <Compile Include="Framework\ScriptTagsInjectionStream.cs" />
+    <Compile Include="Policy\AddRemoveClearItemsConfigurator.cs" />
+    <Compile Include="Policy\ContentTypePolicyConfigurator.cs" />
+    <Compile Include="Extensibility\IContentTypePolicyConfigurator.cs" />
+    <Compile Include="Extensibility\IStatusCodePolicyConfigurator.cs" />
+    <Compile Include="Policy\StatusCodePolicyConfigurator.cs" />
+    <Compile Include="Policy\SupportedContentType.cs" />
+    <Compile Include="Policy\UriPolicyConfigurator.cs" />
     <Compile Include="Resource\ConfigurationScriptResource.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -179,23 +228,20 @@
     <Compile Include="Extensions\NameValueCollectionExtension.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\TabContextExtensions.cs" />
-    <Compile Include="Framework\ApplicationPersistenceStore.cs" />
+    <Compile Include="Framework\InMemoryPersistenceStore.cs" />
     <Compile Include="Framework\CacheSetting.cs" />
     <Compile Include="Framework\CastleDynamicProxyFactory.cs" />
     <Compile Include="Framework\CastleDynamicProxyWrapper.cs" />
-    <Compile Include="Framework\Factory.cs" />
     <Compile Include="Framework\GlimpseException.cs" />
-    <Compile Include="Framework\GlimpseMetadata.cs" />
     <Compile Include="Framework\GlimpseRequest.cs" />
     <Compile Include="Framework\GlimpseRequestHeaders.cs" />
     <Compile Include="Framework\IDiscoverableCollection.cs" />
-    <Compile Include="Framework\IGlimpseConfiguration.cs" />
+    <Compile Include="Framework\IConfiguration.cs" />
     <Compile Include="Framework\IGlimpseRuntime.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Framework\IPersistenceStore.cs" />
     <Compile Include="Framework\IReadOnlyPersistenceStore.cs" />
     <Compile Include="Framework\IServiceLocator.cs" />
-    <Compile Include="Framework\TabMetadata.cs" />
     <Compile Include="Framework\ReflectionDiscoverableCollection.cs" />
     <Compile Include="Framework\ResourceEndpointConfiguration.cs" />
     <Compile Include="Framework\ResourceParameters.cs" />
@@ -211,8 +257,8 @@
     <Compile Include="Extensibility\IInspector.cs" />
     <Compile Include="Extensibility\ISerializer.cs" />
     <Compile Include="Extensibility\ITabContext.cs" />
-    <Compile Include="Framework\IFrameworkProvider.cs" />
-    <Compile Include="Framework\GlimpseConfiguration.cs" />
+    <Compile Include="Framework\IRequestResponseAdapter.cs" />
+    <Compile Include="Framework\Configuration.cs" />
     <Compile Include="Framework\GlimpseRuntime.cs" />
     <Compile Include="Message\IMessage.cs" />
     <Compile Include="Message\ITimedMessage.cs" />
@@ -280,13 +326,12 @@
     </Compile>
     <Compile Include="SerializationConverter\DateTimeConverter.cs" />
     <Compile Include="SerializationConverter\GlimpseRequestHeadersConverter.cs" />
-    <Compile Include="SerializationConverter\GlimpseMetadataConverter.cs" />
     <Compile Include="SerializationConverter\GlimpseRequestConverter.cs" />
     <Compile Include="SerializationConverter\MethodInfoConverter.cs" />
-    <Compile Include="SerializationConverter\TabMetadataConverter.cs" />
     <Compile Include="SerializationConverter\TabResultConverter.cs" />
     <Compile Include="SerializationConverter\CSharpTypeConverter.cs" />
     <Compile Include="Tab\Timeline.cs" />
+    <Compile Include="Tab\Glimpse.cs" />
     <Compile Include="Tab\Trace.cs" />
     <Compile Include="TraceListener.cs" />
   </ItemGroup>
@@ -294,8 +339,12 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="EmbeddedResources\glimpse_config.css" />
-    <EmbeddedResource Include="EmbeddedResources\glimpse_config.js" />
+    <EmbeddedResource Include="EmbeddedResources\glimpse_config.css">
+    	<LogicalName>EmbeddedResources/glimpse_config.css</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EmbeddedResources\glimpse_config.js">
+    	<LogicalName>EmbeddedResources/glimpse_config.js</LogicalName>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -303,17 +352,34 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="glimpse.js" />
+    <EmbeddedResource Include="glimpse.js">
+    	<LogicalName>glimpse.js</LogicalName>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="EmbeddedResources\glimpse_favicon.png" />
-    <EmbeddedResource Include="EmbeddedResources\github_logo.gif" />
-    <EmbeddedResource Include="EmbeddedResources\glimpse_image_logo.png" />
-    <EmbeddedResource Include="EmbeddedResources\glimpse_text_logo.png" />
-    <EmbeddedResource Include="EmbeddedResources\twitter_logo.png" />
-    <EmbeddedResource Include="EmbeddedResources\sprite.png" />
-    <EmbeddedResource Include="EmbeddedResources\glimpse_config.html" />
+    <EmbeddedResource Include="EmbeddedResources\glimpse_favicon.png">
+    	<LogicalName>EmbeddedResources/glimpse_favicon.js</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EmbeddedResources\github_logo.gif">
+    	<LogicalName>EmbeddedResources/github_logo.gif</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EmbeddedResources\glimpse_image_logo.png">
+    	<LogicalName>EmbeddedResources/glimpse_image_logo.png</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EmbeddedResources\glimpse_text_logo.png">
+    	<LogicalName>EmbeddedResources/glimpse_text_logo.png</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EmbeddedResources\twitter_logo.png">
+    	<LogicalName>EmbeddedResources/twitter_logo.png</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EmbeddedResources\sprite.png">
+    	<LogicalName>EmbeddedResources/sprite.png</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EmbeddedResources\glimpse_config.html">
+    	<LogicalName>EmbeddedResources/glimpse_config.html</LogicalName>
+    </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

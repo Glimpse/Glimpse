@@ -10,81 +10,51 @@ namespace Glimpse.Test.AspNet
 {
     public class AspNetFrameworkProviderShould : IDisposable
     {
-        private AspNetFrameworkProviderTester tester;
+        private AspNetRequestResponseAdapterTester tester;
 
-        public AspNetFrameworkProviderTester FrameworkProvider
+        public AspNetRequestResponseAdapterTester RequestResponseAdapter
         {
-            get { return tester ?? (tester = AspNetFrameworkProviderTester.Create()); }
+            get { return tester ?? (tester = AspNetRequestResponseAdapterTester.Create()); }
             set { tester = value; }
         }
 
         public void Dispose()
         {
-            FrameworkProvider = null;
+            RequestResponseAdapter = null;
         }
 
         [Fact]
         public void HaveARuntimeContextTypeOfHttpContextBase()
         {
-            Assert.True(FrameworkProvider.RuntimeContext.GetType().IsSubclassOf(typeof (HttpContextBase)));
+            Assert.True(RequestResponseAdapter.RuntimeContext.GetType().IsSubclassOf(typeof (HttpContextBase)));
         }
 
         [Fact]
         public void HaveARuntimeContext()
         {
-            Assert.NotNull(FrameworkProvider.RuntimeContext);
-            Assert.True(FrameworkProvider.RuntimeContext is HttpContextBase);
+            Assert.NotNull(RequestResponseAdapter.RuntimeContext);
+            Assert.True(RequestResponseAdapter.RuntimeContext is HttpContextBase);
         }
 
-        [Fact]
-        public void HaveHttpRequestStore()
-        {
-            Assert.NotNull(FrameworkProvider.HttpRequestStore);
-            Assert.Equal(5, FrameworkProvider.HttpRequestStore.Get<int>());
-            Assert.Equal("TestString", FrameworkProvider.HttpRequestStore.Get<string>());
-        }
-
-        [Fact]
-        public void HaveHttpServerStore()
-        {
-            Assert.NotNull(FrameworkProvider.HttpServerStore);
-            Assert.Equal("testValue", FrameworkProvider.HttpServerStore.Get("testKey"));
-
-            FrameworkProvider.HttpApplicationStateMock.Verify(st => st.Get("testKey"), Times.Once());
-        }
-
- 
         [Fact]
         public void SetHttpResponseHeader()
         {
             var headerName = "testKey";
             var headerValue = "testValue";
 
-            FrameworkProvider.SetHttpResponseHeader(headerName, headerValue);
+            RequestResponseAdapter.SetHttpResponseHeader(headerName, headerValue);
 
-            FrameworkProvider.HttpResponseMock.Verify(r=>r.AppendHeader(headerName, headerValue));
-        }
-
-        [Fact]
-        public void InjectHttpResponseBody()
-        {
-            var outputString = "<script src=\"test.js\"></script>";
-
-            FrameworkProvider.InjectHttpResponseBody(outputString);
-
-            FrameworkProvider.HttpContextMock.VerifyGet(ctx => ctx.Response);
-            FrameworkProvider.HttpResponseMock.VerifyGet(r => r.Filter);
-            FrameworkProvider.HttpResponseMock.VerifySet(r => r.Filter = It.IsAny<Stream>());
+            RequestResponseAdapter.HttpResponseMock.Verify(r=>r.AppendHeader(headerName, headerValue));
         }
 
         [Fact]
         public void SetHttpResponseStatusCode()
         {
             var statusCode = 200;
-            FrameworkProvider.SetHttpResponseStatusCode(statusCode);
+            RequestResponseAdapter.SetHttpResponseStatusCode(statusCode);
 
-            FrameworkProvider.HttpResponseMock.VerifySet(r => r.StatusCode = statusCode);
-            FrameworkProvider.HttpResponseMock.VerifySet(r => r.StatusDescription = null);
+            RequestResponseAdapter.HttpResponseMock.VerifySet(r => r.StatusCode = statusCode);
+            RequestResponseAdapter.HttpResponseMock.VerifySet(r => r.StatusDescription = null);
         }
     }
 }

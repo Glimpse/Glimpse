@@ -54,13 +54,13 @@
     <Compile Include="AlternateType\RouteConstraint.cs" />
     <Compile Include="AlternateType\RouteConstraintRegex.cs" />
     <Compile Include="AlternateType\RouteNameMixin.cs" />
-    <Compile Include="AspNetFrameworkProvider.cs" />
+    <Compile Include="AspNetCurrentGlimpseRequestIdTracker.cs" />
+    <Compile Include="AspNetRequestResponseAdapter.cs" />
     <Compile Include="AspNetServiceLocator.cs" />
     <Compile Include="Controls\Client.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Display\EnvironmentDisplay.cs" />
     <Compile Include="Extensibility\AspNetTab.cs" />
-    <Compile Include="Extensions\HttpContextExtensions.cs" />
     <Compile Include="Extensions\RuntimePolicyContextExtensions.cs" />
     <Compile Include="Extensions\TabContextExtensions.cs" />
     <Compile Include="HttpApplicationBase.cs" />
@@ -69,7 +69,7 @@
     <Compile Include="HttpHandler.cs" />
     <Compile Include="HttpHandlerEndpointConfiguration.cs" />
     <Compile Include="HttpModule.cs" />
-    <Compile Include="HttpRuntimeShutdownMessageResolver.cs" />
+    <Compile Include="IAspNetRequestResponseAdapter.cs" />
     <Compile Include="Message\ProcessConstraintMessage.cs" />
     <Compile Include="Message\RouteDataMessage.cs" />
     <Compile Include="Model\CacheConfigurationModel.cs" />
@@ -120,7 +120,6 @@
     <Compile Include="Tab\Configuration.cs" />
     <Compile Include="Tab\Environment.cs" />
     <Compile Include="Tab\Request.cs" />
-    <Compile Include="PreBodyTagFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tab\Routes.cs" />
     <Compile Include="Tab\Server.cs" />

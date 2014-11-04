@@ -69,21 +69,12 @@ namespace Glimpse.Core.Resource
 
             Guid parentRequestId;
             var parentRequestKey = context.Parameters.GetValueOrDefault(ParentRequestKey);
-
-#if NET35
-            if (!Glimpse.Core.Backport.Net35Backport.TryParseGuid(parentRequestKey, out parentRequestId))
-            {
-                return new StatusCodeResourceResult(404, string.Format("Could not parse ParentRequestKey '{0}' as GUID.", parentRequestKey));
-            }
-#else
             if (!Guid.TryParse(parentRequestKey, out parentRequestId))
             {
                 return new StatusCodeResourceResult(404, string.Format("Could not parse ParentRequestKey '{0}' as GUID.", parentRequestKey));
             }
-#endif
 
-            var data = context.PersistenceStore.GetByRequestParentId(parentRequestId);
-
+            var data = context.PersistenceStore.GetByRequestParentId(parentRequestId); 
             if (data == null)
             {
                 return new StatusCodeResourceResult(404, string.Format("Could not find requests with ParentRequestKey '{0}'.", parentRequestKey));

@@ -71,21 +71,12 @@ namespace Glimpse.Core.Resource
 
             Guid requestId;
             var request = context.Parameters.GetValueOrDefault(ResourceParameter.RequestId.Name);
-
-#if NET35
-            if (!Glimpse.Core.Backport.Net35Backport.TryParseGuid(request, out requestId))
-            {
-                return new StatusCodeResourceResult(404, string.Format("Could not parse RequestId '{0} as GUID.'", request));
-            }
-#else
             if (!Guid.TryParse(request, out requestId))
             {
                 return new StatusCodeResourceResult(404, string.Format("Could not parse RequestId '{0} as GUID.'", request));
             }
-#endif
 
-            var data = context.PersistenceStore.GetByRequestId(requestId);
-
+            var data = context.PersistenceStore.GetByRequestId(requestId); 
             if (data == null)
             {
                 return new StatusCodeResourceResult(404, string.Format("No data found for RequestId '{0}'.", request));

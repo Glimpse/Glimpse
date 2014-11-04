@@ -11,7 +11,7 @@ namespace Glimpse.Core.Resource
     {
         internal const string InternalName = "glimpse_logo";
 
-        private EmbeddedResourceInfo GlimpseTextLogoEmbeddedResourceInfo { get; set; }
+        private EmbeddedResourceInfo EmbeddedResourceInfo { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LogoResource" /> class.
@@ -19,7 +19,7 @@ namespace Glimpse.Core.Resource
         public LogoResource()
         {
             Name = InternalName;
-            GlimpseTextLogoEmbeddedResourceInfo = new EmbeddedResourceInfo(this.GetType().Assembly, "Glimpse.Core.EmbeddedResources.glimpse_text_logo.png", "image/png");
+            EmbeddedResourceInfo = new EmbeddedResourceInfo(this.GetType().Assembly, "EmbeddedResources/glimpse_text_logo.png", "image/png");
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace Glimpse.Core.Resource
         /// <returns>Information about the embedded Glimpse text logo</returns>
         protected override EmbeddedResourceInfo GetEmbeddedResourceInfo(IResourceContext context)
         {
-            return GlimpseTextLogoEmbeddedResourceInfo;
+            return EmbeddedResourceInfo;
         }
     }
 }

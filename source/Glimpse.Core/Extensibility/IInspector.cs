@@ -1,4 +1,6 @@
-﻿namespace Glimpse.Core.Extensibility
+﻿using Glimpse.Core.Framework;
+
+namespace Glimpse.Core.Extensibility
 {
     /// <summary>
     /// Definition of an inspector that runs during startup. This provides the means 
@@ -16,9 +18,7 @@
         /// </summary>
         /// <param name="context">The context.</param>
         /// <remarks>
-        /// Executed during the <see cref="Glimpse.Core.Framework.IGlimpseRuntime.Initialize"/> phase of 
-        /// system startup. Specifically, with the ASP.NET provider, this is wired to/implemented by the 
-        /// <c>System.Web.IHttpModule.Init</c> method.
+        /// Executed during initialization of the <see cref="GlimpseRuntime" />
         /// </remarks>
         void Setup(IInspectorContext context);
     }

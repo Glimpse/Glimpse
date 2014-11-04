@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.Adapters;
 using System.Web.UI.WebControls;
+using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework;
 using Glimpse.WebForms.Model;
 
@@ -35,7 +36,7 @@ namespace Glimpse.WebForms.Inspector
         {
             get
             {
-                return GlimpseConfiguration.GetConfiguredTimerStrategy()().Point().Offset;
+                return (GlimpseRuntime.IsAvailable ? GlimpseRuntime.Instance.CurrentRequestContext.CurrentExecutionTimer : UnavailableGlimpseRequestContext.Instance.CurrentExecutionTimer).Point().Offset;
             }
         }
 
@@ -73,7 +74,7 @@ namespace Glimpse.WebForms.Inspector
 
         protected override void OnInit(EventArgs e)
         {
-            if (GlimpseConfiguration.GetConfiguredTimerStrategy()() != null)
+            if (GlimpseRuntime.IsAvailable && GlimpseRuntime.Instance.CurrentRequestContext.RequestHandlingMode == RequestHandlingMode.RegularRequest)
             {
 #if NET45Plus
                 DataBoundControl.CallingDataMethods += DataBoundControl_CallingDataMethods;
@@ -204,7 +205,7 @@ namespace Glimpse.WebForms.Inspector
         protected override void OnInit(EventArgs e)
         {
             CopyAccessState();
-            if (GlimpseConfiguration.GetConfiguredTimerStrategy()() != null)
+            if (GlimpseRuntime.IsAvailable && GlimpseRuntime.Instance.CurrentRequestContext.RequestHandlingMode == RequestHandlingMode.RegularRequest)
             {
 #if NET45Plus
                 DataBoundControl.CallingDataMethods += DataBoundControl_CallingDataMethods;

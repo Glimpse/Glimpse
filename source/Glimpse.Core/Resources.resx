@@ -117,9 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="EndRequestOutOfOrderRuntimeMethodCall" xml:space="preserve">
-    <value>BeginRequest method has not been called in the context of the current HTTP request. Calls to EndRequest must be preceded by calls to BeginRequest.</value>
-  </data>
   <data name="ExecuteTabError" xml:space="preserve">
     <value>Exception executing tab of type '{0}'.</value>
     <comment>{0} - GetType() of offending tab</comment>
@@ -247,5 +244,17 @@
   <data name="PrivilegedResourceExecuteNotSupported" xml:space="preserve">
     <value>Invalid privileged resource execution on '{0}'. Call overload Execute(IResourceContext, IGlimpseConfiguration) instead.</value>
     <comment>{0} - GetType() of offending resource</comment>
+  </data>
+  <data name="ExecuteTabMetadataExtensionsError" xml:space="preserve">
+    <value>Extension tab of type '{0}' failed to execute.</value>
+    <comment>{0} - GetType() of offending tab</comment>
+  </data>
+  <data name="ExecuteMetadataExtensionsError" xml:space="preserve">
+    <value>Extension of type '{0}' failed to execute.</value>
+    <comment>{0} - GetType() of offending tab</comment>
+  </data>
+  <data name="ExecuteInstanceMetadataExtensionsError" xml:space="preserve">
+    <value>Instance extension of type '{0}' failed to execute.</value>
+    <comment>{0} - GetType() of offending metadata</comment>
   </data>
 </root>

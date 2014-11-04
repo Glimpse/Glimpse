@@ -81,16 +81,10 @@
     <Compile Include="ClientScript\ClientShould.cs" />
     <Compile Include="ClientScript\DataShould.cs" />
     <Compile Include="ClientScript\MetadataShould.cs" />
-    <Compile Include="Configuration\ContentTypeElementCollectionShould.cs" />
-    <Compile Include="Configuration\ContentTypeElementShould.cs" />
     <Compile Include="Configuration\DiscoverableCollectionElementShould.cs" />
     <Compile Include="Configuration\SectionShould.cs" />
     <Compile Include="Configuration\LoggingElementShould.cs" />
-    <Compile Include="Configuration\PolicyDiscoverableCollectionElementShould.cs" />
-    <Compile Include="Configuration\RegexConverterShould.cs" />
-    <Compile Include="Configuration\RegexElementShould.cs" />
     <Compile Include="Configuration\TypeConverterShould.cs" />
-    <Compile Include="Configuration\TypeElementShould.cs" />
     <Compile Include="CastleShould.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -115,8 +109,12 @@
     <Compile Include="Extensions\TestingExtensions.cs" />
     <Compile Include="Framework\CastleDynamicProxyFactoryShould.cs" />
     <Compile Include="Framework\ApplicationPersistenceStoreShould.cs" />
+    <Compile Include="Framework\ActiveGlimpseRequestContextsShould.cs" />
+    <Compile Include="Framework\GlimpseRequestContextHandleShould.cs" />
+    <Compile Include="Framework\UnavailableGlimpseRequestContextHandleShould.cs" />
+    <Compile Include="Framework\InactiveGlimpseRequestContextShould.cs" />
+    <Compile Include="Framework\GlimpseRequestContextShould.cs" />
     <Compile Include="Framework\MessageBrokerShould.cs" />
-    <Compile Include="Framework\FactoryShould.cs" />
     <Compile Include="Framework\GlimpseConfigurationShould.cs" />
     <Compile Include="Framework\GlimpseMetadataShould.cs" />
     <Compile Include="Framework\GlimpseRuntimeShould.cs" />
@@ -144,6 +142,7 @@
     <Compile Include="Policy\GlimpseResourcePolicyShould.cs" />
     <Compile Include="Policy\StatusCodePolicyShould.cs" />
     <Compile Include="Policy\UriPolicyShould.cs" />
+    <Compile Include="ScriptTagsInjectionStreamShould.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResourceResult\CacheControlDecoratorShould.cs" />
     <Compile Include="ResourceResult\RedirectResourceResultShould.cs" />
@@ -160,9 +159,7 @@
     <Compile Include="SerializationConverter\TimelineEventModelConverterShould.cs" />
     <Compile Include="SerializationConverter\TimeStampConverterShould.cs" />
     <Compile Include="SerializationConverter\DateTimeConverterShould.cs" />
-    <Compile Include="SerializationConverter\GlimpseMetadataConverterShould.cs" />
     <Compile Include="SerializationConverter\GlimpseRequestConverterShould.cs" />
-    <Compile Include="SerializationConverter\PluginMetadataConverterShould.cs" />
     <Compile Include="SerializationConverter\TabResultConverterShould.cs" />
     <Compile Include="SerializationConverter\CSharpTypeConverterShould.cs" />
     <Compile Include="SerializationConverter\ListOfTraceMessageConverterShould.cs" />
@@ -182,11 +179,13 @@
     <Compile Include="TestDoubles\DummyTab.cs" />
     <Compile Include="TestDoubles\IDummyInterface.cs" />
     <Compile Include="TestDoubles\IDummyMixin.cs" />
+    <Compile Include="Tester\CurrentGlimpseRequestIdTrackerTester.cs" />
+    <Compile Include="Tester\ResourceEndpointConfigurationTester.cs" />
+    <Compile Include="Tester\RequestResponseAdapterTester.cs" />
     <Compile Include="Tester\AjaxPolicyTester.cs" />
-    <Compile Include="Tester\ApplicationPersistenceStoreTester.cs" />
+    <Compile Include="Tester\InMemoryPersistenceStoreTester.cs" />
     <Compile Include="Tester\ContentTypePolicyTester.cs" />
     <Compile Include="Tester\ControlCookiePolicyTester.cs" />
-    <Compile Include="Tester\GlimpseConfigurationTester.cs" />
     <Compile Include="Tester\GlimpseRuntimeTester.cs" />
     <Compile Include="Tester\ResourceParametersTester.cs" />
     <Compile Include="Tester\StatusCodePolicyTester.cs" />
@@ -214,7 +213,6 @@
     <EmbeddedResource Include="Resource\FileResourceTester.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

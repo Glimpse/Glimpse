@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Glimpse.Core.Extensibility;
-using Glimpse.Core.Extensions;
 using Glimpse.Core.Framework;
 using Glimpse.Core.ResourceResult;
 
@@ -67,6 +66,7 @@ namespace Glimpse.Core.Resource
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="configuration">The configuration.</param>
+        /// <param name="requestResponseAdapter">The request response adapter</param>
         /// <returns>
         /// A <see cref="IResourceResult" />.
         /// </returns>
@@ -74,7 +74,7 @@ namespace Glimpse.Core.Resource
         /// <remarks>
         /// Use of <see cref="IPrivilegedResource" /> is reserved.
         /// </remarks>
-        public IResourceResult Execute(IResourceContext context, IGlimpseConfiguration configuration)
+        public IResourceResult Execute(IResourceContext context, IReadonlyConfiguration configuration, IRequestResponseAdapter requestResponseAdapter)
         {
             //TODO: Can't assume this is here 
             var request = context.PersistenceStore.GetTop(1).FirstOrDefault(); 
