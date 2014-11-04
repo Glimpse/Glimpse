@@ -36,10 +36,10 @@ If you would like to get involved, there are plenty of things that you can do. T
  - **Issues** - Glimpse maintains several issues that are good for first-timers [tagged as Jump In on GitHub](https://github.com/Glimpse/Glimpse/issues?labels=Jump+In&milestone=&page=1&sort=updated&state=open). If one piques your interest, feel free to work on it and let us know if you need any help doing so.
     - [Learn more about how "Jump In" issues work](http://nikcodes.com/2013/05/10/new-contributor-jump-in/)
  - **New Features** - For those looking to get more deeply involved, reach out to find out about our current efforts and how you can help.
-    - [Learn more about contributing to Glimpse core](http://getglipse.com/Docs/Contributing)
+    - [Learn more about contributing to Glimpse core](http://getglimpse.com/Docs/Contributing)
  - **Share Glimpse** - If you love Glimpse, tell others about it! Present Glimpse at a company tech talk, your local user group or submit a proposal to a conference about how you are using Glimpse or any extensions you may have written.
-    - [Need inspiration? Watch some of the talks that we have given](http://getglipse.com/Docs/More-information)
- - **Create an Extension** - Get the best out of Glimpse by writing your own extension to expose diagnostic data that is meaningful for your applications. Creating extensions is easy, check [the docs](http://getglipse.com/Docs/Custom-Tabs) or reference an [open source extension](http://getglipse.com//Extensions) to get started.
+    - [Need inspiration? Watch some of the talks that we have given](http://getglimpse.com/Docs/More-information)
+ - **Create an Extension** - Get the best out of Glimpse by writing your own extension to expose diagnostic data that is meaningful for your applications. Creating extensions is easy, check [the docs](http://getglimpse.com/Docs/Custom-Tabs) or reference an [open source extension](http://getglimpse.com//Extensions) to get started.
  - **Documentation** - Documentation is a key differentiator between good projects and <em>great</em> ones. Whether you’re a first time OSS contributor or a veteran, documentation is a great stepping stone to learn our contribution process.
     - Contributing to Glimpse documentation is dead simple. To make it so easy, we're using Glimpse’s [GitHub Wiki](https://github.com/Glimpse/Glimpse/wiki) as the entry point for documentation - each page within the docs section of the site has a link to take you straight to the page where you can make changes directly. GitHub Wikis provide an online WYSIWYG interface for adding and editing the docs, completely in browser, using [Markdown](https://daringfireball.net/projects/markdown/).
 
