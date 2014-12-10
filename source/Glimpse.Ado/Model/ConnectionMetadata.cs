@@ -51,13 +51,15 @@ namespace Glimpse.Ado.Model
             Transactions.Add(transaction.Id, transaction);
 
             var command = Commands.FirstOrDefault(x => x.Value.Offset >= transaction.Offset);
-            command.Value.HeadTransaction = transaction;
+            if(command.Value != null)
+				command.Value.HeadTransaction = transaction;
         }
 
         public void RegiserTransactionEnd(TransactionMetadata transaction)
         {
             var command = Commands.LastOrDefault(x => x.Value.Offset <= transaction.Offset + transaction.Duration);
-            command.Value.TailTransaction = transaction;
+            if(command.Value != null)
+				command.Value.TailTransaction = transaction;
         }
     }
 }
