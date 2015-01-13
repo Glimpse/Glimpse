@@ -55,7 +55,7 @@ namespace Glimpse.AspNet
         { 
             get
             {
-                if (Context.User != null)
+                if (Context.User != null && Context.User.Identity != null)
                 {
                     var user = Context.User.Identity.Name;
                     if (!string.IsNullOrEmpty(user))
