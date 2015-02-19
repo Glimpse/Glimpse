@@ -2405,7 +2405,7 @@ glimpse.tab = (function($, pubsub, data) {
         },
         activate = function() {
             var options = elements.optionsHolder().html('<div class="glimpse-clear"><a href="javascript:void(0)" class="glimpse-clear-ajax">Clear</a></div><div class="glimpse-notice glimpse-disconnect"><div class="icon"></div><span>Disconnected...</span></div>');
-            context.notice = util.connectionNotice(options.find('.glimpse-notice')); 
+            context.notice = util.connectionNotice(options.find('.glimpse-notice'));
              
             context.isSelected = true;
             
@@ -2600,7 +2600,7 @@ glimpse.tab = (function($, pubsub, data) {
     var context = { resultCount : 0, clientName : '', requestId : '', currentData: null, notice: null, isActive: false, isSelected: false, contextRequestId: undefined }, 
         generateHistoryAddress = function() {
             var currentMetadata = data.currentMetadata();
-            return util.uriTemplate(currentMetadata.resources.glimpse_history, { 'hash': currentMetadata.hash });
+            return util.uriTemplate(currentMetadata.resources.glimpse_history, { 'hash': currentMetadata.hash, 'top': $(".glimpse-options select").val() });
         },
         wireListeners = function() {
             var panel = elements.panel('history');
@@ -2616,7 +2616,9 @@ glimpse.tab = (function($, pubsub, data) {
         }, 
         activate = function() { 
             var options = elements.optionsHolder().html('<div class="glimpse-clear"><a href="javascript:void(0)" class="glimpse-clear-history">Clear</a></div><div class="glimpse-notice glimpse-disconnect"><div class="icon"></div><span>Disconnected...</span></div>');
-            context.notice = util.connectionNotice(options.find('.glimpse-notice')); 
+            // TODO:this is concept design, does not reflect Glimpse.Client repo
+            options.prepend('<div style="bottom:50px;position:absolute;right:20px;-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px;border:#CCC solid 1px"><select name="history-size"><option>25</option><option selected="">50</option><option>100</option><option>250</option><option>500</option><option value="b"></option></select></div>');
+            context.notice = util.connectionNotice(options.find('.glimpse-notice'));
             
             context.isSelected = true;
             
@@ -2715,7 +2717,7 @@ glimpse.tab = (function($, pubsub, data) {
                 detailBody.empty();
             }
             
-            for (var x = context.resultCount; x < clientData.length; x++) {
+            for (var x = (clientData.length - context.resultCount - 1); x >= 0 ; x--) {
                 var item = clientData[x];
                 html = '<tr class="glimpse-row" data-requestId="' + item.requestId + '"><td><div class="glimpse-ellipsis" title="' + item.uri + '">' + util.htmlEncode(item.uri) + '</div></td><td>' + item.method + '</td><td>' + item.statusCode + '</td><td class="mono" style="text-align:right">' + item.duration + '<span class="glimpse-soft"> ms</span></td><td>' + item.dateTime + '</td><td>' + item.isAjax + '</td><td><a href="javascript:void(0)" class="glimpse-history-link" data-requestId="' + item.requestId + '">Inspect</a></td></tr>' + html;
             }

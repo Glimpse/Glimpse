@@ -100,9 +100,13 @@ namespace Glimpse.Test.Core
             Store.Save(metadata4);
             Store.Save(metadata5);
 
-            var result = Store.GetTop(10);
+            var result = Store.GetTop(10).ToArray();
             Assert.Equal(5, result.Count());
-            Assert.Equal(metadata1, result.First());
+            Assert.Equal(metadata5, result[0]);
+            Assert.Equal(metadata4, result[1]);
+            Assert.Equal(metadata3, result[2]);
+            Assert.Equal(metadata2, result[3]);
+            Assert.Equal(metadata1, result[4]);
         }
 
         [Fact]
@@ -123,9 +127,11 @@ namespace Glimpse.Test.Core
             Store.Save(metadata4);
             Store.Save(metadata5);
 
-            var result = Store.GetTop(3);
+            var result = Store.GetTop(3).ToArray();
             Assert.Equal(3, result.Count());
-            Assert.Equal(metadata1, result.First());
+            Assert.Equal(metadata5, result[0]);
+            Assert.Equal(metadata4, result[1]);
+            Assert.Equal(metadata3, result[2]);
         }
 
         [Fact]

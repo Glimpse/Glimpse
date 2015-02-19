@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
@@ -16,7 +17,12 @@ namespace Glimpse.Core.Framework
     {
         private const string PersistenceStoreKey = "__GlimpsePersistenceKey";
 
-        private const int BufferSize = 25;
+        private static readonly int BufferSize = new Func<int>(() =>
+        {
+            int bufferSize;
+            var bufferSizeConfig = ConfigurationManager.AppSettings["Glimpse:PersistenceStoreBufferSize"];
+            return int.TryParse(bufferSizeConfig, out bufferSize) ? bufferSize : 25;
+        })();
         
         private readonly object queueLock = new object();
 
@@ -137,7 +143,7 @@ namespace Glimpse.Core.Framework
         {
             lock (queueLock)
             {
-                return GlimpseRequests.Take(count).ToList();
+                return GlimpseRequests.Reverse().Take(count).ToList();
             }
         }
 
