@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
@@ -16,7 +17,7 @@ namespace Glimpse.Core.Framework
     {
         private const string PersistenceStoreKey = "__GlimpsePersistenceKey";
 
-        private const int BufferSize = 25;
+        private readonly int bufferSize;
         
         private readonly object queueLock = new object();
 
@@ -31,8 +32,15 @@ namespace Glimpse.Core.Framework
             var glimpseRequests = DataStore.Get<Queue<GlimpseRequest>>(PersistenceStoreKey);
             if (glimpseRequests == null)
             {
-                glimpseRequests = new Queue<GlimpseRequest>(BufferSize);
+                glimpseRequests = new Queue<GlimpseRequest>(bufferSize);
                 DataStore.Set(PersistenceStoreKey, glimpseRequests);
+            }
+
+            int.TryParse(ConfigurationManager.AppSettings["Glimpse:ApplicationPersistenceStoreBufferSize"], out bufferSize);
+            if (bufferSize <= 0)
+            {
+                // Set bufferSize to the previous default of 25 to maintain backwards compatability
+                bufferSize = 25;
             }
 
             GlimpseRequests = glimpseRequests;
@@ -52,7 +60,7 @@ namespace Glimpse.Core.Framework
         {
             lock (queueLock)
             {
-                if (GlimpseRequests.Count >= BufferSize)
+                if (GlimpseRequests.Count >= bufferSize)
                 {
                     GlimpseRequests.Dequeue();
                 }
