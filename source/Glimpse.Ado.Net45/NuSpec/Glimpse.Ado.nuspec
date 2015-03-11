@@ -15,7 +15,7 @@
         <summary>Glimpse tabs for ADO.</summary>
         <releaseNotes>
 Featherweight release for Ado:
- - Conduct an additional null check around the StateChange event (fixes bug in EF 6.1.1)
+ - Fixed null-pointer exception that occoured when using transactions without commands
         </releaseNotes>
         <tags>ASP.NET Web WebForms Glimpse ADO ADO.NET SQL performance profiling timing diagnostics</tags>
         <dependencies>
