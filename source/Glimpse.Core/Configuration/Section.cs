@@ -312,22 +312,22 @@ namespace Glimpse.Core.Configuration
         /// Gets or sets the number of requests persisted by default.
         /// </summary>
         /// <remarks>
-        /// The <c>BufferSize</c> defaults to <c>25</c>. The <c>BufferSize</c> is leveraged by an instance of <see cref="IPersistenceStore"/> in order to persist the correct number of requests.
+        /// The <c>RequestBufferSize</c> defaults to <c>25</c>. The <c>RequestBufferSize</c> is leveraged by an instance of <see cref="IPersistenceStore"/> in order to persist the correct number of requests.
         /// </remarks>
         /// <example>
         /// <code>
         /// <![CDATA[
-        /// <glimpse defaultRuntimePolicy="On" endpointBaseUri="~/Glimpse.axd" bufferSize="100">
+        /// <glimpse defaultRuntimePolicy="On" endpointBaseUri="~/Glimpse.axd" requestBufferSize="100">
         ///     <!-- Additional Glimpse configuration nodes -->
         /// </glimpse>
         /// ]]>
         /// </code>
         /// </example>
-        [ConfigurationProperty("bufferSize", DefaultValue = DefaultBufferSize)]
-        public int BufferSize
+        [ConfigurationProperty("requestBufferSize", DefaultValue = DefaultBufferSize)]
+        public int RequestBufferSize
         {
-            get { return (int)base["bufferSize"]; }
-            set { base["bufferSize"] = value; }
+            get { return (int)base["requestBufferSize"]; }
+            set { base["requestBufferSize"] = value; }
         }
     }
 }

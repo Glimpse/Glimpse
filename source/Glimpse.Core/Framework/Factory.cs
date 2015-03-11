@@ -247,7 +247,7 @@ namespace Glimpse.Core.Framework
                 return store;
             }
 
-            return new ApplicationPersistenceStore(InstantiateFrameworkProvider().HttpServerStore, Configuration.BufferSize);
+            return new ApplicationPersistenceStore(InstantiateFrameworkProvider().HttpServerStore, Configuration.RequestBufferSize);
         }
 
         /// <summary>
