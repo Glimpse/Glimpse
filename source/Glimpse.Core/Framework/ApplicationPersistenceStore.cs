@@ -16,31 +16,23 @@ namespace Glimpse.Core.Framework
     public class ApplicationPersistenceStore : IPersistenceStore
     {
         private const string PersistenceStoreKey = "__GlimpsePersistenceKey";
-
-        private readonly int bufferSize;
-        
+                
         private readonly object queueLock = new object();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ApplicationPersistenceStore" /> class.
         /// </summary>
         /// <param name="dataStore">The data store.</param>
-        public ApplicationPersistenceStore(IDataStore dataStore)
+        public ApplicationPersistenceStore(IDataStore dataStore, int bufferSize)
         {
             DataStore = dataStore;
+            BufferSize = bufferSize;
 
             var glimpseRequests = DataStore.Get<Queue<GlimpseRequest>>(PersistenceStoreKey);
             if (glimpseRequests == null)
             {
-                glimpseRequests = new Queue<GlimpseRequest>(bufferSize);
+                glimpseRequests = new Queue<GlimpseRequest>(BufferSize);
                 DataStore.Set(PersistenceStoreKey, glimpseRequests);
-            }
-
-            int.TryParse(ConfigurationManager.AppSettings["Glimpse:ApplicationPersistenceStoreBufferSize"], out bufferSize);
-            if (bufferSize <= 0)
-            {
-                // Set bufferSize to the previous default of 25 to maintain backwards compatability
-                bufferSize = 25;
             }
 
             GlimpseRequests = glimpseRequests;
@@ -52,6 +44,8 @@ namespace Glimpse.Core.Framework
 
         private GlimpseMetadata Metadata { get; set; }
 
+        private int BufferSize { get; set; }
+
         /// <summary>
         /// Saves the specified request.
         /// </summary>
@@ -60,7 +54,7 @@ namespace Glimpse.Core.Framework
         {
             lock (queueLock)
             {
-                if (GlimpseRequests.Count >= bufferSize)
+                if (GlimpseRequests.Count >= BufferSize)
                 {
                     GlimpseRequests.Dequeue();
                 }

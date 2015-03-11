@@ -28,6 +28,7 @@ namespace Glimpse.Core.Configuration
     public class Section : ConfigurationSection
     {
         internal const string DefaultLocation = "";
+        internal const int DefaultBufferSize = 25;
 
         /// <summary>
         /// Gets or sets the logging settings used by Glimpse.
@@ -305,6 +306,28 @@ namespace Glimpse.Core.Configuration
         {
             get { return (string)base["discoveryLocation"]; }
             set { base["discoveryLocation"] = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the number of requests persisted by default.
+        /// </summary>
+        /// <remarks>
+        /// The <c>BufferSize</c> defaults to <c>25</c>. The <c>BufferSize</c> is leveraged by an instance of <see cref="IPersistenceStore"/> in order to persist the correct number of requests.
+        /// </remarks>
+        /// <example>
+        /// <code>
+        /// <![CDATA[
+        /// <glimpse defaultRuntimePolicy="On" endpointBaseUri="~/Glimpse.axd" bufferSize="100">
+        ///     <!-- Additional Glimpse configuration nodes -->
+        /// </glimpse>
+        /// ]]>
+        /// </code>
+        /// </example>
+        [ConfigurationProperty("bufferSize", DefaultValue = DefaultBufferSize)]
+        public int BufferSize
+        {
+            get { return (int)base["bufferSize"]; }
+            set { base["bufferSize"] = value; }
         }
     }
 }
