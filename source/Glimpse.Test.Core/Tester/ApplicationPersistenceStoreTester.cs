@@ -10,7 +10,8 @@ namespace Glimpse.Test.Core.Tester
     {
         public Mock<IRequestMetadata> RequestMetadataMock { get; set; }
 
-        private ApplicationPersistenceStoreTester(IDataStore dataStore):base(dataStore)
+        private ApplicationPersistenceStoreTester(IDataStore dataStore, int bufferSize)
+            : base(dataStore, bufferSize)
         {
             RequestMetadataMock = new Mock<IRequestMetadata>();
             RequestMetadataMock.Setup(r => r.RequestHttpMethod).Returns("POST");
@@ -19,9 +20,9 @@ namespace Glimpse.Test.Core.Tester
             RequestMetadataMock.Setup(r => r.RequestIsAjax).Returns(true);
         }
 
-        public static ApplicationPersistenceStoreTester Create()
+        public static ApplicationPersistenceStoreTester Create(int bufferSize = 25)
         {
-            return new ApplicationPersistenceStoreTester(new DictionaryDataStoreAdapter(new Dictionary<object, object>()));
+            return new ApplicationPersistenceStoreTester(new DictionaryDataStoreAdapter(new Dictionary<object, object>()), bufferSize);
         }
     }
 }

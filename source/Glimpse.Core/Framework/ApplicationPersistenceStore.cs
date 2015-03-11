@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Extensions;
@@ -15,18 +16,17 @@ namespace Glimpse.Core.Framework
     public class ApplicationPersistenceStore : IPersistenceStore
     {
         private const string PersistenceStoreKey = "__GlimpsePersistenceKey";
-
-        private const int BufferSize = 25;
-        
+                
         private readonly object queueLock = new object();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ApplicationPersistenceStore" /> class.
         /// </summary>
         /// <param name="dataStore">The data store.</param>
-        public ApplicationPersistenceStore(IDataStore dataStore)
+        public ApplicationPersistenceStore(IDataStore dataStore, int bufferSize)
         {
             DataStore = dataStore;
+            BufferSize = bufferSize;
 
             var glimpseRequests = DataStore.Get<Queue<GlimpseRequest>>(PersistenceStoreKey);
             if (glimpseRequests == null)
@@ -43,6 +43,8 @@ namespace Glimpse.Core.Framework
         private IDataStore DataStore { get; set; }
 
         private GlimpseMetadata Metadata { get; set; }
+
+        private int BufferSize { get; set; }
 
         /// <summary>
         /// Saves the specified request.
