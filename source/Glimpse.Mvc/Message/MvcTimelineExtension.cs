@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using Glimpse.Core.Message;
 using Glimpse.Mvc.AlternateType;
 
@@ -21,6 +18,12 @@ namespace Glimpse.Mvc.Message
             {
                 controllerName = actionMessage.ControllerName;
                 actionName = actionMessage.ActionName;
+            }
+
+            var sourceMessage = message as ISourceMessage;
+            if (sourceMessage != null)
+            {
+                message.EventSubText = sourceMessage.ExecutedType.ToString();
             }
 
             var viewRenderMessage = message as View.Render.Message;
