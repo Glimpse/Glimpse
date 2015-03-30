@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using Glimpse.Core.Extensibility;
+using Glimpse.Core.Extensions;
 
 namespace Glimpse.Core.Framework
 {
@@ -19,7 +20,7 @@ namespace Glimpse.Core.Framework
         private ICollection<IClientScript> clientScripts;
         private IResource defaultResource;
         private string endpointBaseUri;
-        private IFrameworkProvider frameworkProvider;
+        private static IFrameworkProvider frameworkProvider;
         private IHtmlEncoder htmlEncoder;
         private IPersistenceStore persistenceStore;
         private ICollection<IInspector> inspectors;
@@ -30,6 +31,7 @@ namespace Glimpse.Core.Framework
         private ISerializer serializer;
         private ICollection<ITab> tabs;
         private ICollection<IDisplay> displays;
+        private static RuntimePolicy defaultRuntimePolicy;
         private Func<RuntimePolicy> runtimePolicyStrategy;
         private string hash;
 
@@ -239,7 +241,18 @@ namespace Glimpse.Core.Framework
         /// <value>
         /// The default runtime policy.
         /// </value>
-        public RuntimePolicy DefaultRuntimePolicy { get; set; }
+        public RuntimePolicy DefaultRuntimePolicy
+        {
+            get
+            {
+                return defaultRuntimePolicy;
+            }
+
+            set
+            {
+                defaultRuntimePolicy = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the endpoint base URI.
@@ -703,6 +716,21 @@ namespace Glimpse.Core.Framework
         public static IMessageBroker GetConfiguredMessageBroker()
         {
             return messageBroker;
+        }
+
+        /// <summary>
+        /// Returns the current runtime policy that is active from the HttpRequestStore
+        /// </summary>
+        /// <returns>Current runtime policy</returns>
+        public static RuntimePolicy GetRuntimePolicy()
+        {
+            if (frameworkProvider == null) {
+                return RuntimePolicy.Off;
+            }
+            var requestStore = frameworkProvider.HttpRequestStore;
+            return requestStore.Contains(Constants.RuntimePolicyKey)
+                ? requestStore.Get<RuntimePolicy>(Constants.RuntimePolicyKey)
+                : defaultRuntimePolicy;
         }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Data.Common;
-using System.Reflection; 
+using System.Reflection;
+using Glimpse.Core.Extensibility;
+using Glimpse.Core.Framework;
 
 namespace Glimpse.Ado.AlternateType
 {
@@ -32,8 +34,12 @@ namespace Glimpse.Ado.AlternateType
         private TProviderFactory InnerFactory { get; set; }
 
         public override DbCommand CreateCommand()
-        { 
-            return new GlimpseDbCommand(InnerFactory.CreateCommand());
+        {
+            var command = InnerFactory.CreateCommand();
+            if (GlimpseConfiguration.GetRuntimePolicy() == RuntimePolicy.Off) {
+                return command;
+            }
+            return new GlimpseDbCommand(command);
         }
 
         public override DbCommandBuilder CreateCommandBuilder()
@@ -42,8 +48,13 @@ namespace Glimpse.Ado.AlternateType
         }
 
         public override DbConnection CreateConnection()
-        { 
-            return new GlimpseDbConnection(InnerFactory.CreateConnection(), this);
+        {
+            var connection = InnerFactory.CreateConnection();
+            if (GlimpseConfiguration.GetRuntimePolicy() == RuntimePolicy.Off)
+            {
+                return connection;
+            }
+            return new GlimpseDbConnection(connection, this);
         }
 
         public override DbConnectionStringBuilder CreateConnectionStringBuilder()
@@ -53,7 +64,11 @@ namespace Glimpse.Ado.AlternateType
 
         public override DbDataAdapter CreateDataAdapter()
         {
-            return new GlimpseDbDataAdapter(InnerFactory.CreateDataAdapter()); 
+            var adapter = InnerFactory.CreateDataAdapter();
+            if (GlimpseConfiguration.GetRuntimePolicy() == RuntimePolicy.Off) {
+                return adapter;
+            }
+            return new GlimpseDbDataAdapter(adapter);
         }
 
         public override DbDataSourceEnumerator CreateDataSourceEnumerator()
