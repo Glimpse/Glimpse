@@ -12,7 +12,7 @@ namespace Glimpse.Ado.AlternateType
 
     public class GlimpseDbProviderFactory<TProviderFactory> : GlimpseDbProviderFactory, IServiceProvider
         where TProviderFactory : DbProviderFactory
-    {   
+    {
         public static readonly GlimpseDbProviderFactory<TProviderFactory> Instance = new GlimpseDbProviderFactory<TProviderFactory>();
         
         public GlimpseDbProviderFactory()
@@ -33,10 +33,24 @@ namespace Glimpse.Ado.AlternateType
 
         private TProviderFactory InnerFactory { get; set; }
 
+        private static bool ShouldNotWrap()
+        {
+            if (GlimpseConfiguration.GetConfiguredMessageBroker() == null)
+            {
+                return true;
+            }
+            if (GlimpseConfiguration.GetRuntimePolicyStategy()() == RuntimePolicy.Off) 
+            {
+                return true;
+            }
+            return false;
+        }
+
         public override DbCommand CreateCommand()
         {
             var command = InnerFactory.CreateCommand();
-            if (GlimpseConfiguration.GetRuntimePolicy() == RuntimePolicy.Off) {
+            if (ShouldNotWrap()) 
+            {
                 return command;
             }
             return new GlimpseDbCommand(command);
@@ -50,7 +64,7 @@ namespace Glimpse.Ado.AlternateType
         public override DbConnection CreateConnection()
         {
             var connection = InnerFactory.CreateConnection();
-            if (GlimpseConfiguration.GetRuntimePolicy() == RuntimePolicy.Off)
+            if (ShouldNotWrap())
             {
                 return connection;
             }
@@ -65,7 +79,8 @@ namespace Glimpse.Ado.AlternateType
         public override DbDataAdapter CreateDataAdapter()
         {
             var adapter = InnerFactory.CreateDataAdapter();
-            if (GlimpseConfiguration.GetRuntimePolicy() == RuntimePolicy.Off) {
+            if (ShouldNotWrap())
+            {
                 return adapter;
             }
             return new GlimpseDbDataAdapter(adapter);

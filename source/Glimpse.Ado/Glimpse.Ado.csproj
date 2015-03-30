@@ -49,6 +49,7 @@
     <Compile Include="AlternateType\Support.cs" />
     <Compile Include="Display\SqlDisplay.cs" />
     <Compile Include="Extensibility\ICommandParameterParser.cs" />
+    <Compile Include="Initialize.cs" />
     <Compile Include="Inspector\AdoInspector.cs" />
     <Compile Include="Inspector\Core\AdoExecutionBlock.cs" />
     <Compile Include="Inspector\Core\DbProviderFactoriesExecutionTask.cs" />

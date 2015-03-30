@@ -24,3 +24,4 @@ using Glimpse.Core.Extensibility;
 [assembly: CLSCompliant(true)]
 [assembly: InternalsVisibleTo("Glimpse.Test.Ado")]
 [assembly: NuGetPackage("Glimpse.Ado")]
+[assembly: PreApplicationStartMethod(typeof(Initialize), "Start")]
