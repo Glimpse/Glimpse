@@ -215,6 +215,9 @@ namespace Glimpse.Core.Resource
             glimpseConfigurationTemplate.Add("messageBrokerType", configuration.MessageBroker.GetType().FullName);
             glimpseConfigurationTemplate.Add("endpointBaseUri", configuration.EndpointBaseUri);
 
+            // General Settings
+            glimpseConfigurationTemplate.Add("generalSettings", GetGeneralSettings().ToArray());
+
             // Registered Packages
             var nuGetPackageDiscoveryResult = NuGetPackageDiscoverer.Discover();
             glimpseConfigurationTemplate.Add(
@@ -236,6 +239,14 @@ namespace Glimpse.Core.Resource
             return new HtmlResourceResult(glimpseConfigurationTemplate.Render());
         }
 
+        private static IEnumerable<object> GetGeneralSettings()
+        {
+            return new List<object>()
+            {
+                new {  Name= "Enable Shortcut Keys", Type = "ShortcutKeys" }
+            };
+        }
+        
         private static IEnumerable<object> GroupItemsByPackage<T>(IEnumerable<T> items, IDictionary<string, PackageItemDetail> packages, Func<T, object> createItemDisplay)
         {
             var groupedItemsByPackage = GroupItems(items, packages);
