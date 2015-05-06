@@ -14,9 +14,9 @@
         <description>Glimpse is a web debugging and diagnostics tool used to gain a better understanding of whats happening inside of your ASP.NET 4.0 application. For ASP.NET MVC3 support, please NuGet Glimpse.MVC3.</description>
         <summary>ASP.NET 4.5 web debugging and diagnostics tool.</summary>
         <releaseNotes>
-Featherweight release for Core:
- - Add button which makes it easy to launch glimpse for service only sites
- - Improve how client renders for thoses using Zurb Foundation
+Lightweight release for Core:
+ - Adds support for a configurable in-memory request buffer size
+ - Support for keyboard shortcuts
         </releaseNotes>
         <tags>ASP.NET Web WebForms Glimpse diagnostics performance profiling timing</tags>
     </metadata>

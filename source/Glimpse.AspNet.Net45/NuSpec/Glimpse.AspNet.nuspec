@@ -15,8 +15,7 @@
         <summary>ASP.NET 4.5 web debugging and diagnostics tool.</summary>
         <releaseNotes>
 Featherweight release for Asp.Net:
- - Added support for AspNetSynchronizationContext.
- - Added support for Build Mode detection of assemblies in Environment tab.
+ - Fixed null-pointer exception that occoured when accessing Identity
         </releaseNotes>
         <tags>ASP.NET Web WebForms Glimpse</tags>
         <dependencies>

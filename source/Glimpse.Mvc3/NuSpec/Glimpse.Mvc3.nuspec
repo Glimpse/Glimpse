@@ -15,8 +15,7 @@
         <summary>ASP.NET MVC 3.0 web debugging and diagnostics tool.</summary>
         <releaseNotes>
 Flyweight release for MVC:
- - Added updated support for IUnvalidated and IEnumerable ValueProviders
- - Fixed problem where Response.RedirectToRoute() in Global.asax could throw a NullReferenceException
+ - Add more details for MVC Timeline events
         </releaseNotes>
         <tags>ASP.NET Web MVC Glimpse diagnostics performance profiling timing</tags>
         <dependencies>
