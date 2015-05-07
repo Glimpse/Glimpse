@@ -131,6 +131,17 @@ $(function () {
         adjustConfigState();
     });
 
+    $('.code-generalSettings-controller input').change(function () {
+        var getOptions = function () {
+            var data = localStorage.getItem('glimpseOptions');
+            return data != null ? JSON.parse(data) : {};
+        },
+            options = getOptions();
+
+        options.shortcutKeysEnabled = $(this).prop('checked');
+        localStorage.setItem('glimpseOptions', JSON.stringify(options));
+    });
+
     var adjustConfigState = function () {
         $('.code-ignoredTypes-options').each(function () {
             var holder = $(this),

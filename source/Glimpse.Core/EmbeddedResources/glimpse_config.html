@@ -290,6 +290,19 @@
                 <li><strong>Proxy Factory</strong>: <span class="code">$proxyFactoryType$</span></li>
                 <li><strong>Message Broker</strong>: <span class="code">$messageBrokerType$</span></li>
                 <li><strong>Endpoint Base Uri</strong>: <span class="code">$endpointBaseUri$</span></li>
+
+                <li>
+                    <strong>General</strong>:
+                    <ul class="code-generalSettings-controller">
+                        $generalSettings : {generalSetting|
+                        <li>
+                            <input type="checkbox" data-type="$generalSetting.Type$" checked="checked" />
+                            <span class="code">$generalSetting.Name$</span>
+                        </li>
+                        }$
+                    </ul>
+                </li>
+                
             </ul>
             <h3>Registered Packages:</h3>
             <p>NOTE, doesn't represent all the Glimpse dependent NuGet packages you have installed, just the ones that have registered as a NuGet package</p>
