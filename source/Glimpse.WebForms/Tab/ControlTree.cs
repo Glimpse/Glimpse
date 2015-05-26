@@ -18,8 +18,8 @@ namespace Glimpse.WebForms.Tab
 {
     public class ControlTree : AspNetTab, ITabSetup, ITabLayout, IKey
     {
-        private static readonly MethodInfo traceContextVerifyStartMethod = typeof(System.Web.TraceContext).GetMethod("VerifyStart", BindingFlags.Instance | BindingFlags.NonPublic);
-        private static readonly FieldInfo requestDataField = typeof(System.Web.TraceContext).GetField("_requestData", BindingFlags.Instance | BindingFlags.NonPublic);
+        private static readonly MethodInfo traceContextVerifyStartMethod = typeof(TraceContext).GetMethod("VerifyStart", BindingFlags.Instance | BindingFlags.NonPublic);
+        private static readonly FieldInfo requestDataField = typeof(TraceContext).GetField("_requestData", BindingFlags.Instance | BindingFlags.NonPublic);
         private static readonly ViewStateFormatter viewStateFormatter = new ViewStateFormatter();
         private static readonly DataBindFormatter dataBindFormatter = new DataBindFormatter();
 
@@ -78,7 +78,7 @@ namespace Glimpse.WebForms.Tab
                 context.TabStore.Set("hasRun", "true");
 
                 // Remember the previous state, turn tracing on at the begining of the request,
-                // set things up so that when request is finished, lets put things back to the 
+                // set things up so that when request is finished, lets put things back to the
                 // way they where. Lastly, make sure sate of trace is setup
                 context.Logger.Debug("Setting logger infrastructure - previouslyEnabled = {0}", trace.IsEnabled);
 
@@ -123,7 +123,7 @@ namespace Glimpse.WebForms.Tab
 
         private void RegisterAdapters(ITabContext context)
         {
-            // Add adapter to the pipeline as a ViewStatePageAdapter 
+            // Add adapter to the pipeline as a ViewStatePageAdapter
             context.Logger.Debug("Setting up view state page adapter");
 
             var adapters = HttpContext.Current.Request.Browser.Adapters;
@@ -137,10 +137,31 @@ namespace Glimpse.WebForms.Tab
             {
                 var existingTypeString = (string)adapters[keyType.AssemblyQualifiedName];
                 var existingType = Type.GetType(existingTypeString);
-                if ((!existingType.IsGenericType && existingType != typeof(ViewStatePageAdapter)) || (existingType.IsGenericType && existingType.GetGenericTypeDefinition() != typeof(ViewStatePageAdapter<>)))
+                if (existingType == null)
                 {
-                    var newAdapterType = typeof(ViewStatePageAdapter<>).MakeGenericType(existingType);
-                    adapters[keyType.AssemblyQualifiedName] = newAdapterType.AssemblyQualifiedName;
+                    // Try resolving type against primary web application assembly (eg. if adapter configuration was not assembly qualified)
+                    var instance = HttpContext.Current.ApplicationInstance;
+                    var baseType = instance.GetType().BaseType;
+                    if (baseType != null)
+                    {
+                        var rootAssembly = baseType.Assembly;
+                        existingType = rootAssembly.GetType(existingTypeString);
+                    }
+                }
+
+                if (existingType != null)
+                {
+                    if ((!existingType.IsGenericType && existingType != typeof(ViewStatePageAdapter)) ||
+                        (existingType.IsGenericType &&
+                         existingType.GetGenericTypeDefinition() != typeof(ViewStatePageAdapter<>)))
+                    {
+                        var newAdapterType = typeof(ViewStatePageAdapter<>).MakeGenericType(existingType);
+                        adapters[keyType.AssemblyQualifiedName] = newAdapterType.AssemblyQualifiedName;
+                    }
+                }
+                else
+                {
+                    context.Logger.Error("Failed to resolve type {0}", existingTypeString);
                 }
             }
 
