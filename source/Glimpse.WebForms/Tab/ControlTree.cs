@@ -78,7 +78,7 @@ namespace Glimpse.WebForms.Tab
                 context.TabStore.Set("hasRun", "true");
 
                 // Remember the previous state, turn tracing on at the begining of the request,
-                // set things up so that when request is finished, lets put things back to the
+                // set things up so that when request is finished, lets put things back to the 
                 // way they where. Lastly, make sure sate of trace is setup
                 context.Logger.Debug("Setting logger infrastructure - previouslyEnabled = {0}", trace.IsEnabled);
 
@@ -123,7 +123,7 @@ namespace Glimpse.WebForms.Tab
 
         private void RegisterAdapters(ITabContext context)
         {
-            // Add adapter to the pipeline as a ViewStatePageAdapter
+            // Add adapter to the pipeline as a ViewStatePageAdapter 
             context.Logger.Debug("Setting up view state page adapter");
 
             var adapters = HttpContext.Current.Request.Browser.Adapters;
