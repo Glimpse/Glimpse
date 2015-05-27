@@ -43,8 +43,15 @@ namespace Glimpse.WebForms.Support
                 if (viewStateType == typeof(Pair))
                 {
                     var pair = (Pair)viewstate;
-                    item.Record.Viewstate = ProcessData(controlTypes[item.ControlId], item.Record.Type, pair.First);
-                    ProcessRecord(item, pair.Second, controlTypes);
+                    if (controlTypes.ContainsKey(item.ControlId))
+                    {
+                        item.Record.Viewstate = ProcessData(controlTypes[item.ControlId], item.Record.Type, pair.First);
+                        ProcessRecord(item, pair.Second, controlTypes);
+                    }
+                    else
+                    {
+                        Logger.Warn("Could not locate control {0} in controlTypes", item.ControlId);
+                    }
                 }
                 else if (viewStateType == typeof(Triplet))
                 {
