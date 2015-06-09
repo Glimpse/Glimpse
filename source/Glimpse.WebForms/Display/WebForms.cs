@@ -50,7 +50,7 @@ namespace Glimpse.WebForms.Display
                 var renderingLast = renderingList.Last();
                 var renderingTime = renderingLast.Offset - renderingFirst.Offset;
 
-                return new {loadingTime, renderingTime};
+                return new { loadingTime, renderingTime };
             }
 
             context.Logger.Warn("No page lifecycle messages found for {0}", context.GetHttpContext().Request.RawUrl);
