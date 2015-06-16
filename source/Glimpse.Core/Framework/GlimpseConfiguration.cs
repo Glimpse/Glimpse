@@ -30,7 +30,8 @@ namespace Glimpse.Core.Framework
         private ISerializer serializer;
         private ICollection<ITab> tabs;
         private ICollection<IDisplay> displays;
-        private Func<RuntimePolicy> runtimePolicyStrategy;
+        private static RuntimePolicy defaultRuntimePolicy;
+        private static Func<RuntimePolicy> runtimePolicyStrategy;
         private string hash;
 
         /// <summary>
@@ -239,7 +240,18 @@ namespace Glimpse.Core.Framework
         /// <value>
         /// The default runtime policy.
         /// </value>
-        public RuntimePolicy DefaultRuntimePolicy { get; set; }
+        public RuntimePolicy DefaultRuntimePolicy
+        {
+            get
+            {
+                return defaultRuntimePolicy;
+            }
+
+            set
+            {
+                defaultRuntimePolicy = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the endpoint base URI.
@@ -703,6 +715,18 @@ namespace Glimpse.Core.Framework
         public static IMessageBroker GetConfiguredMessageBroker()
         {
             return messageBroker;
+        }
+
+        [Obsolete("HACK: To prevent unnecessary wrapping of SQL connections, commands etc")]
+        public static RuntimePolicy GetDefaultRuntimePolicy()
+        {
+            return defaultRuntimePolicy;
+        }
+
+        [Obsolete("HACK: To prevent unnecessary wrapping of SQL connections, commands etc")]
+        public static Func<RuntimePolicy> GetRuntimePolicyStategy()
+        {
+            return runtimePolicyStrategy;
         }
     }
 }
