@@ -1,3 +1,5 @@
+#NOTE: Work on v2 of Glimpse has shifted to https://github.com/Glimpse/Glimpse.Prototype
+
 ##The Diagnostics platform of the web [![Build Status](http://img.shields.io/teamcity/codebetter/bt428.svg)](http://teamcity.codebetter.com/viewType.html?buildTypeId=bt428&guest=1)
 
 Providing real time diagnostics & insights to the fingertips of hundreds of thousands of developers daily
