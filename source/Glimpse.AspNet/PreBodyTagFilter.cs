@@ -177,6 +177,7 @@ namespace Glimpse.AspNet
 
         private void WriteToOutputStream(string content)
         {
+            if (string.IsNullOrEmpty(content)) return;
             byte[] outputBuffer = ContentEncoding.GetBytes(content);
             OutputStream.Write(outputBuffer, 0, outputBuffer.Length);
         }
