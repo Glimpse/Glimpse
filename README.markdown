@@ -53,7 +53,7 @@ For more on getting involved see our [contributor guidelines](https://github.com
 
 ##What to Use Glimpse for and When to Use It
 
-GLIMPSE stands for *Global IMPlicit SEarch*, which is a thriving and growing family of open source NuGet packages that provides detailed performance, debugging and diagnostic information  for ASP.NET apps. 
+GLIMPSE stands for *Global IMPlicit SEarch*, which is a thriving and growing family of open source *NuGet* packages that provides detailed performance, debugging and diagnostic information  for ASP.NET apps. 
 Glimpse is like the FireBug client side debuger, which is implemented in JavaScript on the client side. At the same time, ASP.NET servers on the Server side. 
 
 Glimpse is the diagnostics platform for the web. During your debugging, Glimpse inspects web requests as they happen, providing insights and tooling that reduce debugging time so that enable every developer to improve their web applications. It allows you to drill down into your app when you need to find out what's goign on at the server and exposes information on every request by displaying key performance metrics at the bottom of every page. 
