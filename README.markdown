@@ -4,6 +4,10 @@
 
 Providing real time diagnostics & insights to the fingertips of hundreds of thousands of developers daily
 
+## For Non-Developers
+
+Glimpse is a tool, which gives you a client-side view of your web server. It presents various types of data concerning your server environment and executions. It is specifically useful for developers who have built ASP.NET applications. It provides performance statistics, diagnostic and debugging info about ASP.NET app. Glimpse offers debugging and diagnostics information both for the server-side calls (because it allows you to view what is happening on server right now) and client-side calls. All the info is showed inside your browser. Give it a try!
+
 ##How does Glimpse help?
 Once installed, Glimpse inspects web requests as they happen, providing insights and tooling that reduce debugging time and empower every developer to improve their web applications.
 
@@ -46,6 +50,13 @@ If you would like to get involved, there are plenty of things that you can do. T
     - Contributing to Glimpse documentation is dead simple. To make it so easy, we're using Glimpse’s [GitHub Wiki](https://github.com/Glimpse/Glimpse/wiki) as the entry point for documentation - each page within the docs section of the site has a link to take you straight to the page where you can make changes directly. GitHub Wikis provide an online WYSIWYG interface for adding and editing the docs, completely in browser, using [Markdown](https://daringfireball.net/projects/markdown/).
 
 For more on getting involved see our [contributor guidelines](https://github.com/Glimpse/Glimpse/blob/master/contributing.md).
+
+##What to Use Glimpse for and When to Use It
+
+GLIMPSE stands for *Global IMPlicit SEarch*, which is a thriving and growing family of open source *NuGet* packages that provides detailed performance, debugging and diagnostic information  for ASP.NET apps. 
+Glimpse is like the FireBug client side debuger, which is implemented in JavaScript on the client side. At the same time, ASP.NET servers on the Server side. 
+
+Glimpse is the diagnostics platform for the web. During your debugging, Glimpse inspects web requests as they happen, providing insights and tooling that reduce debugging time so that enable every developer to improve their web applications. It allows you to drill down into your app when you need to find out what's goign on at the server and exposes information on every request by displaying key performance metrics at the bottom of every page. 
 
 ##Need Help?
 
