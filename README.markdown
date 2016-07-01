@@ -54,3 +54,7 @@ For more on getting involved see our [contributor guidelines](https://github.com
  - **Mailing List** - Got questions about how to extend or work on Glimpse, or just want to discuss a new feature idea? Shoot it through to the [developers mailing list](https://groups.google.com/forum/#!forum/getglimpse-dev).
 
 More information about Glimpse can be found at [getGlimpse.com](http://getGlimpse.com)
+
+---
+
+This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
