@@ -4,6 +4,11 @@
 
 Providing real time diagnostics & insights to the fingertips of hundreds of thousands of developers daily
 
+## For Non-Developers
+
+Glimpse is a tool, which gives you a client-side view of your web server. It presents various types of data concerning your server environment and execution. It is specifically useful for developers who have built ASP.NET applications. It provides performance statistics, diagnostic and debugging info about ASP.NET app. Glimpse offers debug and diagnostics information both for the server-side calls (because it allows you to view what is happening on server right now) and client-side calls. All the info is showed inside your browser. Give it a try!
+
+
 ##How does Glimpse help?
 Once installed, Glimpse inspects web requests as they happen, providing insights and tooling that reduce debugging time and empower every developer to improve their web applications.
 
