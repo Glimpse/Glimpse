@@ -17,7 +17,7 @@ namespace Glimpse.Test.Core.Framework
 
         public void Dispose()
         {
-            ResourceParameters = null;
+            ResourceParameters = 0;
         }
 
         [Fact]
