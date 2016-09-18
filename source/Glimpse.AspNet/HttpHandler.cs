@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Specialized;
+using System.Linq;
 using System.Web;
 using Glimpse.Core.Framework;
 
@@ -35,8 +36,22 @@ namespace Glimpse.AspNet
             }
             else
             {
-                runtime.ExecuteResource(resourceName, new ResourceParameters(queryString.AllKeys.Where(key => key != null).ToDictionary(key => key, key => queryString[key])));
+                runtime.ExecuteResource(resourceName, BuildResourceParameters(queryString, context.Request.Form));
             }
+        }
+
+        private ResourceParameters BuildResourceParameters(NameValueCollection queryString, NameValueCollection form)
+        {
+            // Process querystring
+            var parameters = queryString.AllKeys.Where(key => key != null).ToDictionary(key => key, key => queryString[key]);
+            
+            // Process form
+            foreach (var key in form.AllKeys.Where(key => !parameters.ContainsKey(key)))
+            {
+                parameters.Add(key, form[key]);
+            } 
+
+            return new ResourceParameters(parameters)
         }
     }
 }
