@@ -5,7 +5,7 @@ namespace Glimpse.Core.Message
     /// <summary>
     /// Message that captures trace events.
     /// </summary>
-    public class TraceMessage : ITraceMessage
+    public class TraceMessage : ITraceMessage, ITimelineMessage
     {
         /// <summary>
         /// Gets or sets the category the message is in.
@@ -36,5 +36,18 @@ namespace Glimpse.Core.Message
         /// </summary>
         /// <value>The indent level.</value>
         public int IndentLevel { get; set; }
+
+        public Guid Id { get; private set; }
+        public TimeSpan Offset { get; set; }
+        public TimeSpan Duration { get; set; }
+        public DateTime StartTime { get; set; }
+        public string EventName { get; set; }
+        public TimelineCategoryItem EventCategory { get; set; }
+        public string EventSubText { get; set; }
+
+        public TraceMessage()
+        {
+            Id = Guid.NewGuid();
+        }
     }
 }

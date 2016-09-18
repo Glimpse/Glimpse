@@ -127,7 +127,7 @@ namespace Glimpse.Ado.AlternateType
                 command.MessageBroker.Publish(
                     new CommandDurationAndRowCountMessage(command.InnerConnection.ConnectionId, commandId, recordsAffected)
                     .AsTimedMessage(command.TimerStrategy.Stop(timer))
-                    .AsTimelineMessage("Command: Executed", AdoTimelineCategory.Command, type));
+                    .AsTimelineMessage(command.CommandText, AdoTimelineCategory.Command, type + (recordsAffected.HasValue? "\n" + recordsAffected + " records affected" : "")));
             }
         }
 
@@ -143,7 +143,7 @@ namespace Glimpse.Ado.AlternateType
                 command.MessageBroker.Publish(
                     new CommandErrorMessage(command.InnerConnection.ConnectionId, commandId, exception)
                     .AsTimedMessage(command.TimerStrategy.Stop(timer))
-                    .AsTimelineMessage("Command: Error", AdoTimelineCategory.Command, type));
+                    .AsTimelineMessage("Error: " + command.CommandText, AdoTimelineCategory.Command, type));
             }
         }
     }
