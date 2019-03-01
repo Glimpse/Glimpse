@@ -1,10 +1,10 @@
-#NOTE: Work on v2 of Glimpse has shifted to [Glimpse/Glimpse.Prototype](https://github.com/Glimpse/Glimpse.Prototype)
+## NOTE: Work on v2 of Glimpse has shifted to [Glimpse/Glimpse.Prototype](https://github.com/Glimpse/Glimpse.Prototype)
 
-##The Diagnostics platform of the web [![Build Status](http://img.shields.io/teamcity/codebetter/bt428.svg)](http://teamcity.codebetter.com/viewType.html?buildTypeId=bt428&guest=1)
+## The Diagnostics platform of the web [![Build Status](http://img.shields.io/teamcity/codebetter/bt428.svg)](http://teamcity.codebetter.com/viewType.html?buildTypeId=bt428&guest=1)
 
 Providing real time diagnostics & insights to the fingertips of hundreds of thousands of developers daily
 
-##How does Glimpse help?
+## How does Glimpse help?
 Once installed, Glimpse inspects web requests as they happen, providing insights and tooling that reduce debugging time and empower every developer to improve their web applications.
 
  - **Visual Profiling** - Glimpse profiles key server side activities and displays the timing of each in an easy to understand Gantt chart.
@@ -17,7 +17,7 @@ Once installed, Glimpse inspects web requests as they happen, providing insights
  - **Improved Tracing** - Glimpse automatically displays trace statements, eliminating the headache of digging through log files. Popular logging frameworks can be integrated with some slight configuration as well!
 
 
-##Where Does it Fit
+## Where Does it Fit
 Glimpse works where you need it to, how you want it to. Insights are presented in digestable summaries, with the ability to drill down to tackle tough problems.
 
  - **Install via NuGet** - Glimpse is installed with one simple NuGet command (Install-Package Glimpse) or with Visual Studio's manager package dialog.
@@ -27,10 +27,10 @@ Glimpse works where you need it to, how you want it to. Insights are presented i
  - **Lightweight & Fast** - Glimpse's unique architecture makes it faster and less resource intensive than traditional profilers so you never have to sacrifice performance.
  - **Unique Perspective** - While F12 tools like Firebug and proxy debuggers like Fiddler are extremely useful, only Glimpse provides diagnostics from the perspective of your server.
 
-##Free & Open Source
+## Free & Open Source
 Thanks to community contributions, Glimpse is thriving and growing. Glimpse is free and available under the Apache 2.0 license. The source code is available, so feel free to jump in and contribute!
 
-###Getting involved
+### Getting involved
 Glimpse wouldn't be what it is today without the love and support of some awesome people from around the world. These contributions have ranged from simple bug fixes to fully fledged features, and from as far afield as South Africa and South East Asia.
 
 If you would like to get involved, there are plenty of things that you can do. There are issues that are good for first-timers ringfenced and tagged Jump In in GitHub. If you'd rather start off on something more self-contained, why not write an extension?
@@ -47,7 +47,7 @@ If you would like to get involved, there are plenty of things that you can do. T
 
 For more on getting involved see our [contributor guidelines](https://github.com/Glimpse/Glimpse/blob/master/contributing.md).
 
-##Need Help?
+## Need Help?
 
  - **Issue List** - Have you found a bug or something misbehaving? Tell us about it on our [GitHub issue list](https://github.com/glimpse/glimpse/issues) and someone will help you as soon as possible.
  - **Stack Overflow** - Got general questions or just need a little support? Anything related to using, configuring or extending Glimpse can be asked at [StackOverflow](http://stackoverflow.com). View [already answered](http://stackoverflow.com/questions/tagged/glimpse) questions for even faster support.
