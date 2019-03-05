@@ -12,7 +12,8 @@ namespace Glimpse.Ado.Model
         {
             Id = id;
             ConnectionId = connectionId;
-            Parameters = new List<CommandParameterMetadata>(); 
+            Parameters = new List<CommandParameterMetadata>();
+            BatchParameters = new List<List<CommandParameterMetadata>>();
         }
 
         /// <summary>
@@ -84,6 +85,12 @@ namespace Glimpse.Ado.Model
         /// </summary>
         /// <value>The parameters value.</value>
         public IList<CommandParameterMetadata> Parameters { get; private set; }
+
+        /// <summary>
+        /// Gets the batch parameter values for the command.
+        /// </summary>
+        /// <value>The parameters value.</value>
+        public IList<List<CommandParameterMetadata>> BatchParameters { get; private set; }
 
         /// <summary>
         /// Gets or sets whether the index of when the command 

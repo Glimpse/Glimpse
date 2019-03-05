@@ -63,20 +63,25 @@ namespace Glimpse.Ado.AlternateType
             return registrations is DataSet ? ((DataSet)registrations).Tables["DbProviderFactories"] : (DataTable)registrations;
         }
 
-        public static object GetParameterValue(IDataParameter parameter)
+        public static object TranslateValue(object value)
         {
-            if (parameter.Value == DBNull.Value)
+            if (value == DBNull.Value)
             {
                 return "NULL";
             }
 
-            if (parameter.Value is byte[])
+            byte[] blob = value as byte[];
+            if (blob != null)
             {
-                var blob = parameter.Value as byte[];
-                return "BLOB" + (blob != null ? string.Format(" {0} bytes", blob.Length) : string.Empty);
+                return string.Format("BLOB {0} bytes", blob.Length);
             }
 
-            return parameter.Value;
+            return value;
+        }
+
+        public static object GetParameterValue(IDataParameter parameter)
+        {
+            return TranslateValue(parameter.Value);
         }
 
         public static TimeSpan LogCommandSeed(this GlimpseDbCommand command)
@@ -93,21 +98,7 @@ namespace Glimpse.Ado.AlternateType
         {
             if (command.MessageBroker != null)
             {
-                IList<CommandExecutedParamater> parameters = null;
-                if (command.Parameters.Count > 0)
-                {
-                    parameters = new List<CommandExecutedParamater>();
-                    foreach (IDbDataParameter parameter in command.Parameters)
-                    {
-                        var parameterName = parameter.ParameterName;
-                        if (!parameterName.StartsWith("@"))
-                        {
-                            parameterName = "@" + parameterName;
-                        }
-
-                        parameters.Add(new CommandExecutedParamater { Name = parameterName, Value = GetParameterValue(parameter), Type = parameter.DbType.ToString(), Size = parameter.Size });
-                    }
-                }
+                IList<CommandExecutedParamater> parameters = Support.ExtractParameters(command, null);
 
                 command.MessageBroker.Publish(
                     new CommandExecutedMessage(command.InnerConnection.ConnectionId, commandId, command.InnerCommand.CommandText, parameters, command.InnerCommand.Transaction != null, isAsync)
@@ -145,6 +136,24 @@ namespace Glimpse.Ado.AlternateType
                     .AsTimedMessage(command.TimerStrategy.Stop(timer))
                     .AsTimelineMessage("Command: Error", AdoTimelineCategory.Command, type));
             }
+        }
+
+        internal static List<CommandExecutedParamater> ExtractParameters(DbCommand command, Dictionary<string, CommandExecutedParamater> parameterToSourceColumn)
+        {
+            var result = new List<CommandExecutedParamater>(command.Parameters.Count);
+            foreach (IDbDataParameter parameter in command.Parameters)
+            {
+                var parameterName = parameter.ParameterName;
+                if (!parameterName.StartsWith("@"))
+                {
+                    parameterName = "@" + parameterName;
+                }
+                var p = new CommandExecutedParamater { Name = parameterName, Value = Support.GetParameterValue(parameter), Type = parameter.DbType.ToString(), Size = parameter.Size };
+                result.Add(p);
+                if (parameterToSourceColumn != null)
+                    parameterToSourceColumn[parameter.SourceColumn ?? parameter.ParameterName] = p;
+            }
+            return result;
         }
     }
 }

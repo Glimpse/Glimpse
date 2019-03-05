@@ -70,11 +70,32 @@ namespace Glimpse.Ado.Model
                         command.Parameters.Add(parameterMetadata);
                     }
                 }
+                if (message.BatchParameters != null)
+                {
+                    foreach (var batch in message.BatchParameters)
+                    {
+                        List<CommandParameterMetadata> batchedMeta = new List<CommandParameterMetadata>(batch.Value.Count);
+                        foreach (var parameter in batch.Value)
+                        {
+                            var parameterMetadata = new CommandParameterMetadata
+                            {
+                                Name = parameter.Name,
+                                Value = parameter.Value,
+                                Type = parameter.Type,
+                                Size = parameter.Size
+                            };
+
+                            batchedMeta.Add(parameterMetadata);
+                        }
+                        command.BatchParameters.Add(batchedMeta);
+                    }
+                }
 
                 // Duplicate tracking
                 var dupCount = 0;
-                command.IsDuplicate = dupTracker.TryGetValue(message.CommandText, out dupCount);
-                dupTracker[message.CommandText] = dupCount + 1; 
+                var dup = message.CommandText;
+                command.IsDuplicate = dupTracker.TryGetValue(dup, out dupCount);
+                dupTracker[dup] = dupCount + 1; 
             }
         }
 
@@ -222,6 +243,6 @@ namespace Glimpse.Ado.Model
             }
 
             return transaction;
-        }
+        }        
     }
 }

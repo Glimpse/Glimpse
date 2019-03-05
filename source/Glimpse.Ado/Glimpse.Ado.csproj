@@ -58,6 +58,7 @@
     <Compile Include="Message\AdoTransactionMessage.cs" />
     <Compile Include="Message\CommandDurationAndRowCountMessage.cs" />
     <Compile Include="Message\CommandErrorMessage.cs" />
+    <Compile Include="Message\CommandExecutedBatchParameter.cs" />
     <Compile Include="Message\CommandExecutedMessage.cs" />
     <Compile Include="Message\CommandExecutedParamater.cs" />
     <Compile Include="Message\CommandRowCountMessage.cs" />
