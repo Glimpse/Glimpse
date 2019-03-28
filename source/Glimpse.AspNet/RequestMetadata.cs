@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Specialized;
 using System.Web;
 using Glimpse.Core.Framework;
 
@@ -31,28 +32,31 @@ namespace Glimpse.AspNet
             get { return Context.Response.ContentType; }
         }
 
+        public string IpAddress
+        {
+            get
+            {
+                throw new NotImplementedException("Need to implement this IP logic");
+            }
+        }
+
         public bool RequestIsAjax
         {
             get
             {
                 var request = Context.Request;
-
-                if (request["X-Requested-With"] == "XMLHttpRequest")
-                {
-                    return true;
-                }
-
-                if (request.Headers != null)
-                {
-                    return request.Headers["X-Requested-With"] == "XMLHttpRequest";
-                }
-
-                return false;
+                return IsRequestedWithXmlHttpRequest(request.QueryString) ||
+                    IsRequestedWithXmlHttpRequest(request.Headers);
             }
         }
 
-        public string ClientId 
-        { 
+        private static bool IsRequestedWithXmlHttpRequest(NameValueCollection collection)
+        {
+            return collection != null && collection["X-Requested-With"] == "XMLHttpRequest";
+        }
+
+        public string ClientId
+        {
             get
             {
                 if (Context.User != null && Context.User.Identity != null)

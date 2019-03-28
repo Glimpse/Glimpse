@@ -82,6 +82,7 @@
     <Compile Include="Inspector\RoutesInspectorShould.cs" />
     <Compile Include="Policy\LocalPolicyShould.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RequestMetadataShould.cs" />
     <Compile Include="SerializationConverter\ConfigurationModelConverterShould.cs" />
     <Compile Include="SerializationConverter\ConfigurationRoleManagerProviderSettingsModelConverterShould.cs" />
     <Compile Include="SerializationConverter\RequestModelConverterShould.cs" />
