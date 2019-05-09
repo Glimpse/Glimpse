@@ -29,9 +29,23 @@ namespace Glimpse.WebForms.Inspector
             GetControlTree(controlTree, Page.Controls);
 
             Logger.Debug("ControlTree contains '{0}' controls.", controlTree.Count);
+            if (HttpContext.Current.Items["_GlimpseWebFormViewState"] == null)
+            {
+                HttpContext.Current.Items.Add("_GlimpseWebFormViewState", new Pair(null, ViewState));
+            }
+            else {
+                HttpContext.Current.Items["_GlimpseWebFormViewState"] = new Pair(null, ViewState);
+            }
 
-            HttpContext.Current.Items.Add("_GlimpseWebFormViewState", new Pair(null, ViewState));
-            HttpContext.Current.Items.Add("_GlimpseWebFormControlTreeType", controlTree);
+
+            if (HttpContext.Current.Items["_GlimpseWebFormControlTreeType"] == null)
+            {
+                HttpContext.Current.Items.Add("_GlimpseWebFormControlTreeType", controlTree);
+            }
+            else {
+                HttpContext.Current.Items["_GlimpseWebFormControlTreeType"] = controlTree;
+            }
+            
 
             if (InnerPageStatePersister != null)
             {
