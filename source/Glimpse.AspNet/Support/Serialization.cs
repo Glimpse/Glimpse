@@ -11,7 +11,7 @@ namespace Glimpse.AspNet.Support
                 var type = value.GetType();
                 if (!type.IsSerializable)
                 {
-                    if (type.GetMethod("ToString").DeclaringType == type)
+                    if (type.GetMethod("ToString", new Type[0]).DeclaringType == type)
                     {
                         value = value.ToString();
                     }
