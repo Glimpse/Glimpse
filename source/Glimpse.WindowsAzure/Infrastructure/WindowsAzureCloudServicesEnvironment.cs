@@ -33,7 +33,7 @@ namespace Glimpse.WindowsAzure.Infrastructure
                 return (string)RoleEnvironmentType.GetProperty("DeploymentId").GetValue(null, null);
             }
         }
-        
+
         public bool IsEmulated
         {
             get
@@ -86,7 +86,7 @@ namespace Glimpse.WindowsAzure.Infrastructure
             try
             {
                 return (bool)RoleEnvironmentType.GetProperty("IsAvailable").GetValue(null, null);
-            }  
+            }
             catch (TargetInvocationException ex)
             {
                 Exception innerException1 = ex;
@@ -121,7 +121,7 @@ namespace Glimpse.WindowsAzure.Infrastructure
         {
             try
             {
-                var serviceRuntimeAssembly = Assembly.LoadWithPartialName("Microsoft.WindowsAzure.ServiceRuntime, Culture=neutral, PublicKeyToken=31bf3856ad364e35, ProcessorArchitecture=MSIL");
+                var serviceRuntimeAssembly = Assembly.Load("Microsoft.WindowsAzure.ServiceRuntime, Culture=neutral, PublicKeyToken=31bf3856ad364e35, ProcessorArchitecture=MSIL");
                 return serviceRuntimeAssembly;
             }
             catch (FileNotFoundException)

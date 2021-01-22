@@ -8,7 +8,7 @@ using Glimpse.WebForms.Inspector;
 
 namespace Glimpse.WebForms.Display
 {
-    [Obsolete]
+    // [Obsolete]
     public class WebForms : IDisplay, ITabSetup, IKey
     {
         private const string InternalName = "WebForms";

@@ -15,7 +15,7 @@ namespace WingtipToys.Checkout
             if (!IsPostBack)
             {
                 // Verify user has completed the checkout process.
-                if (Session["userCheckoutCompleted"] != "true")
+                if ((string)Session["userCheckoutCompleted"] != "true")
                 {
                     Session["userCheckoutCompleted"] = "";
                     Response.Redirect("CheckoutError.aspx?" + "Desc=Unvalidated%20Checkout.");
@@ -44,7 +44,7 @@ namespace WingtipToys.Checkout
                     ProductContext _db = new ProductContext();
                     // Get the current order id.
                     int currentOrderId = -1;
-                    if (Session["currentOrderId"] != "")
+                    if ((string)Session["currentOrderId"] != "")
                     {
                         currentOrderId = Convert.ToInt32(Session["currentOrderID"]);
                     }

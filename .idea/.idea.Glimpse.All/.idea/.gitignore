@@ -1,0 +1,13 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+# Rider ignored files
+/contentModel.xml
+/projectSettingsUpdater.xml
+/.idea.Glimpse.All.iml
+/modules.xml
+# Datasource local storage ignored files
+/../../../../../../../:\src\git\Glimpse\.idea\.idea.Glimpse.All\.idea/dataSources/
+/dataSources.local.xml
+# Editor-based HTTP Client requests
+/httpRequests/

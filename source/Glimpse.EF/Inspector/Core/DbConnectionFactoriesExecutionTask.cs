@@ -1,5 +1,5 @@
 using System.Data.Entity;
-using System.Reflection; 
+using System.Reflection;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework.Support;
 using Glimpse.EF.AlternateType;
@@ -26,10 +26,12 @@ namespace Glimpse.EF.Inspector.Core
             {
                 Logger.Info("EntityFrameworkInspector: Detected that user is using a custom DefaultConnectionFactory");
 
+#pragma warning disable 618
                 Database.DefaultConnectionFactory = new GlimpseDbConnectionFactory(Database.DefaultConnectionFactory);
+#pragma warning restore 618
             }
 
             Logger.Info("EntityFrameworkInspector: Finished to replacing DefaultConnectionFactory");
-        } 
+        }
     }
 }

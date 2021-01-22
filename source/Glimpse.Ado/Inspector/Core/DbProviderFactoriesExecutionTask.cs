@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
-using System.Linq; 
+using System.Linq;
 using Glimpse.Ado.AlternateType;
 using Glimpse.Core.Extensibility;
 using Glimpse.Core.Framework.Support;
@@ -11,7 +11,7 @@ namespace Glimpse.Ado.Inspector.Core
 {
     public class DbProviderFactoriesExecutionTask : IExecutionTask
     {
-        public readonly static Dictionary<string, string> Factories = new Dictionary<string, string>(); 
+        public static readonly Dictionary<string, string> Factories = new Dictionary<string, string>();
 
         public DbProviderFactoriesExecutionTask(ILogger logger)
         {
@@ -21,16 +21,16 @@ namespace Glimpse.Ado.Inspector.Core
         private ILogger Logger { get; set; }
 
         public void Execute()
-        { 
+        {
             Logger.Info("AdoInspector: Starting to replace DbProviderFactory");
 
-            // This forces the creation 
+            // This forces the creation
             try
             {
-                DbProviderFactories.GetFactory("Anything"); 
+                DbProviderFactories.GetFactory("Anything");
             }
             catch (ArgumentException)
-            { 
+            {
             }
 
             // Find the registered providers
@@ -52,7 +52,7 @@ namespace Glimpse.Ado.Inspector.Core
                     continue;
                 }
 
-                // Check that we haven't already wrapped things up 
+                // Check that we haven't already wrapped things up
                 if (factory is GlimpseDbProviderFactory)
                 {
                     Logger.Error("AdoInspector: Factory is already wrapped - {0}", row["Name"]);

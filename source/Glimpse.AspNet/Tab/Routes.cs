@@ -22,9 +22,9 @@ namespace Glimpse.AspNet.Tab
                     r.Cell(0).WidthInPixels(100);
                     r.Cell(1).AsKey();
                     r.Cell(2);
-                    r.Cell(3).WidthInPercent(20).SetLayout(TabLayout.Create().Row(x => 
+                    r.Cell(3).WidthInPercent(20).SetLayout(TabLayout.Create().Row(x =>
                         {
-                            x.Cell("{{0}} ({{1}})").WidthInPercent(45); 
+                            x.Cell("{{0}} ({{1}})").WidthInPercent(45);
                             x.Cell(2);
                         }));
                     r.Cell(4).WidthInPercent(35).SetLayout(TabLayout.Create().Row(x =>
@@ -36,7 +36,7 @@ namespace Glimpse.AspNet.Tab
                     r.Cell(5).WidthInPercent(15).SetLayout(TabLayout.Create().Row(x =>
                         {
                             x.Cell(0).WidthInPercent(45);
-                            x.Cell(1).WidthInPercent(55); 
+                            x.Cell(1).WidthInPercent(55);
                         }));
                     r.Cell(6).WidthInPixels(100).Suffix(" ms").Class("mono").AlignRight();
                 }).Build();
@@ -73,7 +73,7 @@ namespace Glimpse.AspNet.Tab
             var constraintMessages = ProcessMessages(context.GetMessages<ProcessConstraintMessage>());
 
             var result = new List<RouteModel>();
-            
+
             using (System.Web.Routing.RouteTable.Routes.GetReadLock())
             {
                 foreach (var routeBase in System.Web.Routing.RouteTable.Routes)
@@ -87,7 +87,6 @@ namespace Glimpse.AspNet.Tab
                     {
                         // This catches any routing that has been defined using Attribute Based Routing
                         // System.Web.Http.Routing.RouteCollectionRoute is a collection of HttpRoutes
-
                         var subRoutes = routeBase.GetType().GetField("_subRoutes", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(routeBase);
                         var _routes = (IList<System.Web.Routing.Route>)subRoutes.GetType().GetField("_routes", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(subRoutes);
 
@@ -120,7 +119,7 @@ namespace Glimpse.AspNet.Tab
         }
 
         private Dictionary<int, List<RouteDataMessage>> ProcessMessages(IEnumerable<RouteDataMessage> messages)
-        { 
+        {
             if (messages == null)
             {
                 return new Dictionary<int, List<RouteDataMessage>>();
@@ -146,7 +145,7 @@ namespace Glimpse.AspNet.Tab
             var routeMessage = SafeFirstOrDefault(routeMessages.GetValueOrDefault(routeBase.GetHashCode()));
             if (routeMessage != null)
             {
-                routeModel.Duration = routeMessage.Duration; 
+                routeModel.Duration = routeMessage.Duration;
                 routeModel.IsMatch = routeMessage.IsMatch;
             }
 
@@ -204,8 +203,8 @@ namespace Glimpse.AspNet.Tab
             {
                 return null;
             }
-             
-            var counstraintRouteMessages = constraintMessages.GetValueOrDefault(route.GetHashCode()); 
+
+            var counstraintRouteMessages = constraintMessages.GetValueOrDefault(route.GetHashCode());
 
             var result = new List<RouteConstraintModel>();
             foreach (var constraint in route.Constraints)
@@ -218,7 +217,7 @@ namespace Glimpse.AspNet.Tab
                 {
                     var counstraintMessage = SafeFirstOrDefault(counstraintRouteMessages.GetValueOrDefault(constraint.Value.GetHashCode()));
                     model.IsMatch = false;
-                    
+
                     if (counstraintMessage != null)
                     {
                         model.IsMatch = counstraintMessage.IsMatch;
@@ -230,7 +229,6 @@ namespace Glimpse.AspNet.Tab
 
             return result;
         }
-
 
         private IDictionary<string, object> ProcessDataTokens(IDictionary<string, object> dataTokens)
         {

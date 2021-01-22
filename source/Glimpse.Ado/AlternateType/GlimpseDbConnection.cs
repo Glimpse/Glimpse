@@ -13,18 +13,18 @@ namespace Glimpse.Ado.AlternateType
     public class GlimpseDbConnection : DbConnection
     {
         private IMessageBroker messageBroker;
-        private IExecutionTimer timerStrategy; 
+        private IExecutionTimer timerStrategy;
         private TimeSpan timerTimeSpan;
         private bool wasPreviouslyUsed;
 
         public GlimpseDbConnection(DbConnection connection)
             : this(connection, connection.TryGetProfiledProviderFactory())
-        { 
+        {
         }
 
         public GlimpseDbConnection(DbConnection connection, DbProviderFactory providerFactory)
             : this(connection, providerFactory, Guid.NewGuid())
-        { 
+        {
         }
 
         public GlimpseDbConnection(DbConnection connection, DbProviderFactory providerFactory, Guid connectionId)
@@ -40,7 +40,7 @@ namespace Glimpse.Ado.AlternateType
                     OpenConnection();
                 }
 
-                connection.StateChange += StateChangeHaneler;               
+                connection.StateChange += StateChangeHaneler;
             }
         }
 
@@ -60,6 +60,7 @@ namespace Glimpse.Ado.AlternateType
                     InnerConnection.StateChange += value;
                 }
             }
+
             remove
             {
                 if (InnerConnection != null)
@@ -136,12 +137,12 @@ namespace Glimpse.Ado.AlternateType
 
         public override void Close()
         {
-            InnerConnection.Close(); 
+            InnerConnection.Close();
         }
 
         public override void Open()
         {
-            InnerConnection.Open(); 
+            InnerConnection.Open();
         }
 
         public override void EnlistTransaction(Transaction transaction)
@@ -157,7 +158,7 @@ namespace Glimpse.Ado.AlternateType
                 }
             }
         }
-         
+
         public override DataTable GetSchema()
         {
             return InnerConnection.GetSchema();
@@ -172,7 +173,7 @@ namespace Glimpse.Ado.AlternateType
         {
             return InnerConnection.GetSchema(collectionName, restrictionValues);
         }
-         
+
         protected override DbTransaction BeginDbTransaction(System.Data.IsolationLevel isolationLevel)
         {
             return new GlimpseDbTransaction(InnerConnection.BeginTransaction(isolationLevel), this);
@@ -187,7 +188,7 @@ namespace Glimpse.Ado.AlternateType
         {
             return ((IServiceProvider)InnerConnection).GetService(service);
         }
-        
+
         protected override void Dispose(bool disposing)
         {
             if (disposing && InnerConnection != null)
@@ -200,7 +201,7 @@ namespace Glimpse.Ado.AlternateType
             InnerProviderFactory = null;
             base.Dispose(disposing);
         }
-        
+
         private void OnDtcTransactionCompleted(object sender, TransactionEventArgs args)
         {
             TransactionStatus aborted;
@@ -220,7 +221,7 @@ namespace Glimpse.Ado.AlternateType
         }
 
         private void StateChangeHaneler(object sender, StateChangeEventArgs args)
-        { 
+        {
             if (args.CurrentState == ConnectionState.Open)
             {
                 OpenConnection();
@@ -248,11 +249,11 @@ namespace Glimpse.Ado.AlternateType
         private void ClosedConnection()
         {
             wasPreviouslyUsed = true;
-            
+
             MessageBroker.Publish(
                 new ConnectionClosedMessage(ConnectionId)
                 .AsTimedMessage(TimerStrategy.Stop(timerTimeSpan))
                 .AsTimelineMessage("Connection: Opened", AdoTimelineCategory.Connection));
-        } 
+        }
     }
 }

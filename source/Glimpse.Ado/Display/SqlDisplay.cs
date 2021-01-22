@@ -7,7 +7,7 @@ using Glimpse.Core.Extensions;
 
 namespace Glimpse.Ado.Display
 {
-    [Obsolete]
+    // [Obsolete]
     public class SqlDisplay : IDisplay, ITabSetup, IKey
     {
         private const string InternalName = "sql";

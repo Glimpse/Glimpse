@@ -70,7 +70,7 @@ namespace Glimpse.Core.Framework
         /// <value>The tabs.</value>
         ICollection<ITab> Tabs { get; }
 
-        [Obsolete]
+        // [Obsolete]
         ICollection<IDisplay> Displays { get; }
 
         /// <summary>

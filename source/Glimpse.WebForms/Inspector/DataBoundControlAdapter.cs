@@ -80,6 +80,7 @@ namespace Glimpse.WebForms.Inspector
 #endif
                 DataBoundControl.DataBinding += DataBoundControl_DataBinding;
             }
+
             base.OnInit(e);
         }
 
@@ -211,6 +212,7 @@ namespace Glimpse.WebForms.Inspector
 #endif
                 DataBoundControl.DataBinding += DataBoundControl_DataBinding;
             }
+
             OnInitInfo.Invoke(InnerAdapter, new object[] { e });
         }
 

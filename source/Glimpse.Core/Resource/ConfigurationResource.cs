@@ -28,7 +28,7 @@ namespace Glimpse.Core.Resource
             {
                 LogosResource.InternalName,
                 ConfigurationStyleResource.InternalName,
-                ConfigurationScriptResource.InternalName    
+                ConfigurationScriptResource.InternalName
             };
         }
 
@@ -103,7 +103,7 @@ namespace Glimpse.Core.Resource
         /// <remarks>
         /// Use of <see cref="IPrivilegedResource" /> is reserved.
         /// </remarks>
-        /// 
+        ///
         public IResourceResult Execute(IResourceContext context, IGlimpseConfiguration configuration)
         {
             const string glimpseConfigurationResourceName = "Glimpse.Core.EmbeddedResources." + InternalName + ".html";
@@ -243,10 +243,10 @@ namespace Glimpse.Core.Resource
         {
             return new List<object>()
             {
-                new {  Name= "Enable Shortcut Keys", Type = "ShortcutKeys" }
+                new { Name = "Enable Shortcut Keys", Type = "ShortcutKeys" }
             };
         }
-        
+
         private static IEnumerable<object> GroupItemsByPackage<T>(IEnumerable<T> items, IDictionary<string, PackageItemDetail> packages, Func<T, object> createItemDisplay)
         {
             var groupedItemsByPackage = GroupItems(items, packages);

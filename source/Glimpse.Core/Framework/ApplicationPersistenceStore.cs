@@ -16,13 +16,14 @@ namespace Glimpse.Core.Framework
     public class ApplicationPersistenceStore : IPersistenceStore
     {
         private const string PersistenceStoreKey = "__GlimpsePersistenceKey";
-                
+
         private readonly object queueLock = new object();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ApplicationPersistenceStore" /> class.
         /// </summary>
         /// <param name="dataStore">The data store.</param>
+        /// <param name="bufferSize">The buffer size</param>
         public ApplicationPersistenceStore(IDataStore dataStore, int bufferSize)
         {
             DataStore = dataStore;

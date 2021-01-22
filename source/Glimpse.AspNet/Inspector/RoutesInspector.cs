@@ -10,11 +10,11 @@ namespace Glimpse.AspNet.Inspector
     {
         private static readonly FieldInfo MappedRoutesField = typeof(System.Web.Routing.RouteCollection).GetField("_namedMap", BindingFlags.NonPublic | BindingFlags.Instance);
         private static readonly List<string> IgnoredRouteTypes = new List<string> { "System.Web.Http.WebHost.Routing.HttpWebRoute", "System.Web.Mvc.Routing.LinkGenerationRoute" };
-         
+
         public void Setup(IInspectorContext context)
         {
             var logger = context.Logger;
-            var alternateBaseImplementation = new AlternateType.RouteBase(context.ProxyFactory, context.Logger); 
+            var alternateBaseImplementation = new AlternateType.RouteBase(context.ProxyFactory, context.Logger);
 
             var currentRoutes = System.Web.Routing.RouteTable.Routes;
             using (currentRoutes.GetWriteLock())
@@ -31,7 +31,7 @@ namespace Glimpse.AspNet.Inspector
 
                     var newObj = (System.Web.Routing.RouteBase)null;
                     var mixins = new[] { RouteNameMixin.None() };
-                    var routeName = string.Empty; 
+                    var routeName = string.Empty;
                     if (mappedRoutes.ContainsValue(originalObj))
                     {
                         var pair = mappedRoutes.First(r => r.Value == originalObj);
@@ -39,12 +39,10 @@ namespace Glimpse.AspNet.Inspector
                         mixins = new[] { new RouteNameMixin(pair.Key) };
                     }
 
-
                     if (originalObj.GetType().ToString() == "System.Web.Mvc.Routing.RouteCollectionRoute")
                     {
                         // This catches any routing that has been defined using Attribute Based Routing
                         // System.Web.Mvc.Routing.RouteCollectionRoute is a collection of Routes
-
                         var subRoutes = originalObj.GetType().GetField("_subRoutes", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(originalObj);
                         var routes = (IList<System.Web.Routing.Route>)subRoutes.GetType().GetField("_routes", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(subRoutes);
 
@@ -64,10 +62,8 @@ namespace Glimpse.AspNet.Inspector
                             {
                                 logger.Info(Resources.RouteSetupNotReplacedRoute, originalObj.GetType());
                             }
-
                         }
                     }
-
                     else
                     {
                         if (alternateBaseImplementation.TryCreate(originalObj, out newObj, mixins))

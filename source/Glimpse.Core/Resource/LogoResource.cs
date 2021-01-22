@@ -6,7 +6,7 @@ namespace Glimpse.Core.Resource
     /// <summary>
     /// The <see cref="IResource"/> implementation responsible for providing the Glimpse client the Glimpse logo.
     /// </summary>
-    [Obsolete("This resource should not be requested anymore, but rather the LogosResource")]
+    /// [Obsolete("This resource should not be requested anymore, but rather the LogosResource")]
     public class LogoResource : FileResource, IKey
     {
         internal const string InternalName = "glimpse_logo";

@@ -4,7 +4,7 @@ using Glimpse.Core.Extensibility;
 
 namespace Glimpse.AspNet.Display
 {
-    [Obsolete]
+    // [Obsolete]
     public class EnvironmentDisplay : IDisplay, IKey
     {
         private const string InternalName = "environment";

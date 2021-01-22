@@ -2,13 +2,13 @@
 
 namespace Glimpse.Core.Extensibility
 {
-    [Obsolete]
+    // [Obsolete]
     public interface IDisplay
     {
-        [Obsolete]
+        // [Obsolete]
         string Name { get; }
 
-        [Obsolete]
+        // [Obsolete]
         object GetData(ITabContext context);
     }
 }

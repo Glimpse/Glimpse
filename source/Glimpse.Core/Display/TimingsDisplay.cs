@@ -6,17 +6,17 @@ using Glimpse.Core.Message;
 
 namespace Glimpse.Core.Display
 {
-    [Obsolete]
+    // [Obsolete]
     public class TimingsDisplay : IDisplay, ITabSetup, IKey
     {
         private const string InternalName = "Timings";
 
-        public string Name 
+        public string Name
         {
             get { return InternalName; }
         }
 
-        public string Key 
+        public string Key
         {
             get { return InternalName; }
         }
@@ -24,7 +24,7 @@ namespace Glimpse.Core.Display
         public object GetData(ITabContext context)
         {
             return context.GetMessages<ITimelineMessage>()
-                .Where(m => 
+                .Where(m =>
                     m.EventCategory.Name.Equals("Command") ||
                     (m.EventCategory.Name.Equals("Controller") && m.EventName.StartsWith("Controller:")) ||
                     m.EventCategory.Name.Equals("View")).OrderBy(m => m.Offset);

@@ -31,19 +31,19 @@ namespace Glimpse.EF.AlternateType
 
                 return registeredFactories;
             }
-        } 
+        }
 
         public virtual object GetService(Type type, object key)
         {
             if (type == typeof(IProviderInvariantName))
-            { 
+            {
                 var factoryType = key.GetType().AssemblyQualifiedName;
 
                 var factoryName = (string)null;
                 if (RegisteredFactories.TryGetValue(factoryType, out factoryName))
                 {
                     return new ProviderInvariantName(factoryName);
-                }  
+                }
             }
 
             return null;
@@ -53,7 +53,7 @@ namespace Glimpse.EF.AlternateType
         {
             var service = GetService(type, key);
 
-            return service == null ? Enumerable.Empty<object>() : new[] {service};
+            return service == null ? Enumerable.Empty<object>() : new[] { service };
         }
 
         private class ProviderInvariantName : IProviderInvariantName

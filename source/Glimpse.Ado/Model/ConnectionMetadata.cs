@@ -5,15 +5,15 @@ using System.Linq;
 namespace Glimpse.Ado.Model
 {
     public class ConnectionMetadata
-    { 
+    {
         public ConnectionMetadata(string id)
         {
             Id = id;
             Commands = new Dictionary<string, CommandMetadata>();
-            Transactions = new Dictionary<string, TransactionMetadata>(); 
+            Transactions = new Dictionary<string, TransactionMetadata>();
         }
 
-        public string Id { get; private set; } 
+        public string Id { get; private set; }
 
         public DateTime? StartDateTime { get; set; }
 
@@ -51,15 +51,19 @@ namespace Glimpse.Ado.Model
             Transactions.Add(transaction.Id, transaction);
 
             var command = Commands.FirstOrDefault(x => x.Value.Offset >= transaction.Offset);
-            if(command.Value != null)
+            if (command.Value != null)
+            {
                 command.Value.HeadTransaction = transaction;
+            }
         }
 
         public void RegiserTransactionEnd(TransactionMetadata transaction)
         {
             var command = Commands.LastOrDefault(x => x.Value.Offset <= transaction.Offset + transaction.Duration);
-            if(command.Value != null)
+            if (command.Value != null)
+            {
                 command.Value.TailTransaction = transaction;
+            }
         }
     }
 }
